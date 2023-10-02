@@ -1,7 +1,7 @@
 <?php 
 
 /*
-        Función isset()
+        Función empty()
 
         VERDADERO
             -variable no definida
