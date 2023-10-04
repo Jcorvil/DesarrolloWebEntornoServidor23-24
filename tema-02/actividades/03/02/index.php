@@ -5,13 +5,24 @@
 
 
 <?php
-$valor1 = null;
-$valor2 = NULL;
-$valor3 = null;
 
-// Valores falsos
-$valor4 = 0;
-$valor5 = "cadena";
-$valor6 = false;
+$valor1 = 5;
+$valor2 = "Hola";
+$valor3 = true;
+$valor4;
+$valor5 = null;
+
+var_dump(is_null($valor1));
+echo "<br>";
+var_dump(is_null($valor2));
+echo "<br>";
+var_dump(is_null($valor3));
+echo "<br>";
+var_dump(is_null($valor4));
+echo "<br>";
+var_dump(is_null($valor5));
+echo "<br>";
+var_dump(is_null($valor6));
+echo "<br>";
 
 ?>
