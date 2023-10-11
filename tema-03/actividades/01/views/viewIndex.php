@@ -57,7 +57,7 @@
 
                 <br>
 
-                <button type="submit" class="btn btn-primary">Registrar</button>
+                <button type="submit" class="btn btn-primary">Acceso</button>
                 <button type="reset" class="btn btn-danger">Borrar</button>
 
             </form>

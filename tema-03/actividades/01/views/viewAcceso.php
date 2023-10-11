@@ -19,11 +19,21 @@
 
 
         <legend>Datos de acceso</legend>
-        
-        <?php if ($perfil == 'admin' or $perfil == 'editor'): ?>
 
+        <?php if ($perfil == 'administrador'): ?>
+            <button type="button" class="btn btn-primary">Nuevo</button>
+            <button type="button" class="btn btn-primary">Eliminar</button>
+            <button type="button" class="btn btn-primary">Actualizar</button>
+            <button type="button" class="btn btn-primary">Consultar</button>
+        <?php elseif ($perfil == 'editor'): ?>
+            <button type="button" class="btn btn-primary">Nuevo</button>
+            <button type="button" class="btn btn-primary">Actualizar</button>
+            <button type="button" class="btn btn-primary">Consultar</button>
+        <?php else:
+            ($perfil == 'usuario') ?>
+            <button type="button" class="btn btn-primary">Consultar</button>
         <?php endif ?>
-        
+
         <table class="table">
             <tbody>
 
@@ -54,7 +64,7 @@
 
 
         </table>
-        
+
         <a class="btn btn-primary" href="index.php" role="button">Volver</a>
 
 
