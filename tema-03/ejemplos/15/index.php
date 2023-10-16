@@ -25,13 +25,13 @@ $equipos = [
 
 
 foreach ($equipos as $equipo) {
-    echo "{";
-    echo "<br>";
-    foreach ($equipo as $key => $dato) { //
-        echo "$key: " . $dato;
-        echo "<br>";
-    }
-    echo "}";
+    print_r($equipo);
+}
+
+echo "<br>";
+
+foreach ($equipos as $equipo) {
+    echo implode(', ', $equipo);
     echo "<br>";
 }
 
