@@ -8,7 +8,7 @@
     */
 
     # Model
-    include "models/modelIndex.php";
+    
 
     # Vista
     
