@@ -12,13 +12,33 @@
                 -false en caso de que no lo encuentre
 */
 
-function buscar_en_tabla($tabla = [], $columna, $valor){
+function buscar_en_tabla($tabla = [], $columna, $valor)
+{
 
     $columna_valores = array_column($tabla, $columna);
     return array_search($valor, $columna_valores, false);
 
 }
 
+
+function agregarLibro(&$libros)
+{
+    $id = $_POST['id'];
+    $titulo = $_POST['titulo'];
+    $autor = $_POST['autor'];
+    $genero = $_POST['genero'];
+    $precio = $_POST['precio'];
+
+    $nuevoLibro = [
+        "id" => $id,
+        "titulo" => $titulo,
+        "autor" => $autor,
+        "genero" => $genero,
+        "precio" => $precio,
+    ];
+
+    array_push($libros, $nuevoLibro);
+}
 
 
 /* 

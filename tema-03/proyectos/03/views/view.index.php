@@ -48,7 +48,6 @@
                         <?php endforeach; ?>
                         <td>
                             <a href="eliminar.php?id=<?= $libro['id'] ?>"><i class="bi bi-trash"></i></a>
-
                         </td>
                     </tr>
                 <?php endforeach; ?>

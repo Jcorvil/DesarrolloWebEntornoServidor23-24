@@ -20,35 +20,35 @@
         <legend>Formulario nuevo libro</legend>
 
         <!--Formulario Nuevo libro-->
-        <form>
+        <form method="POST" action="create.php">
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">ID</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <label class="form-label">ID</label>
+                <input type="number" name="id" class="form-control">
 
             </div>
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Título</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <label class="form-label">Título</label>
+                <input type="text" name="titulo" class="form-control">
 
             </div>
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Autor</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <labelclass="form-label">Autor</label>
+                <input type="text" name="autor" class="form-control">
 
             </div>
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Género</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <label class="form-label">Género</label>
+                <input type="text" name="genero" class="form-control">
 
             </div>
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Precio (€)</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <label class="form-label">Precio (€)</label>
+                <input type="number" step="any" name="precio" class="form-control">
 
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Añadir</button>
             <button type="reset" class="btn btn-danger">Borrar</button>
-            <a class="btn btn-secondary" href="index.php" role="button">Cancelar</a>
+            <a class="btn btn-secondary" role="button">Cancelar</a>
         </form>
 
         <!-- Pié del documento -->
