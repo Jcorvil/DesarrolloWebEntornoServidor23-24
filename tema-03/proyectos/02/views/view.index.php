@@ -22,20 +22,16 @@
         <table class="table">
             <thead>
                 <tr>
-                    <!--<?php foreach (array_keys($libros[0]) as $clave): ?>
-                        <th>
-                            <?= $clave ?>
-                        </th>
-                    <?php endforeach; ?> -->
-
                     <th>ID</th>
                     <th>Título</th>
                     <th>Autor</th>
                     <th>Género</th>
                     <th>Precio</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
+
                 <?php foreach ($libros as $libro): ?>
                     <tr>
                         <?php foreach ($libro as $key): ?>
@@ -43,23 +39,20 @@
                                 <?= $key ?>
                             </td>
                         <?php endforeach; ?>
+                        <td>
+                            <a href="eliminar.php?id=<?= $libro['id'] ?>"><i class="bi bi-trash"></i></a>
+
+                        </td>
                     </tr>
                 <?php endforeach; ?>
 
 
-                
-                <!--
-                    <td><?= $libro['id']?></td>
-                    <td><?= $libro['titulo']?></td>
-                    <td><?= $libro['autor']?></td>
-                    <td><?= $libro['genero']?></td>
-                    <td><?= $libro['precio']?></td>
-                -->
-
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5">Nº Libros <?= count($libros) ?></td>
+                    <td colspan="5">Nº Libros
+                        <?= count($libros) ?>
+                    </td>
                 </tr>
             </tfoot>
         </table>
