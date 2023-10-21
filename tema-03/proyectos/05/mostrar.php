@@ -8,9 +8,10 @@
     */
 
     # Librería
-    //include 'libs/crud_funciones.php';
+    include 'libs/crud_funciones.php';
 
     #Model
+    include 'models/model.index.php';
     include 'models/model.mostrar.php';
 
     # Vista

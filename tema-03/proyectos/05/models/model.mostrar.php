@@ -1,19 +1,19 @@
 <?php
 
 /*
-    Modelo: model.editar.php
-    Descripción: edita los detalles un libro existente
+    Modelo: model.mostrar.php
+    Descripción: muestra los detalles un libro existente
 
-    Método GET: -id del libro que quiero editar
+    Método GET: -id del libro que quiero mostrar
 */
 
 $id = $_GET['id'];
 
-$indice_editar = buscar_en_tabla($libros, 'id', $id);
+$indice_mostrar = buscar_en_tabla($libros, 'id', $id);
 
-if ($indice_editar !== false) {
+if ($indice_mostrar !== false) {
 
-    $libro = $libros[$indice_editar];
+    $libro = $libros[$indice_mostrar];
 
     
 

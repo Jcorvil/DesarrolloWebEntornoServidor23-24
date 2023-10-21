@@ -46,9 +46,7 @@
                 <input type="number" step="any" name="precio" class="form-control" value="<?= $libro['precio']?>" readonly>
 
             </div>
-            <button type="submit" class="btn btn-primary">Actualizar</button>
-            <button type="reset" class="btn btn-danger">Restablecer</button>
-            <a class="btn btn-secondary" role="button" href="index.php"></a>Cancelar</a>
+            <a class="btn btn-secondary" role="button" href="index.php">Volver</a>
         </form>
 
         <!-- Pié del documento -->
