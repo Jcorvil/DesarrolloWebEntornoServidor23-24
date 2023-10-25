@@ -14,6 +14,10 @@
         <!-- cabecera documento -->
         <?php include 'views/partials/header.php' ?>
 
+        <?php
+        include 'views/partials/menu.php';
+        ?>
+
 
         <legend>Tabla Artículos</legend>
 
@@ -43,6 +47,7 @@
                             <a href="eliminar.php?id=<?= $articulo['id'] ?>" title="Eliminar"><i
                                     class="bi bi-trash"></i></a>
                             <a href="editar.php?id=<?= $articulo['id'] ?>" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="mostrar.php?id=<?= $articulo['id'] ?>" title="Mostrar"><i class="bi bi-eye"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

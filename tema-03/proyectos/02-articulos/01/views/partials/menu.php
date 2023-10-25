@@ -19,10 +19,10 @@
                         Ordenar
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="ordenar.php?criterio=descripcion">Título</a></li>
-                        <li><a class="dropdown-item" href="ordenar.php?criterio=modelo">Autor</a></li>
-                        <li><a class="dropdown-item" href="ordenar.php?criterio=categoria">Género</a></li>
-                        <li><a class="dropdown-item" href="ordenar.php?criterio=unidades">Género</a></li>
+                        <li><a class="dropdown-item" href="ordenar.php?criterio=descripcion">Descripción</a></li>
+                        <li><a class="dropdown-item" href="ordenar.php?criterio=modelo">Modelo</a></li>
+                        <li><a class="dropdown-item" href="ordenar.php?criterio=categoria">Categoría</a></li>
+                        <li><a class="dropdown-item" href="ordenar.php?criterio=unidades">Unidades</a></li>
                         <li><a class="dropdown-item" href="ordenar.php?criterio=precio">Precio</a></li>
                     </ul>
                 </li>

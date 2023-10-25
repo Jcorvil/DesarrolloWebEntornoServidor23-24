@@ -98,4 +98,12 @@ function generar_tabla()
 }
 
 
+function nuevo ($tabla, $registro){
+
+$tabla[] = $registro;
+return $tabla;
+
+}
+
+
 ?>
