@@ -23,7 +23,7 @@
         <form method="POST" action="create.php">
             <div class="mb-3">
                 <label class="form-label">ID</label>
-                <input type="number" name="id" class="form-control">
+                <input type="number" name="id" class="form-control" readonly>
 
             </div>
             <div class="mb-3">

@@ -5,7 +5,7 @@ $categorias = generar_tabla_categorias();
 
 $new_articulo = [
 
-    'id' => $_POST['id'],
+    'id' => siguienteID($articulos),
     'descripcion' => $_POST['descripcion'],
     'modelo' => $_POST['modelo'],
     'categoria' => $_POST['categoria'],
@@ -15,6 +15,6 @@ $new_articulo = [
 
 //$articulos[] = $new_articulo;
 
-nuevo($articulos, $articulo);
+$articulos = nuevo($articulos, $new_articulo);
 
 ?>

@@ -98,11 +98,27 @@ function generar_tabla()
 }
 
 
-function nuevo ($tabla, $registro){
+function nuevo($tabla, $registro)
+{
 
-$tabla[] = $registro;
-return $tabla;
+    $tabla[] = $registro;
+    return $tabla;
 
+}
+
+
+function siguienteID($tabla)
+{ {
+        $ultimoID = 0;
+
+        foreach ($tabla as $articulo) {
+            if (isset($articulo['id']) && $articulo['id'] > $ultimoID) {
+                $ultimoID = $articulo['id'];
+            }
+        }
+
+        return $ultimoID + 1;
+    }
 }
 
 
