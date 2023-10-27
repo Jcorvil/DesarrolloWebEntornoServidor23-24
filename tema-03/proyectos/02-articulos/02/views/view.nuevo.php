@@ -32,12 +32,12 @@
 
             </div>
             <div class="mb-3">
-                <label class="form-label">Categoría</label>
-                <select type="text" name="categoria" class="form-select">
-                    <option selected disabled>Seleccione una categoría</option>
-                    <?php foreach ($categorias as $key => $categoria): ?>
+                <label class="form-label">Marca</label>
+                <select type="text" name="marca" class="form-select">
+                    <option selected disabled>Seleccione una marca</option>
+                    <?php foreach ($marcas as $key => $marcas): ?>
                         <option value="<?= $key ?>">
-                            <?= $categoria ?>
+                            <?= $marcas ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -54,6 +54,22 @@
                 <input type="number" step="any" name="precio" class="form-control">
 
             </div>
+
+            <!-- Categorías -->
+            <div class="mb-3">
+                <label for="categorias" class="form-label">Seleccione categorías</label>
+                <div class="form-control">
+                    <?php foreach ($categorias as $key => $categoria): ?>
+                        <input class="form-check-input" type="checkbox" value="<?= $indice ?>" name="categorias[]">
+                        <input class="form-check-label" for="">
+                        <option value="<?= $key ?>">
+                            <?= $categoria ?>
+                        </option>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+
             <button type="submit" class="btn btn-primary">Añadir</button>
             <button type="reset" class="btn btn-danger">Borrar</button>
             <a class="btn btn-secondary" role="button" href="index.php">Cancelar</a>

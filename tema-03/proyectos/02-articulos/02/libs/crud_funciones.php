@@ -42,6 +42,24 @@ function generar_tabla_categorias()
 }
 
 
+function generar_tabla_marcas()
+{
+    $marcas = [
+        'Xiaomi',
+        'Acer',
+        'Aoc',
+        'Nokia',
+        'Apple',
+        'Lenovo',
+        'IBM'
+    ];
+
+    asort($marcas);
+
+    return $marcas;
+}
+
+
 function generar_tabla()
 {
 
@@ -50,7 +68,8 @@ function generar_tabla()
             'id' => 1,
             'descripcion' => 'Portátil - HP 15-D00774NS',
             'modelo' => 'HP 15-DB0074NS',
-            'categoria' => 0,
+            'marca' => 0,
+            'categorias' => [2, 3, 5],
             'unidades' => 120,
             'precio' => 379
         ],
@@ -58,7 +77,8 @@ function generar_tabla()
             'id' => 2,
             'descripcion' => 'Portátil - AMD A4-9125, 8GB RAM, 125GB',
             'modelo' => 'HP 255 G7, 15.6',
-            'categoria' => 0,
+            'marca' => 0,
+            'categorias' => [2, 3, 5],
             'unidades' => 200,
             'precio' => 550.50
         ],
@@ -66,7 +86,8 @@ function generar_tabla()
             'id' => 3,
             'descripcion' => 'PC Sobremesa - Lenovo Intel© Core™ i3-8100',
             'modelo' => 'ideacentre 510S-07ICB',
-            'categoria' => 1,
+            'marca' => 1,
+            'categorias' => [2, 4, 1],
             'unidades' => 50,
             'precio' => 12.95
         ],
@@ -74,7 +95,8 @@ function generar_tabla()
             'id' => 4,
             'descripcion' => 'PC Sobremesa - HP 290 APU AMD Dual-Core A6',
             'modelo' => 'HP 290-a0002ns',
-            'categoria' => 1,
+            'marca' => 1,
+            'categorias' => [1, 3, 4],
             'unidades' => 50,
             'precio' => 15.95
         ],
@@ -82,7 +104,8 @@ function generar_tabla()
             'id' => 5,
             'descripcion' => 'Monitor gaming - LG 24GN60R-B',
             'modelo' => '24GN60R-B',
-            'categoria' => 3,
+            'marca' => 3,
+            'categorias' => [3, 5],
             'unidades' => 80,
             'precio' => 161.50
         ],
@@ -90,7 +113,8 @@ function generar_tabla()
             'id' => 6,
             'descripcion' => 'GEFORCE RTX™ 4080 GAMING OC 16GB GDRR6X',
             'modelo' => 'GDRR6X',
-            'categoria' => 2,
+            'marca' => 2,
+            'categorias' => [2, 3, 5],
             'unidades' => 25,
             'precio' => 480.50
         ]
@@ -118,38 +142,11 @@ function ultimoID($tabla)
 }
 
 
-function actualizar($tabla, $id_editar)
+function actualizar($tabla, $registro)
 {
 
-    $articulos = generar_tabla();
-
-    $id = $_POST['id'];
-    $descripcion = $_POST['descripcion'];
-    $modelo = $_POST['modelo'];
-    $categoria = $_POST['categoria'];
-    $unidades = $_POST['unidades'];
-    $precio = $_POST['precio'];
 
 
-    $id_editar = $_GET['id'];
-
-
-    $indice_articulo_editar = buscar_en_tabla($articulos, 'id', $id_editar);
-
-
-    $articulo = [
-        'id' => $id,
-        'descripcion' => $descripcion,
-        'modelo' => $modelo,
-        'categoria' => $categoria,
-        'unidades' => $unidades,
-        'precio' => $precio
-    ];
-
-
-    $articulos[$indice_articulo_editar] = $articulo;
-
-    return $tabla;
 
 }
 
@@ -190,5 +187,17 @@ function eliminar($tabla, $id)
     return $tabla;
 }
 
+function mostrarCategorias($categorias = [], $categoriasArticulo = [])
+{
+
+    $arrayCategorias = [];
+
+    foreach ($categoriasArticulo as $indiceCategoria) {
+        $arrayCategorias[] = $categorias[$indiceCategoria];
+    }
+
+    return $arrayCategorias;
+
+}
 
 ?>
