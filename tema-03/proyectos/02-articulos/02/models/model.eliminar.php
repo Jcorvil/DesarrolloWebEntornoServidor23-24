@@ -1,30 +1,39 @@
 <?php
 
-/*
-    Modelo: model.eliminar.php
-    Descripción: elimina un elemento de la tabla
+    /*
 
-    Método GET: -id del articulo que quiero eliminar
-*/
+        Modelo: model.eliminar.php
+        Descripcion: elimina un elemento de la  tabla
 
-#Cargo la tabla
-$categorias = generar_tabla_categorias();
-$articulos = generar_tabla();
+        Método GET:
+                    - id del artículo que quiero eliminar
 
-$id = $_GET['id'];
+    */
 
-$indice_eliminar = buscar_en_tabla($articulos, 'id', $id);
+    # cargamos la tabla
+    $articulos = generar_tabla();
+    $categorias = generar_tabla_categorias();
 
-if ($indice_eliminar !== false) {
 
-    unset($articulos[$indice_eliminar]);
+    # obtengo el  id del  artículo que deseo eliminar
+    $id = $_GET['id'];
 
-    $articulos = array_values($articulos);
+    # obtengo el índice  del artículo que deseo eliminar
+    $indice_eliminar = buscar_en_tabla($articulos, 'id', $id);
 
-} else {
-    echo 'ERROR: Libro no encontrado';
-    exit();
-}
+    // comparación estricta para distinguer el false del 0
+    if ($indice_eliminar !== false) {
+        // elimino el libro seleccionado
+        unset ($articulos[$indice_eliminar]);
 
+        // reconstruyo el array 
+        $articulos = array_values($articulos);
+
+    }  else { 
+        echo 'ERROR: artículo  no encontrado';
+        exit();
+    }
+
+   
 
 ?>

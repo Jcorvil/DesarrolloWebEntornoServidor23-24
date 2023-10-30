@@ -1,30 +1,37 @@
 <?php
 
-/*
-    Modelo: model.editar.php
-    Descripción: edita los detalles un artículo existente
+    /*
 
-    Método GET: -id del artículo que quiero editar
-*/
+        Modelo: model.editar.php
+        Descripcion: edita los detalles de un articulo
 
-$categorias = generar_tabla_categorias();
+        Método GET:
+                    - id del libro que quiero editar
 
-#Cargo la tabla
-$articulos = generar_tabla();
+    */
 
-$id = $_GET['id'];
+    // Cargamos los datos
+    $articulos = generar_tabla();
+    $categorias = generar_tabla_categorias();
+    $marcas = generar_tabla_marcas();
 
-$indice_editar = buscar_en_tabla($articulos, 'id', $id);
+    // ordenamos las categorias
+    asort($categorias);
 
-if ($indice_editar !== false) {
 
-    $articulo = $articulos[$indice_editar];
+    # obtener  el id  del artículo que quiero  editar
+    $id_editar = $_GET['id'];
 
-    
+    # obtener el índice  del  libro
+    $indice_editar = buscar_en_tabla($articulos, 'id', $id_editar);
 
-} else {
-    echo 'ERROR: Artículo no encontrado';
-    exit();
-}
+    // comparación estricta para distinguir el false del 0
+    if ($indice_editar !== false) {
+        // obtengo el array del artículo a  editar
+        $articulo = $articulos[$indice_editar];
 
+    }  else { 
+        echo 'ERROR: artículo  no encontrado';
+        exit();
+    }
 ?>

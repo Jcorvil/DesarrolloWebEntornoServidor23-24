@@ -3,8 +3,7 @@
 
 <head>
     <?php include 'views/layouts/head.php' ?>
-    <!-- Incluir head -->
-    <title>Tabla de Libros</title>
+    <title>Proyecto 3.1 - Gestión de libros</title>
 </head>
 
 <body>
@@ -12,47 +11,67 @@
     <div class="container">
 
         <!-- cabecera documento -->
-        <header class="pb-3 mb-4 border-bottom">
-            <i class="bi bi-book"></i>Tabla de Libros
-            <span class="fs-6"></span>
-        </header>
+        <?php include 'views/partials/header.php' ?>
 
-        <legend>Formulario mostrar artículo</legend>
+        <legend>Formulario Mostrar Artículo</legend>
 
-        <form method="POST" action="mostrar.php?id=<?= $id ?>">
+        <!-- Formulario Mostrar Artículo -->
+        <form>
+
+            <!-- id -->
             <div class="mb-3">
-                <label class="form-label">ID</label>
-                <input type="number" name="id" class="form-control" value="<?= $articulo['id']?>" disabled>
-
+                <label for="titulo" class="form-label">Id</label>
+                <input type="text" class="form-control" name="id" value="<?= $articulo['id'] ?>" disabled>
             </div>
+            <!-- Descripción -->
             <div class="mb-3">
-                <label class="form-label">Descripción</label>
-                <input type="text" name="descripcion" class="form-control" value="<?= $articulo['descripcion']?>" disabled>
-
+                <label for="descripcion" class="form-label">Descripción</label>
+                <input type="text" class="form-control" name="descripcion" value="<?= $articulo['descripcion'] ?>"
+                    disabled>
             </div>
+            <!-- Modelo -->
             <div class="mb-3">
-                <labelclass="form-label">Modelo</label>
-                <input type="text" name="modelo" class="form-control" value="<?= $articulo['modelo']?>" disabled>
-
+                <label for="modelo" class="form-label">Modelo</label>
+                <input type="text" class="form-control" name="modelo" value="<?= $articulo['modelo'] ?>" disabled>
             </div>
+            <!-- Marca Select -->
             <div class="mb-3">
-                <label class="form-label">Categoría</label>
-                <input type="text" name="categoria" class="form-control" value="<?= $articulo['categoria']?>" disabled>
-
+                <label for="marca" class="form-label">Marca</label>
+                <input type="text" class="form-control" name="categoria"
+                    value="<?= $marcas[$articulo['marca']] ?>" disabled>
             </div>
-
+            <!-- Unidades -->
             <div class="mb-3">
-                <label class="form-label">Unidades</label>
-                <input type="number" name="unidades" class="form-control" value="<?= $articulo['unidades']?>" disabled>
-
+                <label for="unidades" class="form-label">Unidades</label>
+                <input type="number" class="form-control" name="unidades" step="0.01"
+                    value="<?= $articulo['unidades'] ?>" disabled>
             </div>
+            <!-- Precio -->
             <div class="mb-3">
-                <label class="form-label">Precio (€)</label>
-                <input type="number" step="any" name="precio" class="form-control" value="<?= $articulo['precio']?>" disabled>
-
+                <label for="precio" class="form-label">Precio (€)</label>
+                <input type="number" class="form-control" name="precio" step="0.01" value="<?= $articulo['precio'] ?>"
+                    disabled>
             </div>
-            <a class="btn btn-secondary" role="button" href="index.php">Volver</a>
+
+             <!-- Categorías -->
+             <div class="mb-3">
+                <label for="marca" class="form-label">Categorías</label>
+                <input type="text" class="form-control" name="categorias"
+                    value="<?= implode(', ', mostrarCategorias($categorias, $articulo['categorias'])) ?>" disabled>
+            </div>
+
+
+            <!-- botones de acción -->
+            <a class="btn btn-primary" href="index.php" role="button">Volver</a>
+
         </form>
+
+        <br>
+        <br>
+        <br>
+
+
+
 
         <!-- Pié del documento -->
         <?php include 'views/partials/footer.php' ?>

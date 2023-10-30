@@ -1,30 +1,23 @@
 <?php
 
-/*
-    Modelo: model.buscar.php
-    Descripción: filtra los libros a partir de la expresión de búsqueda
+    /*
 
-    Método GET: -expresión: prompt o expresión de búsqueda
-*/
+        Modelo: model.buscar.php
+        Descripcion: filtra los artículos  a partir de la expresión búsqueda
 
+        Método GET:
+                    - expresion: prompt o expresión de búsqueda
+    */
 
-$articulos = generar_tabla();
-$categorias = generar_tabla_categorias();
+    # Cargo los datos
+    $categorias = generar_tabla_categorias();
+    $articulos = generar_tabla();
 
+    # Cargo la expresion de búsqueda
+    $expresion = $_GET['expresion'];
 
-$expresion = $_GET['expresion'];
-
-$aux = [];
-foreach ($articulos as $articulo) {
-    if ( false !== array_search($expresion, $articulo, false)) {
-        $aux[] = $articulo;
-    }
-
-}
-
-if (!empty($aux)) {
-    $articulos = $aux;
-}
+    # Filtrar la tabla  a partir de esa expresión
+    $articulos  = filtrar($articulos, $expresion);
 
 
 ?>

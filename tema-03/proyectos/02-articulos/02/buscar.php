@@ -7,7 +7,7 @@
 
     */
 
-    #Librerías
+    # Librería
     include 'libs/crud_funciones.php';
     
     # Model
@@ -15,4 +15,5 @@
 
     # Vista
     include 'views/view.index.php';
+
 ?>

@@ -1,18 +1,19 @@
 <?php
 
-/*
-    Controlador: index.php
-    Descripción: Carga el  formulario de  datos  para  la conversión
-*/
+    /*
 
+        Controlador: index.php
+        Descripción: muestra los detalles de  los libros ordenados  por id
 
-#Librería
-include 'libs/crud_funciones.php';
+    */
 
-#Model
-include 'models/model.index.php';
+    # Librería
+    include 'libs/crud_funciones.php';
 
-#Vista
-include 'views/view.index.php';
+    # Model
+    include 'models/model.index.php';
+
+    # Vista
+    include 'views/view.index.php';
 
 ?>

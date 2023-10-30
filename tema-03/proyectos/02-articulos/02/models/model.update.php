@@ -1,54 +1,44 @@
 <?php
 
-/*
-    Modelo: model.create.php
-    Descripción: actualiza los detalles de un librro
+    /*
 
-    Método POST:
-        -id
-        -descripcion
-        -modelo
-        -categoria
-        -unidades
-        -precio
+        Modelo: model.update.php
+        Descripcion: actualiza los detalles de un  artículo
 
-    Método GET:
-        -id
-*/
+        Método POST:
+                    - descripcion
+                    - modelo
+                    - genero
+                    - unidades
+                    - precio
 
-$categorias = generar_tabla_categorias();
+        Método GET:
+                    - indice -> índice  del articulo que quiero editar
 
-#Cargo la tabla
-$articulos = generar_tabla();
+    */
 
-//Extraemos en variables los valores del formulario
-$id = $_POST['id'];
-$descripcion = $_POST['descripcion'];
-$modelo = $_POST['modelo'];
-$categoria = $_POST['categoria'];
-$unidades = $_POST['unidades'];
-$precio = $_POST['precio'];
+    $articulos = generar_tabla();
+    $marcas = generar_tabla_marcas();
+    $categorias = generar_tabla_categorias();
 
+    // Extraer índice del artículo que voy a editar
+    $indice = $_GET['indice'];
 
-//Obtener el indice del libro que quiero editar
-$id_editar = $_GET['id'];
+    // Extraer los detalles del formulario
+    $edit_articulo = [
 
+        'id' => $_POST['id'],
+        'descripcion'=>$_POST['descripcion'],
+        'modelo'=>$_POST['modelo'],
+        'marca'=>$_POST['marca'] ,
+        'categorias'=>$_POST['categorias'],
+        'unidades'=> $_POST['unidades'],
+        'precio'=> $_POST['precio']
 
-//Obtener el indice del libro
-$indice_articulo_editar = buscar_en_tabla($articulos, 'id', $id_editar);
+    ];
 
+    // $articulos = update($articulos, $edit_articulo, $indice);
 
-//creo un array asociativo con los detalles del nuevo libro
-$articulo = [
-    'id'=> $id,
-    'descripcion'=> $descripcion,
-    'modelo'=>$modelo,
-    'categoria'=>$categoria,
-    'unidades'=>$unidades,
-    'precio'=>$precio
-];
+    $articulos[$indice] = $edit_articulo;
 
-//actualizo el libro
-$articulos[$indice_articulo_editar] = $articulo;  
-    
 ?>
