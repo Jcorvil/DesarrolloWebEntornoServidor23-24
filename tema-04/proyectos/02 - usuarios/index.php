@@ -3,12 +3,13 @@
     /*
 
         Controlador: index.php
-        Descripción: muestra los detalles de  los libros ordenados  por id
+        Descripción: muestra los detalles de los articulos ordenados  por id
 
     */
 
-    # Librería
-    include 'libs/crud_funciones.php';
+    # Clases
+    include 'class/class.articulo.php';
+    include 'class/class.arrayArticulo.php';
 
     # Model
     include 'models/model.index.php';

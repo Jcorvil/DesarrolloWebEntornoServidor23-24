@@ -3,7 +3,7 @@
 
 <head>
     <?php include 'views/layouts/head.php' ?>
-    <title>Proyecto 3.2 - Gestión Artículos</title>
+    <title>Proyecto 4.2 - Gestión Artículos</title>
 </head>
 
 <body>
@@ -37,25 +37,38 @@
             <!-- Mostramos cuerpo de la tabla -->
             <tbody>
 
-                <?php foreach ($articulos as $articulo): ?>
+                <?php foreach ($articulos->getTabla() as $indice => $articulo): ?>
                     <tr>
                         <!-- Formatos distintos para cada  columna -->
 
                         <!-- Detalles de artículos -->
-                        <td><?= $articulo['id'] ?></td>
-                        <td><?= $articulo['descripcion'] ?></td>
-                        <td><?= $articulo['modelo'] ?></td>
-                        <td><?= $marcas[$articulo['marca']] ?></td>
-                        <td><?= implode(', ', mostrarCategorias($categorias, $articulo['categorias'])) ?></td>
-                        <td class="text-end"><?= $articulo['unidades'] ?></td>
-                        <td class="text-end"><?= number_format($articulo['precio'], 2, ',', '.')?> €</td>
+                        <td>
+                            <?= $articulo->getId() ?>
+                        </td>
+                        <td>
+                            <?= $articulo->getDescripcion() ?>
+                        </td>
+                        <td>
+                            <?= $articulo->getModelo() ?>
+                        </td>
+                        <td>
+                            <?= $marcas[$articulo->getMarca()] ?>
+                        </td>
+                        <td>
+                            <?= implode(', ', ArrayArticulos::mostrarCategorias($categorias, $articulo->getCategoria())) ?>
+                        </td>
+                        <td class="text-end">
+                            <?= $articulo->getUnidades() ?>
+                        </td>
+                        <td class="text-end">
+                            <?= number_format($articulo->getPrecio(), 2, ',', '.') ?> €
+                        </td>
 
 
                         <td>
-                        <a href="eliminar.php?id=<?= $articulo['id'] ?>" title="Eliminar"><i
-                                    class="bi bi-trash"></i></a>
-                            <a href="editar.php?id=<?= $articulo['id'] ?>" title="Editar"><i class="bi bi-pencil"></i></a>
-                            <a href="mostrar.php?id=<?= $articulo['id'] ?>" title="Mostrar"><i class="bi bi-eye"></i></a>
+                            <a href="eliminar.php?id=<?= $indice ?>" title="Eliminar"><i class="bi bi-trash"></i></a>
+                            <a href="editar.php?id=<?= $indice ?>" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="mostrar.php?id=<?= $indice ?>" title="Mostrar"><i class="bi bi-eye"></i></a>
 
                         </td>
                     </tr>
@@ -67,7 +80,7 @@
             <tfoot>
                 <tr>
                     <td colspan="7">Nº Artículos
-                        <?= count($articulos) ?>
+                        <?= count($articulos->getTabla()) ?>
                     </td>
                 </tr>
             </tfoot>

@@ -8,8 +8,8 @@
     */
 
     # cargamos la tabla
-    $categorias = generar_tabla_categorias();
-    $marcas = generar_tabla_marcas();
+    $categorias = ArrayArticulos::getCategorias();
+    $marcas = ArrayArticulos::getMarcas();
 
 
 ?>
