@@ -165,6 +165,11 @@ class ArrayArticulos
     }
 
 
+    public function create(Articulo $data) {
+        $this->tabla[] = $data;
+    }
+
+
 }
 
 ?>
