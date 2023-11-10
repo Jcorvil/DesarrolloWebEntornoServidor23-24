@@ -3,7 +3,7 @@
 
 <head>
     <?php include 'views/layouts/head.php' ?>
-    <title>Proyecto 3.1 - Gestión de libros</title>
+    <title>Proyecto 4.2 - CRUD Artículos POO</title>
 </head>
 
 <body>
@@ -18,12 +18,11 @@
         <!-- Formulario Nuevo Libro -->
         <form action="create.php" method="POST">
 
-            <!-- id 
+            <!-- id -->
             <div class="mb-3">
                 <label for="titulo" class="form-label">Id</label>
                 <input type="text" class="form-control" name="id">
-                <div class="form-text">Introduzca identificador del libro</div>
-            </div> -->
+            </div>
             <!-- Descripción -->
             <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label>

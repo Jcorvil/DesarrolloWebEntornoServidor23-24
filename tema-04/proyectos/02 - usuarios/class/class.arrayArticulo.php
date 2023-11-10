@@ -169,6 +169,10 @@ class ArrayArticulos
         $this->tabla[] = $data;
     }
 
+    public function delete ($indice) {
+        unset($this->tabla[$indice]);
+        array_values($this->tabla);
+    }
 
 }
 

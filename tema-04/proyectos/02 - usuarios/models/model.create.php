@@ -6,32 +6,51 @@
         Descripcion: añade un nuevo  artículo en a la tabla
 
         Método POST:
+                    - id
                     - descripcion
                     - modelo
                     - genero
+                    - marca - indice
                     - unidades
                     - precio
+                    - categoria - array
 
     */
 
-    $articulos = generar_tabla();
-    $categorias = generar_tabla_categorias();
-    $marcas = generar_tabla_marcas();
+    $categorias = ArrayArticulos::getCategorias();
+    $marcas = ArrayArticulos::getMarcas();
 
-    $new_articulo = [
 
-        'id' => generar_id($articulos),
-        'descripcion'=>$_POST['descripcion'],
-        'modelo'=>$_POST['modelo'],
-        'marca'=>$_POST['marca'],
-        'categorias'=>$_POST['categorias'], // array de  categorias
-        'unidades'=> $_POST['unidades'],
-        'precio'=> $_POST['precio']
+    $articulos = new ArrayArticulos();
+    $articulos->getDatos();
 
-    ];
 
-    // $articulos = nuevo($articulos, $new_articulo);
+    #Cargo en variables los detalles del artículo
+    $id = $_POST['id'];
+    $descripcion = $_POST['descripcion'];
+    $modelo = $_POST['modelo'];
+    $marca = $_POST['marca'];
+    $categorias_art = $_POST['categorias'];
+    $unidades = $_POST['unidades'];
+    $precio = $_POST['precio'];
+    
 
-    $articulos[] = $new_articulo;
+    #Creo un objeto clase artículo a partir de los detalles del formulario
+    $articulo = new Articulo(
+        $id,
+        $descripcion,
+        $modelo,
+        $marca,
+        $categorias_art,
+        $unidades,
+        $precio
+    );
+
+    
+    #Añado el artículo al array de artículos
+    $articulos->create($articulo);
+
+    #Genero notificación
+    $notificacion = "Artículo creado con éxtio";
 
 ?>

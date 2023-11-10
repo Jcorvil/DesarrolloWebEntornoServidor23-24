@@ -9,7 +9,8 @@
     */
 
     # Librería
-    include 'libs/crud_funciones.php';
+    include 'class/class.articulo.php';
+    include 'class/class.arrayArticulo.php';
 
     # Model
     include 'models/model.create.php';

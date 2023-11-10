@@ -3,7 +3,7 @@
     /*
 
         Modelo: model.nuevo.php
-        Descripcion: carga array categorias generar el select dinámico de categorías
+        Descripcion: carga array categorias y array de marcas
 
     */
 
