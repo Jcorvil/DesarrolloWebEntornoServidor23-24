@@ -21,5 +21,6 @@
     # obtener  el id  del artículo que quiero  editar
     $indice_editar = $_GET['id'];
 
+    
 
 ?>
