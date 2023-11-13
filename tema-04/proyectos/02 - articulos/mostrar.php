@@ -7,8 +7,9 @@
         del libro seleccionado
     */
 
-    # Librería
-    include 'libs/crud_funciones.php';
+    # Clases
+    include 'class/class.articulo.php';
+    include 'class/class.arrayArticulo.php';
 
     # Model
     include 'models/model.mostrar.php';

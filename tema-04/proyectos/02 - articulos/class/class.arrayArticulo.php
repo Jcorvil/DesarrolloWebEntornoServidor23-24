@@ -174,6 +174,23 @@ class ArrayArticulos
         array_values($this->tabla);
     }
 
+
+    public function read($indice)
+    {
+        return $this->tabla[$indice];
+    }
+
+
+    public function update($indice, Articulo $data)
+    {
+        $this->tabla[$indice] = $data;
+    }
+
+
+        public function order () {
+            
+        }
+
 }
 
 ?>
