@@ -3,54 +3,53 @@
     /*
 
         Modelo: model.create.php
-        Descripcion: añade un nuevo  artículo en a la tabla
+        nombre: añade un nuevo alumno en a la tabla
 
         Método POST:
                     - id
-                    - descripcion
-                    - modelo
-                    - genero
-                    - marca - indice
-                    - unidades
-                    - precio
-                    - categoria - array
+                    - nombre
+                    - apellidos
+                    - email
+                    - fecha nacimiento
+                    - curso
+                    - asignaturas
 
     */
 
-    $categorias = ArrayArticulos::getCategorias();
-    $marcas = ArrayArticulos::getMarcas();
+    $cursos = ArrayAlumnos::getCursos();
+    $asignaturas = ArrayAlumnos::getAsignaturas();
+
+    $alumnos = new ArrayAlumnos();
+    $alumnos->getAlumnos();
 
 
-    $articulos = new ArrayArticulos();
-    $articulos->getDatos();
-
-
-    #Cargo en variables los detalles del artículo
+    #Cargo en variables los detalles del alumno
     $id = $_POST['id'];
-    $descripcion = $_POST['descripcion'];
-    $modelo = $_POST['modelo'];
-    $marca = $_POST['marca'];
-    $categorias_art = $_POST['categorias'];
-    $unidades = $_POST['unidades'];
-    $precio = $_POST['precio'];
+    $nombre = $_POST['nombre'];
+    $apellidos = $_POST['apellidos'];
+    $email = $_POST['email'];
+    $fecha_nacimiento = $_POST['fecha_nacimiento'];
+    $fecha_nacimiento = date('d/m/Y', strtotime($fecha_nacimiento));
+    $curso = $_POST['curso'];
+    $asignaturasNuevo = $_POST['asignaturas'];
     
 
-    #Creo un objeto clase artículo a partir de los detalles del formulario
-    $articulo = new Articulo(
+    #Creo un objeto clase alumno a partir de los detalles del formulario
+    $alumno = new Alumno(
         $id,
-        $descripcion,
-        $modelo,
-        $marca,
-        $categorias_art,
-        $unidades,
-        $precio
+        $nombre,
+        $apellidos,
+        $email,
+        $fecha_nacimiento,
+        $curso,
+        $asignaturasNuevo
     );
 
     
-    #Añado el artículo al array de artículos
-    $articulos->create($articulo);
+    #Añado el alumno al array de alumnos
+    $alumnos->create($alumno);
 
     #Genero notificación
-    $notificacion = "Artículo creado con éxtio";
+    $notificacion = "Alumno añadido con éxtio";
 
 ?>

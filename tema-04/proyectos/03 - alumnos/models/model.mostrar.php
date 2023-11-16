@@ -10,18 +10,21 @@
 
     */
 
-    # cargamos los  datos
-    $categorias = ArrayArticulos::getCategorias();
-    $marcas = ArrayArticulos::getMarcas();
+    #Cargamos los arrays a partir de los métodos estáticos de la clase
+    #ArrayAlumnos
+    $cursos = ArrayAlumnos::getCursos();
+    $asignaturas = ArrayAlumnos::getAsignaturas();
 
-    $articulos = new ArrayArticulos();
-    $articulos->getDatos();
+    #Creamos un objeto de la clase ArrayAlumnos
+    $alumnos = new ArrayAlumnos();
+
+    $alumnos->getAlumnos();
 
 
     # obtener  el id  del artículo que quiero mostrar
     $indice = $_GET['id'];
 
     
-    $articulo = $articulos->read($indice);
+    $alumno = $alumnos->read($indice);
 
 ?>

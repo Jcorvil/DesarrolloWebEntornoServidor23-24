@@ -3,7 +3,7 @@
 
 <head>
     <?php include 'views/layouts/head.php' ?>
-    <title>Proyecto 4.2 - Gestión Artículos</title>
+    <title>Información Alumnos</title>
 </head>
 
 <body>
@@ -13,7 +13,7 @@
         <!-- cabecera documento -->
         <?php include 'views/partials/header.php' ?>
 
-        <legend>Tabla Artículos</legend>
+        <legend>Tabla Alumnos</legend>
 
         <!-- Menu Principal -->
         <?php include 'views/partials/menu_prin.php' ?>
@@ -29,62 +29,61 @@
                 <tr>
                     <!-- personalizado -->
                     <th>Id</th>
-                    <th>Descripción</th>
-                    <th>Modelo</th>
-                    <th>Marca</th>
-                    <th>Categorias</th>
-                    <th class="text-end">Stock</th>
-                    <th class="text-end">Precio</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Email</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Edad</th></th>
+                    <th>Curso</th>
+                    <th>Asignaturas</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <!-- Mostramos cuerpo de la tabla -->
             <tbody>
 
-                <?php foreach ($articulos->getTabla() as $indice => $articulo): ?>
+                <?php foreach ($alumnos->getAlumnos() as $indice => $alumno): ?>
                     <tr>
-                        <!-- Formatos distintos para cada  columna -->
-
-                        <!-- Detalles de artículos -->
+                        <!-- Mostramos la información de cada alumno en las celdas -->
                         <td>
-                            <?= $articulo->getId() ?>
+                            <?= $alumno->id ?>
                         </td>
                         <td>
-                            <?= $articulo->getDescripcion() ?>
+                            <?= $alumno->nombre ?>
                         </td>
                         <td>
-                            <?= $articulo->getModelo() ?>
+                            <?= $alumno->apellidos ?>
                         </td>
                         <td>
-                            <?= $marcas[$articulo->getMarca()] ?>
+                            <?= $alumno->email ?>
                         </td>
                         <td>
-                            <?= implode(', ', ArrayArticulos::mostrarCategorias($categorias, $articulo->getCategoria())) ?>
+                            <?= $alumno->fecha_nacimiento ?>
                         </td>
-                        <td class="text-end">
-                            <?= $articulo->getUnidades() ?>
-                        </td>
-                        <td class="text-end">
-                            <?= number_format($articulo->getPrecio(), 2, ',', '.') ?> €
-                        </td>
-
-
                         <td>
+                            <?= $alumno->getEdad() ?>
+                        </td>
+                        <td>
+                            <?= $alumno->curso ?>
+                        </td>
+                        <td>
+                            <?= implode(', ', ArrayAlumnos::mostrarAsignaturas(ArrayAlumnos::getAsignaturas(), $alumno->asignatura))?>
+                        </td>
+                        <td>
+                            <!-- Acciones -->
                             <a href="eliminar.php?id=<?= $indice ?>" title="Eliminar"><i class="bi bi-trash"></i></a>
                             <a href="editar.php?id=<?= $indice ?>" title="Editar"><i class="bi bi-pencil"></i></a>
                             <a href="mostrar.php?id=<?= $indice ?>" title="Mostrar"><i class="bi bi-eye"></i></a>
-
                         </td>
                     </tr>
-
                 <?php endforeach; ?>
 
 
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="7">Nº Artículos
-                        <?= count($articulos->getTabla()) ?>
+                    <td colspan="7">Nº Alumnos
+                        <?= count($alumnos->getTabla()) ?>
                     </td>
                 </tr>
             </tfoot>

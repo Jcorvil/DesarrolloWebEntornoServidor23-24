@@ -3,67 +3,62 @@
 /*
 
     Modelo: model.update.php
-    Descripcion: actualiza los detalles de un  artículo
+    nombre: actualiza los detalles de un alumno
 
     Método POST:
-                - descripcion
-                - modelo
-                - genero
-                - unidades
-                - precio
+                - nombre
+                - apellidos
+                - email
+                - fecha nacimiento
+                - curso
+                - asignaturas
 
     Método GET:
-                - indice -> índice  del articulo que quiero editar
+                - indice -> índice  del alumno que quiero editar
 
 */
 
 
 
-$marcas = ArrayArticulos::getMarcas();
-$categorias = ArrayArticulos::getCategorias();
+$cursos = ArrayAlumnos::getCursos();
+$asignaturas = ArrayAlumnos::getAsignaturas();
 
-$articulos = new ArrayArticulos();
-$articulos->getDatos();
+$alumnos = new ArrayAlumnos();
+$alumnos->getAlumnos();
 
-// Extraer índice del artículo que voy a editar
-$indice = $_GET['indice'];
 
-$articulo = $articulos->read($indice);
+# obtener  el id  del alumno que quiero  editar
+$id = $_GET['id'];
+
+
 
 // Extraer los detalles del formulario
-$edit_articulo = [
 
-    'descripcion' => $_POST['descripcion'],
-    'modelo' => $_POST['modelo'],
-    'marca' => $_POST['marca'],
-    'categorias' => $_POST['categorias'],
-    'unidades' => $_POST['unidades'],
-    'precio' => $_POST['precio']
-
-];
+$nombre = $_POST['nombre'];
+$apellidos = $_POST['apellidos'];
+$email = $_POST['email'];
+$fecha_nacimiento = $_POST['fecha_nacimiento'];
+$fecha_nacimiento = date('d/m/Y', strtotime($fecha_nacimiento));
+$curso = $_POST['curso'];
+$asignaturasNuevo = $_POST['asignaturas'];
 
 
-$descripcion = $edit_articulo['descripcion'];
-$modelo = $edit_articulo['modelo'];
-$marca = $edit_articulo['marca'];
-$categoriasArticulo = $edit_articulo['categorias'];
-$unidades = $edit_articulo['unidades'];
-$precio = $edit_articulo['precio'];
+$alumno = new Alumno(
+    $nombre,
+    $apellidos,
+    $email,
+    $fecha_nacimiento,
+    $curso,
+    $asignaturasNuevo
+);
 
 
-$articulo->setDescripcion($descripcion);
-$articulo->setModelo($modelo);
-$articulo->setMarca($marca);
-$articulo->setCategoria($categoriasArticulo);
-$articulo->setUnidades($unidades);
-$articulo->setPrecio($precio);
+
+// $alumnos = update($alumnos, $edit_alumno, $indice);
+
+$alumnos->update($alumno, $id);
 
 
-// $articulos = update($articulos, $edit_articulo, $indice);
-
-$articulos->update($indice, $articulo);
-
-
-$notificacion = "Articulo editado";
+$notificacion = "Alumno editado";
 
 ?>

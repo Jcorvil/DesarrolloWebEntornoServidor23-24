@@ -3,13 +3,15 @@
     /*
 
         Modelo: model.nuevo.php
-        Descripcion: carga array categorias y array de marcas
+        Descripcion: carga array cursos y array de asignaturas
 
     */
 
+    setlocale(LC_MONETARY, "es_ES"); 
+
     # cargamos la tabla
-    $categorias = ArrayArticulos::getCategorias();
-    $marcas = ArrayArticulos::getMarcas();
+    $cursos = ArrayAlumnos::getCursos();
+    $asignaturas = ArrayAlumnos::getAsignaturas();
 
 
 ?>

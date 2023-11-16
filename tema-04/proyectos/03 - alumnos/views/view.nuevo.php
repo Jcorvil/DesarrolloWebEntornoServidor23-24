@@ -3,7 +3,7 @@
 
 <head>
     <?php include 'views/layouts/head.php' ?>
-    <title>Proyecto 4.2 - CRUD Artículos POO</title>
+    <title>Información Alumnos</title>
 </head>
 
 <body>
@@ -13,9 +13,9 @@
         <!-- cabecera documento -->
         <?php include 'views/partials/header.php' ?>
 
-        <legend>Formulario Nuevo Artículo</legend>
+        <legend>Formulario Nuevo Alumno</legend>
 
-        <!-- Formulario Nuevo Libro -->
+        <!-- Formulario Nuevo alumno -->
         <form action="create.php" method="POST">
 
             <!-- id -->
@@ -23,55 +23,52 @@
                 <label for="titulo" class="form-label">Id</label>
                 <input type="text" class="form-control" name="id">
             </div>
-            <!-- Descripción -->
+            <!-- Nombre -->
             <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripción</label>
-                <input type="text" class="form-control" name="descripcion">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" name="nombre">
             </div>
-            <!-- Modelo -->
+            <!-- Apellidos -->
             <div class="mb-3">
-                <label for="modelo" class="form-label">Modelo</label>
-                <input type="text" class="form-control" name="modelo">
-                <!-- <div class="form-text">Introduzca Autor del libro</div> -->
+                <label for="apellidos" class="form-label">Apellidos</label>
+                <input type="text" class="form-control" name="apellidos">
             </div>
-            <!-- Marca Select -->
+            <!-- Email -->
             <div class="mb-3">
-                <label for="genero" class="form-label">Marca</label>
-                <select class="form-select" aria-label="Default select example" name="marca">
-                    <option selected disabled>Seleccione Marca</option>
-                    <?php foreach ($marcas as $indice => $marca): ?>
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" name="email">
+            </div>
+            <!-- Fecha Nacimiento -->
+            <div class="mb-3">
+                <label for="fecha_nacimiento" class="form-label">Fecha Nacimiento</label>
+                <input type="date" class="form-control" name="fecha_nacimiento">
+            </div>
+            <!-- Curso Select -->
+            <div class="mb-3">
+                <label for="curso" class="form-label">Curso</label>
+                <select class="form-select" aria-label="Default select example" name="curso">
+                    <option selected disabled>Seleccione Curso</option>
+                    <?php foreach ($cursos as $indice => $curso): ?>
                         <option value="<?= $indice ?>">
-                            <?= $marca ?>
+                            <?= $curso ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
             </div>
-            <!-- Unidades -->
+
+            <!-- Asignaturas checkbox -->
             <div class="mb-3">
-                <label for="unidades" class="form-label">Unidades</label>
-                <input type="number" class="form-control" name="unidades" step="0.01">
-                <!-- <div class="form-text">Introduzca Precio</div> -->
+                <label class="form-label">Asignaturas</label>
+                <?php foreach ($asignaturas as $indice => $asignatura): ?>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="asignaturas[]" value="<?= $indice ?>">
+                        <label class="form-check-label">
+                            <?= $asignatura ?>
+                        </label>
+                    </div>
+                <?php endforeach; ?>
             </div>
-            <!-- Precio -->
-            <div class="mb-3">
-                <label for="precio" class="form-label">Precio (€)</label>
-                <input type="number" class="form-control" name="precio" step="0.01">
-                <!-- <div class="form-text">Introduzca Precio</div> -->
-            </div>
-            <!-- Categorías -->
-            <div class="mb-3">
-                <label for="categorias" class="form-label">Seleccione Categorías</label>
-                <div class="form-control">
-                    <?php foreach ($categorias as $indice => $categoria): ?>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="<?= $indice ?>" name="categorias[]">
-                            <label class="form-check-label" for="">
-                                <?= $categoria ?>
-                            </label>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
+
 
 
 

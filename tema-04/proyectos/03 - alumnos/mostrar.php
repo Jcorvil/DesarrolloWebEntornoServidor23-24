@@ -4,12 +4,12 @@
 
         Controlador: mostrar.php
         Descripción: mostrar un formulario con los detalles no editables
-        del libro seleccionado
+        del alumno seleccionado
     */
 
     # Clases
-    include 'class/class.articulo.php';
-    include 'class/class.arrayArticulo.php';
+    include 'class/class.alumno.php';
+    include 'class/class.arrayAlumnos.php';
 
     # Model
     include 'models/model.mostrar.php';

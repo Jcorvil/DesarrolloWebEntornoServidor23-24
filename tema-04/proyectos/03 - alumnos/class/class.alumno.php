@@ -38,16 +38,11 @@ class Alumno
 
 
 	function getEdad() {
-		$fechaNacimiento = new DateTime($this->fecha_nacimiento);
+		$fechaNacimiento = DateTime::createFromFormat('d/m/Y', $this->fecha_nacimiento);
 		$hoy = new DateTime();
 		$edad = $hoy->diff($fechaNacimiento)->y;
 		return $edad;
 	}
-
-
-
-
-	/* ******* GETTERS Y SETTERS ******* */
 
 
 }

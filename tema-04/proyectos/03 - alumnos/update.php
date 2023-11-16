@@ -3,19 +3,16 @@
     /*
 
         Controlador: update.php
-        Descripción: actualiza los detalles  de un  artículo
-        
+        Descripción: actualiza los detalles de un alumno
 
     */
 
-
     # Clases
-    include 'class/class.articulo.php';
-    include 'class/class.arrayArticulo.php';
+    include 'class/class.alumno.php';
+    include 'class/class.arrayAlumnos.php';
 
     # Model
     include 'models/model.update.php';
-
 
     # Vista
     include 'views/view.index.php';
