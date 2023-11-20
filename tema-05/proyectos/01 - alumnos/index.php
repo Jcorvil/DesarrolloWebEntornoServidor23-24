@@ -3,13 +3,13 @@
     /*
 
         Controlador: index.php
-        Descripción: muestra los detalles de los articulos ordenados  por id
+        Descripción: muestra los detalles de los alumnos ordenados  por id
 
     */
 
     # Clases
-    include 'class/class.articulo.php';
-    include 'class/class.arrayArticulo.php';
+    include 'class/class.conexion.php';
+    include 'class/class.fp.php';
 
     # Model
     include 'models/model.index.php';

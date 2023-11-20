@@ -3,7 +3,7 @@
 
 <head>
     <?php include 'views/layouts/head.php' ?>
-    <title>Proyecto 4.2 - Gestión Artículos</title>
+    <title>Proyecto 5.1 - Alumnos FP</title>
 </head>
 
 <body>
@@ -13,7 +13,7 @@
         <!-- cabecera documento -->
         <?php include 'views/partials/header.php' ?>
 
-        <legend>Tabla Artículos</legend>
+        <legend>Tabla Alumnos</legend>
 
         <!-- Menu Principal -->
         <?php include 'views/partials/menu_prin.php' ?>
@@ -29,50 +29,53 @@
                 <tr>
                     <!-- personalizado -->
                     <th>Id</th>
-                    <th>Descripción</th>
-                    <th>Modelo</th>
-                    <th>Marca</th>
-                    <th>Categorias</th>
-                    <th class="text-end">Stock</th>
-                    <th class="text-end">Precio</th>
-                    <th>Acciones</th>
+                    <th>Alumno</th>
+                    <th>Edad</th>
+                    <th>Dni</th>
+                    <th>Poblacion</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Curso</th>
                 </tr>
             </thead>
             <!-- Mostramos cuerpo de la tabla -->
             <tbody>
 
-                <?php foreach ($articulos->getTabla() as $indice => $articulo): ?>
+                <?php foreach ($alumnos as $alumno): ?>
                     <tr>
                         <!-- Formatos distintos para cada  columna -->
 
                         <!-- Detalles de artículos -->
                         <td>
-                            <?= $articulo->getId() ?>
+                            <?= $alumno['id'] ?>
                         </td>
                         <td>
-                            <?= $articulo->getDescripcion() ?>
-                        </td>
-                        <td>
-                            <?= $articulo->getModelo() ?>
-                        </td>
-                        <td>
-                            <?= $marcas[$articulo->getMarca()] ?>
-                        </td>
-                        <td>
-                            <?= implode(', ', ArrayArticulos::mostrarCategorias($categorias, $articulo->getCategoria())) ?>
+                            <?= $alumno['alumno'] ?>
                         </td>
                         <td class="text-end">
-                            <?= $articulo->getUnidades() ?>
+                            <?= $alumno['edad'] ?>
                         </td>
-                        <td class="text-end">
-                            <?= number_format($articulo->getPrecio(), 2, ',', '.') ?> €
+                        <td>
+                            <?= $alumno['dni'] ?>
+                        </td>
+                        <td>
+                            <?= $alumno['poblacion'] ?>
+                        </td>
+                        <td>
+                            <?= $alumno['email'] ?>
+                        </td>
+                        <td>
+                            <?= $alumno['telefono'] ?>
+                        </td>
+                        <td>
+                            <?= $alumno['curso'] ?>
                         </td>
 
 
                         <td>
-                            <a href="eliminar.php?id=<?= $indice ?>" title="Eliminar"><i class="bi bi-trash"></i></a>
-                            <a href="editar.php?id=<?= $indice ?>" title="Editar"><i class="bi bi-pencil"></i></a>
-                            <a href="mostrar.php?id=<?= $indice ?>" title="Mostrar"><i class="bi bi-eye"></i></a>
+                            <a href="eliminar.php?id=<?= $alumno ?>" title="Eliminar"><i class="bi bi-trash"></i></a>
+                            <a href="editar.php?id=<?= $alumno ?>" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="mostrar.php?id=<?= $alumno ?>" title="Mostrar"><i class="bi bi-eye"></i></a>
 
                         </td>
                     </tr>
@@ -83,8 +86,8 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="7">Nº Artículos
-                        <?= count($articulos->getTabla()) ?>
+                    <td colspan="7">Nº Alumnos
+                        <?= $alumnos->num_rows ?>
                     </td>
                 </tr>
             </tfoot>

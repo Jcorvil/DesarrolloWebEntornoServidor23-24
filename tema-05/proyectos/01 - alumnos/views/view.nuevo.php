@@ -13,20 +13,22 @@
         <!-- cabecera documento -->
         <?php include 'views/partials/header.php' ?>
 
-        <legend>Formulario Nuevo Artículo</legend>
+        <legend>Formulario Nuevo Alumno</legend>
 
         <!-- Formulario Nuevo Libro -->
         <form action="create.php" method="POST">
 
-            <!-- id -->
+            <!-- id 
             <div class="mb-3">
                 <label for="titulo" class="form-label">Id</label>
                 <input type="text" class="form-control" name="id">
             </div>
-            <!-- Descripción -->
+            -->
+
+            <!-- Nombre -->
             <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripción</label>
-                <input type="text" class="form-control" name="descripcion">
+                <label for="Nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" name="Nombre">
             </div>
             <!-- Modelo -->
             <div class="mb-3">
@@ -52,25 +54,23 @@
                 <input type="number" class="form-control" name="unidades" step="0.01">
                 <!-- <div class="form-text">Introduzca Precio</div> -->
             </div>
-            <!-- Precio -->
+            <!-- nacionalidad -->
             <div class="mb-3">
-                <label for="precio" class="form-label">Precio (€)</label>
-                <input type="number" class="form-control" name="precio" step="0.01">
-                <!-- <div class="form-text">Introduzca Precio</div> -->
+                <label for="nacionalidad" class="form-label">Nacionalidad</label>
+                <input type="text" class="form-control" name="nacionalidad">
+
             </div>
-            <!-- Categorías -->
+            <!-- Curso select -->
             <div class="mb-3">
-                <label for="categorias" class="form-label">Seleccione Categorías</label>
-                <div class="form-control">
-                    <?php foreach ($categorias as $indice => $categoria): ?>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="<?= $indice ?>" name="categorias[]">
-                            <label class="form-check-label" for="">
-                                <?= $categoria ?>
-                            </label>
-                        </div>
+                <label for="curso" class="form-label">Curso</label>
+                <select class="form-select" aria-label="Default select example" name="id_curso">
+                    <option selected disabled>Seleccione Curso</option>
+                    <?php foreach ($cursos as $data): ?>
+                        <option value="<?= $data['id'] ?>">
+                            <?= $data['curso'] ?>
+                        </option>
                     <?php endforeach; ?>
-                </div>
+                </select>
             </div>
 
 

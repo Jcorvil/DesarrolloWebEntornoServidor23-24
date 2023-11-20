@@ -29,11 +29,38 @@ class Fp extends Conexion
         cursos ON alumnos.id_curso = cursos.id
     ORDER BY id";
 
-        $result = $this->db->query($sql);
+        //$result = $this->db->query($sql);
+
+        //return $result;
+
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
 
         return $result;
 
+
     }
+
+
+    public function getCursos()
+    {
+        $sql = "SELECT
+        id, nombreCorto curso 
+        FROM 
+        cursos 
+        ORDER BY 
+        id ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result;
+    }
+
 
 }
 

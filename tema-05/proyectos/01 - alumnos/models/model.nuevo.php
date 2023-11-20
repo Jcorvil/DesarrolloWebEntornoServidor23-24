@@ -8,8 +8,8 @@
     */
 
     # cargamos la tabla
-    $categorias = ArrayArticulos::getCategorias();
-    $marcas = ArrayArticulos::getMarcas();
+    $fp = new Fp();
+    $cursos = $fp->getCursos();
 
 
 ?>
