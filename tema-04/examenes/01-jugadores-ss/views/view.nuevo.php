@@ -51,7 +51,7 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-            
+
             <!-- equipos -->
             <div class="mb-3">
                 <label for="" class="form-label">Equipo</label>
