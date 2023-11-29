@@ -15,9 +15,9 @@
     include('class/class.alumnos.php');
 
     # Cargo modelo
-    include('models/model.index.php');
+    include('models/model.create.php');
 
     # Cargo vista
-    include('views/view.index2.php');
+    header('location: index.php');
 
 ?>

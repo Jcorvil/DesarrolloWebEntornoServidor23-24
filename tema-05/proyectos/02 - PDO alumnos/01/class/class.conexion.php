@@ -31,7 +31,6 @@
                 exit();
             }
 
-            echo 'Conexión realizada con éxito';
 
         }
 

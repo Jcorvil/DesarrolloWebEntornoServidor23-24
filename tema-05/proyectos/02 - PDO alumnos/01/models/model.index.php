@@ -11,6 +11,7 @@
     $conexion = new Alumnos();
 
     # Extraigo los valores de los alumnos
+    # $alumnos es un objeto de la clase pdostmt
     $alumnos = $conexion->getAlumnos();
 
 
