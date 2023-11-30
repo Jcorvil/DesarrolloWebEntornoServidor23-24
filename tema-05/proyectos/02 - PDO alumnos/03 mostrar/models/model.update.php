@@ -2,24 +2,13 @@
 
 /*
 
-    Modelo: model.create.php
-    Descripcion: añade un nuevo  alumno a la tabla alumnos de la bbdd fp
-
-    Método POST:
-                - id 
-                - nombre
-                - apellidos
-                - email
-                - telefono
-                - direccion
-                - poblacion
-                - provincia
-                - nacionalidad
-                - dni
-                - fechaNac
-                - id_curso
+    Modelo: model.update.php
+    Descripcion: actualiza los detalles de un alumno
 
 */
+
+# obtener id del alumno
+$id_editar = $_GET['id'];
 
 # Cargamos en varibales detalles del  formulario
 $nombre = $_POST['nombre'];
@@ -53,12 +42,11 @@ $alumno->id_curso = $id_curso;
 
 # Validación
 
-# Insertar registro
-$conexion = new Alumnos();
-$conexion->insertAlumno($alumno);
+# Se actualizan los datos
 
+$alumnos = new Alumnos();
+$alumnos->update_alumno($alumno, $id_editar);
 
-
-
+header('location: index.php');
 
 ?>

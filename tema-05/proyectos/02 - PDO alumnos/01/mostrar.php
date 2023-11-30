@@ -1,7 +1,7 @@
 <?php
 
     /*
-        Controlador principal index con PDO
+        Controlador mostrar con PDO
     */
 
     # Cargamos configuración
@@ -15,9 +15,9 @@
     include('class/class.alumnos.php');
 
     # Cargo modelo
-    include('models/model.index.php');
+    include('models/model.mostrar.php');
 
     # Cargo vista
-    include('views/view.index.php');
+    include('views/view.mostrar.php');
 
 ?>
