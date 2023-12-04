@@ -290,49 +290,36 @@ class Alumnos extends Conexion
     public function order($criterio)
     {
         try {
-            switch ($criterio) {
-                case 'id':
-                    $sql = "SELECT * FROM alumnos ORDER BY id";
-                    break;
-                case 'alumno':
-                    $sql = "SELECT * FROM alumnos ORDER BY apellidos, nombre";
-                    break;
-                case 'edad':
-                    $sql = "SELECT * FROM alumnos ORDER BY timestampdiff(YEAR, fechaNac, NOW())";
-                    break;
-                case 'dni':
-                    $sql = "SELECT * FROM alumnos ORDER BY dni";
-                    break;
-                case 'poblacion':
-                    $sql = "SELECT * FROM alumnos ORDER BY poblacion";
-                    break;
-                case 'email':
-                    $sql = "SELECT * FROM alumnos ORDER BY email";
-                    break;
-                case 'telefono':
-                    $sql = "SELECT * FROM alumnos ORDER BY telefono";
-                    break;
-                case 'curso':
-                    $sql = "SELECT * FROM alumnos ORDER BY curso";
-                    break;
-                default:
-                    # Si el criterio no coincide con ninguno de los casos anteriores, obtén todos los alumnos
-                    $sql = "SELECT * FROM alumnos";
-                    break;
-            }
+            $sql = "SELECT 
+                        alumnos.id,
+                        CONCAT_WS(', ', alumnos.apellidos, alumnos.nombre) AS nombre,
+                        alumnos.email,
+                        alumnos.telefono,
+                        alumnos.poblacion,
+                        alumnos.dni,
+                        TIMESTAMPDIFF(YEAR,
+                            alumnos.fechaNac,
+                            NOW()) AS edad,
+                        cursos.nombreCorto AS curso
+                    FROM
+                        fp.alumnos
+                            INNER JOIN
+                        cursos ON alumnos.id_curso = cursos.id
+                    ORDER BY $criterio";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->setFetchMode(PDO::FETCH_OBJ);
+
+            $data = $stmt->fetch(PDO::FETCH_OBJ);
+
             $stmt->execute();
 
-            return $stmt->fetchAll(PDO::FETCH_OBJ);
+            return $data;
+
         } catch (Exception $e) {
             include('views/partials/errorDB.php');
             exit();
         }
     }
-
-
 
 
 }
