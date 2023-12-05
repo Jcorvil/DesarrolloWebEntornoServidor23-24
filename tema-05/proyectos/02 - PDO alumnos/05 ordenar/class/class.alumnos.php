@@ -307,7 +307,7 @@ class Alumnos extends Conexion
                         cursos ON alumnos.id_curso = cursos.id
                     ORDER BY $criterio";
 
-            $stmt = $this->pdo->prepare($sql);
+              $stmt = $this->pdo->prepare($sql);
 
             $data = $stmt->fetch(PDO::FETCH_OBJ);
 
