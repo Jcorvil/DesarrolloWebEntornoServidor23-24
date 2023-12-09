@@ -8,9 +8,11 @@
 
 */
 
-class Corredores extends Conexion {
+class Corredores extends Conexion
+{
 
-    public function getCorredores() {
+    public function getCorredores()
+    {
         $sql = "SELECT 
                     corredores.id,
                     corredores.nombre,
@@ -44,7 +46,8 @@ class Corredores extends Conexion {
 
 
 
-    public function getCategorias() {
+    public function getCategorias()
+    {
         try {
 
             $sql = "SELECT id, nombrecorto FROM categorias;";
@@ -67,7 +70,8 @@ class Corredores extends Conexion {
 
     }
 
-    public function getClubs() {
+    public function getClubs()
+    {
         try {
 
             $sql = "SELECT id, nombrecorto FROM clubs;";
@@ -90,7 +94,8 @@ class Corredores extends Conexion {
 
     }
 
-    public function create(Corredor $corredor) {
+    public function create(Corredor $corredor)
+    {
         try {
             # Prepare
             $sql = "INSERT INTO maratoon.corredores (
@@ -148,7 +153,8 @@ class Corredores extends Conexion {
 
 
 
-    public function delete($id) {
+    public function delete($id)
+    {
         try {
 
             $registroDelete = "DELETE FROM 
@@ -191,33 +197,30 @@ class Corredores extends Conexion {
     }
 
 
-    public function read($id) {
+    public function read($id)
+    {
         try {
-
             $sql = "SELECT *
                     FROM
                         corredores
-                    WHERE id = :id";
+                    WHERE id = :id
+                    LIMIT 1";
 
             $pdostmt = $this->pdo->prepare($sql);
-
             $pdostmt->bindParam(":id", $id, PDO::PARAM_INT);
-
             $pdostmt->setFetchMode(PDO::FETCH_OBJ);
-
             $pdostmt->execute();
 
             return $pdostmt->fetch();
-
         } catch (PDOException $e) {
-
             include('views/partials/errorDB.php');
             exit();
 
         }
     }
 
-    public function update(Corredor $corredor, $id) {
+    public function update(Corredor $corredor, $id)
+    {
 
         try {
             $sql = "UPDATE corredores SET 
@@ -259,7 +262,8 @@ class Corredores extends Conexion {
         }
     }
 
-    public function insertarCorredor(Corredor $corredor) {
+    public function insertarCorredor(Corredor $corredor)
+    {
         try {
             // Creamos la consulta
             $sql = "INSERT INTO corredores (
@@ -314,7 +318,8 @@ class Corredores extends Conexion {
 
 
 
-    public function getCategoria($id) {
+    public function getCategoria($id)
+    {
         try {
 
             $sql = "SELECT 
@@ -338,7 +343,14 @@ class Corredores extends Conexion {
             # Ejecución
             $pdostmt->execute();
 
-            return $pdostmt->fetch();
+            $resultado = $pdostmt->fetch();
+
+            if ($resultado) {
+                return $resultado;
+            } else {
+                // En caso de que no haya categoría, devuelve un valor predeterminado
+                return (object) ['nombre' => 'Sin categoría'];
+            }
 
         } catch (Exception $e) {
             include('views/partials/errorDB.php');
@@ -347,7 +359,8 @@ class Corredores extends Conexion {
 
     }
 
-    public function getClub($id) {
+    public function getClub($id)
+    {
         try {
 
             $sql = "SELECT 
@@ -380,7 +393,8 @@ class Corredores extends Conexion {
 
     }
 
-    public function order($criterio) {
+    public function order($criterio)
+    {
         try {
             $sql = "SELECT 
                         corredores.id,
@@ -413,7 +427,8 @@ class Corredores extends Conexion {
     }
 
 
-    public function filter($expresion) {
+    public function filter($expresion)
+    {
         try {
             $sql = "SELECT 
                         corredores.id,
