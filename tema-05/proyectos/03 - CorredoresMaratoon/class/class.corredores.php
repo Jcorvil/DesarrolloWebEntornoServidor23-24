@@ -393,7 +393,7 @@ class Corredores extends Conexion
 
     }
 
-    public function order($criterio)
+    public function order(int $criterio)
     {
         try {
             $sql = "SELECT 
@@ -413,9 +413,13 @@ class Corredores extends Conexion
                         maratoon.categorias ON categorias.id = corredores.id_categoria
                     LEFT JOIN
                         maratoon.clubs ON clubs.id = corredores.id_club
-                    ORDER BY $criterio";
+                    ORDER BY :order";
+
+
 
             $pdostmt = $this->pdo->prepare($sql);
+            
+            $pdostmt->bindParam(':order', $criterio, PDO::PARAM_INT);
             $pdostmt->execute();
 
             return $pdostmt->fetchAll(PDO::FETCH_OBJ);
