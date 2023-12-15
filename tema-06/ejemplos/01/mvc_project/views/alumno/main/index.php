@@ -8,7 +8,14 @@
 </head>
 
 <body>
-    Placeholder
+    <h1>Hola mundo</h1>
+    <h3>Vista main de Alumno</h3>
+    <p>
+        Nombre:
+        <?= $this->nombre; ?> <br>
+        Apellidos:
+        <?= $this->apellidos; ?>
+    </p>
 </body>
 
 </html>

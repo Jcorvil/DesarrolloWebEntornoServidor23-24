@@ -1,6 +1,6 @@
 <?php
 
-    class Alumnos Extends Controller {
+    class Main Extends Controller {
 
         function __construct() {
 
