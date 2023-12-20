@@ -22,7 +22,7 @@
         <legend>Formulario Nuevo Alumnos</legend>
 
         <!-- Formulario Nuevo Libro -->
-        <form action="create.php" method="POST">
+        <form action="<?= URL ?>create.php" method="POST">
 
             <!-- id -->
             <!-- <div class="mb-3">

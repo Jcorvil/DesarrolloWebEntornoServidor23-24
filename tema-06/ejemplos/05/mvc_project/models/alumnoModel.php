@@ -157,6 +157,32 @@ class alumnoModel extends Model
             }
         }
     }
+
+    public function read($id)
+    {
+        try {
+
+            $sql = "SELECT * FROM alumnos WHERE id = :id LIMIT 1";
+
+            $stmt = $this->pdo->prepare($sql);
+
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+            $data = $stmt->fetch(PDO::FETCH_OBJ);
+
+            $stmt->execute();
+
+            if (!$data) {
+                throw new Exception('Alumno No Encontrado');
+            }
+
+            return $data;
+
+        } catch (Exception $e) {
+            include('views/partials/errorDB.php');
+            exit();
+        }
+    }
 }
 
 ?>

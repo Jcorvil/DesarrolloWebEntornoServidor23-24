@@ -66,10 +66,28 @@ class Alumno extends Controller
         $this->model->create($alumno);
 
         # Redirigimos al main de alumnos
-        header('location:'.URL.'alumno');
+        header('location:' . URL . 'alumno');
 
     }
 
+    function edit($param = [])
+    {
+        # Obtengo el id del alumno que voy a editar
+
+        $id = $param[0];
+
+        # asigno id a una propiedad de la vista
+        $this->view->id = $param[0];
+
+        # title
+        $this->view->title = "Edit - Panel de control Alumnos";
+
+        # Obtener el objeto de la clase alumno
+        $this->view->alumno = $this->model->read($id);
+        $this->view->alumno = $this->model->getCursos($id);
+
+        $this->view->render('alumnos/edit/index');
+    }
 
 }
 
