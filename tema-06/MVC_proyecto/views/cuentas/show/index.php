@@ -61,7 +61,7 @@
             <!-- saldo -->
             <div class="mb-3">
                 <label for="saldo" class="form-label">Saldo</label>
-                <input type="text" class="form-control" name="saldo" value="<?= $this->cuentas->saldo ?>" disabled>
+                <input type="text" class="form-control" name="saldo" value="<?= $this->cuenta->saldo ?>" disabled>
             </div>
 
             <!-- botones de acción -->

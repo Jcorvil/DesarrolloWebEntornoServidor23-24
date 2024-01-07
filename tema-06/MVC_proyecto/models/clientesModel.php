@@ -181,7 +181,6 @@ class clientesModel extends Model
         }
     }
 
-
     public function order(int $criterio)
     {
         try {
@@ -198,8 +197,7 @@ class clientesModel extends Model
                     FROM
                         clientes
                     ORDER BY 
-                        :criterio
-            ";
+                        :criterio";
 
             $conexion = $this->db->connect();
 

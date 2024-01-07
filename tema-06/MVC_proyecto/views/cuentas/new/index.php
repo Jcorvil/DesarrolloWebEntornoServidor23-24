@@ -38,14 +38,7 @@
             <!-- cliente -->
             <div class="mb-3">
                 <label for="id_cliente" class="form-label">Cliente</label>
-                <select class="form-select" aria-label="Default select example" type="number" name="id_cliente">
-                    <option selected>Seleccione Cliente</option>
-                    <?php foreach ($this->clientes as $cliente): ?>
-                        <option value="<?= $cliente->id ?>">
-                            <?= $cliente->clienteCuenta ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <input type="number" class="form-control" name="id_cliente">
             </div>
 
 
