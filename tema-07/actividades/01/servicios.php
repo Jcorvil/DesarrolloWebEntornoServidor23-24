@@ -3,10 +3,10 @@
 // Iniciamos la sesión
 session_start();
 
-if (isset($_SESSION['num_visitas_home'])) {
-  $_SESSION['num_visitas_home']++;
+if (isset($_SESSION['num_visitas_servicios'])) {
+  $_SESSION['num_visitas_servicios']++;
 } else {
-  $_SESSION['num_visitas_home'] = 1;
+  $_SESSION['num_visitas_servicios'] = 1;
 }
 
 if (!isset($_SESSION['fecha_hora_visita'])) {
@@ -27,7 +27,7 @@ if (!isset($_SESSION['fecha_hora_visita'])) {
 
 <body>
   <ul>
-  <li>
+    <li>
       <a href="index.php">Home</a>
     </li>
     <li>
@@ -46,7 +46,7 @@ if (!isset($_SESSION['fecha_hora_visita'])) {
 
   <h3>Detalles</h3>
   <ul>
-    <li>Página: Home</li>
+    <li>Página: Servicios</li>
     <li>SID:
       <?= session_id() ?>
     </li>
@@ -57,7 +57,7 @@ if (!isset($_SESSION['fecha_hora_visita'])) {
       <?= date('d-m-Y H:i:s', $_SESSION['fecha_hora_visita']) ?>
     </li>
     <li>Visitas durante la sesión:
-      <?= $_SESSION['num_visitas_home'] ?>
+      <?= $_SESSION['num_visitas_servicios'] ?>
     </li>
   </ul>
 
