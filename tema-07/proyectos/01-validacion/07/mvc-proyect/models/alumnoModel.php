@@ -439,7 +439,7 @@ class alumnoModel extends Model
              $conexion = $this->db->connect();
  
              $pdost = $conexion->prepare($sql);
-             $pdost->bindParam(':id', $id_curso, PDO::PARAM_INT);
+             $pdost->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
  
              $pdost->execute();
  

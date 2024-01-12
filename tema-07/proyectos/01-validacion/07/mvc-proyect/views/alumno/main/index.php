@@ -18,7 +18,7 @@
 		<!-- cabecera  -->
 		<?php require_once("views/alumno/partials/header.php") ?>
 
-		<!-- mensajes -->
+		<!-- notificacion -->
 		<?php require_once("template/partials/notify.php") ?>
 
 		<!-- errores -->

@@ -14,6 +14,15 @@ class Alumno extends Controller
     function render()
     {
 
+        # Inicio o continúo la sesión
+        session_start();
+
+        # Comprobar si existe el mensaje
+        if (isset($_SESSION['mensaje'])) {
+            $this->view->mensaje = $_SESSION['mensaje'];
+            unset($_SESSION['mensaje']);
+        }
+
         # Creo la propiedad title de la vista
         $this->view->title = "Home - Panel Control Alumnos";
 
@@ -26,6 +35,31 @@ class Alumno extends Controller
 
     function new()
     {
+
+        # Iniciar o continuar sesión
+        session_start();
+
+        # Crear un objeto alumno vacío
+        $this->view->alumno = new classAlumno();
+
+        # Comprobar si vuelvo de un registro no validado
+        if (isset($_SESSION['error'])) {
+
+            # Mensaje de error
+            $this->view->error = $_SESSION['error'];
+
+
+            # Autorrellenar el formulario con los detalles del alumno
+            $this->view->alumno = unserialize($_SESSION['alumno']);
+            
+            # Recupero array de errores específicos
+            $this->view->errores = $_SESSION['errores'];
+
+            unset($_SESSION['error']);
+            unset($_SESSION['errores']);
+            unset($_SESSION['alumno']);
+
+        }
 
         # etiqueta title de la vista
         $this->view->title = "Añadir - Gestión Alumnos";
@@ -125,12 +159,12 @@ class Alumno extends Controller
 
 
         // Fecha nacimiento: Obligatorio
-        $valores = explode('/', $fechaNac);
-        if (empty($fechaNac)) {
-            $errores['fechaNac'] = 'El campo fecha de nacimiento es obligatorio';
-        } else if (!checkdate($valores[1], $valores[0], $valores[2])) {
-            $errores['fechaNac'] = 'Formato de fecha de nacimiento erróneo';
-        }
+        // $valores = explode('/', $fechaNac);
+        // if (empty($fechaNac)) {
+        //     $errores['fechaNac'] = 'El campo fecha de nacimiento es obligatorio';
+        // } else if (!checkdate($valores[1], $valores[0], $valores[2])) {
+        //     $errores['fechaNac'] = 'Formato de fecha de nacimiento erróneo';
+        // }
 
         // ID Curso: Obligatorio, entero, existente
         if (empty($id_curso)) {
@@ -147,6 +181,11 @@ class Alumno extends Controller
             // Errores de validación
             // transforma el objeto alumno en un string
             $_SESSION['alumno'] = serialize($alumno);
+            $_SESSION['error'] = 'Formulario no validado';
+            $_SESSION['erorres'] = $errores;
+
+            # Redireccionamos a new
+            header('Location:' . URL . 'alumno/new');
 
         } else {
             # Añadir registro a la tabla
