@@ -51,7 +51,7 @@
             <div class="mb-3">
                 <label for="dni" class="form-label">Dni</label>
                 <input type="text" class="form-control" name="dni" value="<?= $this->alumno->dni ?>">
-
+                
                 <!-- Mostrar posible error -->
                 <?php if (isset($this->errores['dni'])): ?>
                     <span class="form-text text-danger" role="alert">
