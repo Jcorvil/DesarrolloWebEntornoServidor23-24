@@ -209,10 +209,8 @@ class alumnoModel extends Model
 
         try {
 
-            $sql = "
-                
-                UPDATE alumnos
-                SET
+            $sql = "UPDATE alumnos
+                    SET
                         nombre = :nombre,
                         apellidos = :apellidos,
                         email = :email,
@@ -221,10 +219,10 @@ class alumnoModel extends Model
                         dni = :dni,
                         fechaNac = :fechaNac,
                         id_curso = :id_curso
-                WHERE
-                        id = :id
-                LIMIT 1
-                ";
+                    WHERE
+                            id = :id
+                    LIMIT 1
+                    ";
 
             $conexion = $this->db->connect();
 
@@ -384,7 +382,7 @@ class alumnoModel extends Model
 
             $pdost->execute();
 
-            if ($pdost->rowCount() != 0){
+            if ($pdost->rowCount() != 0) {
                 return false;
             }
 
@@ -398,66 +396,80 @@ class alumnoModel extends Model
         }
     }
 
-     # Validación de dni único
-     public function validateDNI($dni)
-     {
-         try {
-             $sql = "SELECT * FROM alumnos 
+    # Validación de dni único
+    public function validateDNI($dni)
+    {
+        try {
+            $sql = "SELECT * FROM alumnos 
                      WHERE dni = :dni";
- 
- 
-             # Conectar con la base de datos
-             $conexion = $this->db->connect();
- 
-             $pdost = $conexion->prepare($sql);
-             $pdost->bindParam(':dni', $dni, PDO::PARAM_STR);
- 
-             $pdost->execute();
- 
-             if ($pdost->rowCount() != 0){
-                 return false;
-             }
- 
-             return true;
- 
-         } catch (PDOException $e) {
- 
-             include_once('template/partials/errorDB.php');
-             exit();
- 
-         }
-     }
 
-     public function validateIdCurso($id_curso)
-     {
-         try {
-             $sql = "SELECT * FROM cursos 
+
+            # Conectar con la base de datos
+            $conexion = $this->db->connect();
+
+            $pdost = $conexion->prepare($sql);
+            $pdost->bindParam(':dni', $dni, PDO::PARAM_STR);
+
+            $pdost->execute();
+
+            if ($pdost->rowCount() != 0) {
+                return false;
+            }
+
+            return true;
+
+        } catch (PDOException $e) {
+
+            include_once('template/partials/errorDB.php');
+            exit();
+
+        }
+    }
+
+    public function validateIdCurso($id_curso)
+    {
+        try {
+            $sql = "SELECT * FROM cursos 
                      WHERE id = :id_curso";
- 
- 
-             # Conectar con la base de datos
-             $conexion = $this->db->connect();
- 
-             $pdost = $conexion->prepare($sql);
-             $pdost->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
- 
-             $pdost->execute();
- 
-             if ($pdost->rowCount() == 1){
-                 return true;
-             }
- 
-             return false;
- 
-         } catch (PDOException $e) {
- 
-             include_once('template/partials/errorDB.php');
-             exit();
- 
-         }
-     }
 
 
+            # Conectar con la base de datos
+            $conexion = $this->db->connect();
+
+            $pdost = $conexion->prepare($sql);
+            $pdost->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
+
+            $pdost->execute();
+
+            if ($pdost->rowCount() == 1) {
+                return true;
+            }
+
+            return false;
+
+        } catch (PDOException $e) {
+
+            include_once('template/partials/errorDB.php');
+            exit();
+
+        }
+    }
+
+
+    public function delete($id)
+    {
+        try {
+            $sql = "DELETE FROM alumnos WHERE id = :id LIMIT 1";
+            $conexion = $this->db->connect();
+            $pdost = $conexion->prepare($sql);
+            $pdost->execute();
+
+        } catch (PDOException $e) {
+            include_once('template/partials/errorDB.php');
+            exit();
+        }
+
+    }
 
 }
 
