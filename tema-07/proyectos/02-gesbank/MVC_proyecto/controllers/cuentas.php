@@ -103,7 +103,7 @@ class Cuentas extends Controller
 
         $this->view->clientes = $clientesConcatenados;
 
-        $this->view->render('cuenta/edit/index');
+        $this->view->render('cuentas/edit/index');
     }
 
     function update($param = [])

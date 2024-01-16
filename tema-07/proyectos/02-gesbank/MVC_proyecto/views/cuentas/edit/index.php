@@ -27,7 +27,7 @@
 
             <div class="mb-3">
                 <label for="num_cuenta" class="form-label">Nº de la cuenta</label>
-                <input type="text" class="form-control" name="num_cuenta" value="<?= $this->cuentas->num_cuenta ?>" readonly>
+                <input type="text" class="form-control" name="num_cuenta" value="<?= $this->cuenta->num_cuenta ?>" readonly>
             </div>
             <!-- id_cliente -->
             <div class="mb-3">
@@ -45,27 +45,27 @@
             <div class="mb-3">
                 <label for="fecha_alta" class="form-label">Fecha de alta</label>
                 <input type="datetime-local" class="form-control" name="fecha_alta"
-                    value="<?= $this->cuentas->fecha_alta ?>" readonly>
+                    value="<?= $this->cuenta->fecha_alta ?>" readonly>
             </div>
             <!-- fecha_ul_mov -->
             <!-- <div class="mb-3">
                 <label for="fecha_ul_mov" class="form-label">Fecha último movimiento</label>
                 <input type="datetime-local" class="form-control" name="fecha_ul_mov"
-                    value="<?= $this->cuentas->fecha_ul_mov ?>">
+                    value="<?= $this->cuenta->fecha_ul_mov ?>">
             </div> -->
             <!-- num_movtos -->
             <div class="mb-3">
                 <label for="num_movtos" class="form-label">Nº de movimientos totales</label>
-                <input type="text" class="form-control" name="num_movtos" value="<?= $this->cuentas->num_movtos ?>" readonly>
+                <input type="text" class="form-control" name="num_movtos" value="<?= $this->cuenta->num_movtos ?>" readonly>
             </div>
             <!-- saldo -->
             <div class="mb-3">
                 <label for="saldo" class="form-label">Saldo</label>
-                <input type="text" class="form-control" name="saldo" value="<?= $this->cuentas->saldo ?>" readonly>
+                <input type="text" class="form-control" name="saldo" value="<?= $this->cuenta->saldo ?>" readonly>
             </div>
 
             <!-- botones de acción -->
-            <a class="btn btn-secondary" href="<?= URL ?>cuentas" role="button">Cancelar</a>
+            <a class="btn btn-secondary" href="<?= URL ?>cuenta" role="button">Cancelar</a>
             <button type="reset" class="btn btn-danger">Restaurar</button>
             <button type="submit" class="btn btn-primary">Actualizar</button>
 
