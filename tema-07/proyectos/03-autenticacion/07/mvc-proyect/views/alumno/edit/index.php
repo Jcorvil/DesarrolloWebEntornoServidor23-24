@@ -11,7 +11,7 @@
 
 <body>
     <!-- Menú Principal -->
-    <?php require_once("template/partials/menu.php") ?>
+	<?php require_once("template/partials/menuAut.php") ?>
     <br><br><br>
 
     <!-- Capa principal -->
