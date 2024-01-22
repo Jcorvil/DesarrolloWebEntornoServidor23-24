@@ -13,12 +13,12 @@
             $this->view->password = null;
 
             # Control de los mensajes
-            if (isset($_SESSION['notify'])) {
+            if (isset($_SESSION['mensaje'])) {
 
-                $this->view->mensaje = $_SESSION['notify'];
-                unset($_SESSION['notify']);
+                $this->view->mensaje = $_SESSION['mensaje'];
+                unset($_SESSION['mensaje']);
 
-                # Autorelleno en caso de registro con éxito
+                # Autorelleno en caso de registro fallido
 
                 if (isset($_SESSION['email'])) {
                     $this->view->email =$_SESSION['email'];
@@ -62,8 +62,8 @@
             session_start();
 
             # Saneamos el formulario
-            $email = filter_var($_POST['email'],FILTER_SANITIZE_EMAIL);
-	        $password = filter_var($_POST['password'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $email = filter_var($_POST['email'] ??= '',FILTER_SANITIZE_EMAIL);
+	        $password = filter_var($_POST['password'] ??= '',FILTER_SANITIZE_STRING);
 
             # Validaciones
 
