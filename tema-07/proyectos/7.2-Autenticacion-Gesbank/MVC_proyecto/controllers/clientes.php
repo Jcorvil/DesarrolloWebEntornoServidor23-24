@@ -157,6 +157,7 @@ class Clientes extends Controller
 
     function edit($param = [])
     {
+        session_start();
 
         # obtengo el id del cliente que voy a editar
         // cliente/edit/4
@@ -179,6 +180,9 @@ class Clientes extends Controller
 
     function update($param = [])
     {
+
+        session_start();
+
         # Cargo id del cliente
         $id = $param[0];
 
@@ -201,6 +205,9 @@ class Clientes extends Controller
 
     function show($param = [])
     {
+
+        session_start();
+
         // Obtengo la id del cliente que quiero mostrar
         $id = $param[0];
 
@@ -220,6 +227,8 @@ class Clientes extends Controller
     function order($param = [])
     {
 
+        session_start();
+
         # Obtengo el criterio de ordenación
         $criterio = $param[0];
 
@@ -237,6 +246,9 @@ class Clientes extends Controller
 
     function filter($param = [])
     {
+
+        session_start();
+
         //Obtengo la expresión de filtrado
         $expresion = $_GET['expresion'];
 
@@ -253,6 +265,9 @@ class Clientes extends Controller
 
     function delete($param = [])
     {
+
+        session_start();
+
         // Obtengo la id del cliente que quiero eliminar
         $id = $param[0];
 
