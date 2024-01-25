@@ -1,7 +1,4 @@
-# Tablas necesarias a añadir a cualquier base de datos para el control de sesión de usuarios.
-
-
-USE gesbank;
+USE maratoon;
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users(
 
@@ -40,4 +37,3 @@ INSERT INTO roles VALUES
 (2, 'Editor', 'Sólo podrá consultar, modificar y añadir información. No podrá eliminar', default, default),
 (3, 'Registrado', 'Sólo podrá realizar consultas', default, default);
     
-

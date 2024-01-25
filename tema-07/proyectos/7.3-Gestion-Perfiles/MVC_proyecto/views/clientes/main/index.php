@@ -92,13 +92,13 @@
 									</a>
 
 									<!-- botón editar -->
-									<a href="<?= URL ?>clientes/editar/<?= $cliente->id ?>" title="Editar"
+									<a href="<?= URL ?>clientes/edit/<?= $cliente->id ?>" title="Editar"
 										class="btn btn-primary <?= (!in_array($_SESSION['id_rol'], $GLOBALS['cliente']['edit'])) ? 'disabled' : '' ?>">
 										<i class="bi bi-pencil"></i>
 									</a>
 
 									<!-- botón mostrar -->
-									<a href="<?= URL ?>clientes/mostrar/<?= $cliente->id ?>" title="Mostrar"
+									<a href="<?= URL ?>clientes/show/<?= $cliente->id ?>" title="Mostrar"
 										class="btn btn-warning <?= (!in_array($_SESSION['id_rol'], $GLOBALS['cliente']['show'])) ? 'disabled' : '' ?>">
 										<i class="bi bi-card-text"></i>
 									</a>

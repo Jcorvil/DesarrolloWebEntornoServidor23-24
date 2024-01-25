@@ -50,6 +50,19 @@ class Clientes extends Controller
         # Iniciar o continuar sesión
         session_start();
 
+        //Comprobar si el usuario está identificado
+        if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario no autentificado";
+
+            header("location:" . URL . "login");
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['cliente']['new']))) {
+            $_SESSION['mensaje'] = "Operación sin privilegios";
+            header('location:' . URL . 'clientes');
+        }
+
+        # obtener objeto de la clase cliente
+        $this->view->cliente = $this->model->read($id);
+
         # Comprobar si vuelvo de un registro no validado
         if (isset($_SESSION['error'])) {
             # Mensaje de error
@@ -172,6 +185,15 @@ class Clientes extends Controller
         # obtengo el id del cliente que voy a editar
         // cliente/edit/4
 
+        if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario no autentificado";
+
+            header("location:" . URL . "login");
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['cliente']['edit']))) {
+            $_SESSION['mensaje'] = "Operación sin privilegios";
+            header('location:' . URL . 'clientes');
+        }
+
         $id = $param[0];
 
         # asigno id a una propiedad de la vista
@@ -182,6 +204,24 @@ class Clientes extends Controller
 
         # obtener objeto de la clase cliente
         $this->view->cliente = $this->model->read($id);
+
+        //Comprobar si el formulario viene de una validación
+        if (isset($_SESSION['error'])) {
+
+            # Mensaje de error
+            $this->view->error = $_SESSION['error'];
+
+
+            # Autorrellenar el formulario con los detalles del cliente
+            $this->view->cliente = unserialize($_SESSION['cliente']);
+
+            # Recupero array de errores específicos
+            $this->view->errores = $_SESSION['errores'];
+
+            unset($_SESSION['error']);
+            unset($_SESSION['errores']);
+            unset($_SESSION['cliente']);
+        }
 
         # cargo la vista
         $this->view->render('clientes/edit/index');
