@@ -7,10 +7,10 @@
     3 - Registrado
 
     # Privilegios
-    Perfiles	 	Nuevo	Editar	Eliminar	 Mostrar	Buscar 	Ordenar 
-    ADMINISTRADOR	SI	    SI	    SI	         SI	 SI	 SI
-    EDITOR	 	    SI	    SI	    NO	         SI	 SI	SI 
-    REGISTRADO	 	NO	    NO	    NO	         SI	 SI 	 SI
+    Perfiles	 	Nuevo	Editar	Eliminar  Mostrar  Buscar  Ordenar 
+    ADMINISTRADOR	 SI	     SI	      SI	    SI	     SI	     SI
+    EDITOR	 	     SI	     SI	      NO	    SI	     SI	     SI 
+    REGISTRADO	 	 NO	     NO	      NO	    SI	     SI      SI
 
 
     # Definir privilegios como variables golbales
