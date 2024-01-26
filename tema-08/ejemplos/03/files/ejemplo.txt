@@ -1,0 +1,2 @@
+Mi primer fichero texto plano PHP
+Esta nueva línea
