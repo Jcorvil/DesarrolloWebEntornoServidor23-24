@@ -36,7 +36,7 @@ class Cuentas extends Controller
         $this->view->render('cuentas/main/index');
     }
 
-    function new()
+    function new($param = [])
     {
 
         # Iniciar o continuar sesión
@@ -89,8 +89,8 @@ class Cuentas extends Controller
         $num_cuenta = filter_input(INPUT_POST, 'num_cuenta', FILTER_SANITIZE_NUMBER_INT);
         $id_cliente = filter_input(INPUT_POST, 'id_cliente', FILTER_SANITIZE_NUMBER_INT);
         $fecha_alta = filter_input(INPUT_POST, 'fecha_alta', FILTER_SANITIZE_SPECIAL_CHARS);
-        $fecha_ul_mov = filter_input(INPUT_POST, 'fecha_ul_mov', FILTER_SANITIZE_SPECIAL_CHARS);
-        $num_movtos = filter_input(INPUT_POST, 'num_movtos', FILTER_SANITIZE_NUMBER_INT);
+        // $fecha_ul_mov = filter_input(INPUT_POST, 'fecha_ul_mov', FILTER_SANITIZE_SPECIAL_CHARS);
+        // $num_movtos = filter_input(INPUT_POST, 'num_movtos', FILTER_SANITIZE_NUMBER_INT);
         $saldo = filter_input(INPUT_POST, 'saldo', FILTER_SANITIZE_NUMBER_INT);
 
 
@@ -101,34 +101,43 @@ class Cuentas extends Controller
             $num_cuenta,
             $id_cliente,
             $fecha_alta,
-            $fecha_ul_mov,
-            $num_movtos,
+            null,
+            null,
             $saldo
         );
 
         # Validación
         $errores = [];
 
+        $cuenta_regexp = [
+            'options' => [
+                'regexp' => '/^[0-9]{20}$/'
+            ]
+        ];
+
         // num_cuenta
         if (empty($num_cuenta)) {
-            $errores['num_cuenta'] = 'El Nº de la cuenta es obligatorio';
-        } else {
-            // Verificar si el número de cuenta ya existe
-            if ($this->model->existeCuenta($num_cuenta)) {
-                $errores['num_cuenta'] = 'El Nº de la cuenta ya existe';
-            }
+            $errores['num_cuenta'] = 'El campo número de cuenta es obligatorio';
+        } else if (!filter_var($num_cuenta, FILTER_VALIDATE_REGEXP, $cuenta_regexp)) {
+            $errores['num_cuenta'] = 'El número de cuenta debe tener 20 números';
+        } else if (!$this->model->existeCuenta($num_cuenta)) {
+            $errores['num_cuenta'] = "El número de cuenta ya existe";
         }
 
-        // id_cliente
+        //id_cliente. Campo obligatorio, valor numérico, debe existir en la tabla de clientes
         if (empty($id_cliente)) {
             $errores['id_cliente'] = 'El campo cliente es obligatorio';
         } else if (!filter_var($id_cliente, FILTER_VALIDATE_INT)) {
-            $errores['id_cliente'] = 'Cliente no válido';
+            $errores['id_cliente'] = 'Deberá introducir un valor númerico en este campo';
+        } else if (!$this->model->getClienteCuenta($id_cliente)) {
+            $errores['id_cliente'] = 'El cliente seleccionado no existe';
         }
 
         // fecha_alta
         if (empty($fecha_alta)) {
-            $errores['fecha_alta'] = 'Debe introducir una fecha de alta';
+            $errores['fecha_alta'] = 'El campo fecha alta es obligatorio';
+        } else if (!$this->model->validateFechaAlta($fecha_alta)) {
+            $errores['fecha_alta'] = 'La fecha no tiene un formato correcto';
         }
 
         // // fecha_ul_mov
@@ -137,13 +146,15 @@ class Cuentas extends Controller
         // }
 
         // num_movtos
-        if (empty($num_movtos)) {
-            $errores['num_movtos'] = 'La cuenta debe tener al menos un movimiento';
-        }
+        // if (empty($num_movtos)) {
+        //     $errores['num_movtos'] = 'La cuenta debe tener al menos un movimiento';
+        // }
 
         // saldo
         if (empty($saldo)) {
-            $errores['saldo'] = 'La cuenta debe tener al menos un movimiento';
+            $errores['saldo'] = 'El campo saldo es obligatorio';
+        } else if (!is_numeric($saldo)) {
+            $errores['saldo'] = 'El campo saldo debe ser numérico';
         }
 
         # 4. Comprobar validación
@@ -157,16 +168,16 @@ class Cuentas extends Controller
             # Redireccionamos a new
             header('Location:' . URL . 'cuentas/new');
             exit();
+        } else {
+            # Añadimos el registro a la tabla
+            $this->model->create($cuenta);
+
+            //Crearemos un mensaje, indicando que se ha realizado dicha acción
+            $_SESSION['mensaje'] = "Cuenta creada correctamente.";
+
+            // Redireccionamos a la vista principal de cuentas
+            header("Location:" . URL . "cuentas");
         }
-
-        # Añadir registro a la tabla
-        $this->model->create($cuenta);
-
-        # Mensaje
-        $_SESSION['mensaje'] = "Cuenta creada correctamente";
-
-        # Redirigimos al main de cuentas
-        header('location:' . URL . 'cuentas');
     }
 
 
@@ -186,15 +197,20 @@ class Cuentas extends Controller
 
         # Obtener objeto de la clase cuenta
         $this->view->cuenta = $this->model->read($id);
-        # Obtener los cliente
+        # Obtener los clientes
         $this->view->clientes = $this->model->getClienteCuenta();
 
-        # Comprobar si el formulario viene de una no validación
-        if (!empty($errores)) {
+        // Obtener el cliente asociado a la cuenta
+        $clienteId = $this->view->cuenta->id_cliente;
+        $this->view->cliente = $this->model->getClienteById($clienteId);
+
+        //Comprobar si el formulario viene de una validación
+        if (isset($_SESSION['error'])) {
+
             # Mensaje de error
             $this->view->error = $_SESSION['error'];
 
-            # Autorrellenar el formulario con los detalles del alumno
+            # Autorrellenar el formulario con los detalles de la cuenta
             $this->view->cuenta = unserialize($_SESSION['cuenta']);
 
             # Recupero array de errores específicos
@@ -203,7 +219,6 @@ class Cuentas extends Controller
             unset($_SESSION['error']);
             unset($_SESSION['errores']);
             unset($_SESSION['cuenta']);
-
         }
 
         # Obtener datos de los clientes disponibles desde el modelo de clientes
@@ -234,8 +249,8 @@ class Cuentas extends Controller
         $num_cuenta = filter_input(INPUT_POST, 'num_cuenta', FILTER_SANITIZE_NUMBER_INT);
         $id_cliente = filter_input(INPUT_POST, 'id_cliente', FILTER_SANITIZE_NUMBER_INT);
         $fecha_alta = filter_input(INPUT_POST, 'fecha_alta', FILTER_SANITIZE_SPECIAL_CHARS);
-        $fecha_ul_mov = filter_input(INPUT_POST, 'fecha_ul_mov', FILTER_SANITIZE_SPECIAL_CHARS);
-        $num_movtos = filter_input(INPUT_POST, 'num_movtos', FILTER_SANITIZE_NUMBER_INT);
+        // $fecha_ul_mov = filter_input(INPUT_POST, 'fecha_ul_mov', FILTER_SANITIZE_SPECIAL_CHARS);
+        // $num_movtos = filter_input(INPUT_POST, 'num_movtos', FILTER_SANITIZE_NUMBER_INT);
         $saldo = filter_input(INPUT_POST, 'saldo', FILTER_SANITIZE_NUMBER_INT);
 
         # 2. Creamos la cuenta con los datos saneados
@@ -245,7 +260,8 @@ class Cuentas extends Controller
             $num_cuenta,
             $id_cliente,
             $fecha_alta,
-            $num_movtos,
+            null,
+            null,
             $saldo
         );
 
@@ -261,8 +277,8 @@ class Cuentas extends Controller
             $_POST['num_cuenta'],
             $_POST['id_cliente'],
             $_POST['fecha_alta'],
-            $_POST['fecha_ul_mov'],
-            $_POST['num_movtos'],
+            null,
+            null,
             $_POST['saldo']
         );
 
@@ -271,10 +287,18 @@ class Cuentas extends Controller
         # 3. Validacion
         $errores = [];
 
+        $cuenta_regexp = [
+            'options' => [
+                'regexp' => '/^[0-9]{20}$/'
+            ]
+        ];
+
         // num_cuenta
         if (strcmp($cuenta->num_cuenta, $cuentaOG->num_cuenta) !== 0) {
             if (empty($num_cuenta)) {
                 $errores['num_cuenta'] = 'El Nº de la cuenta es obligatorio';
+            } else if (!filter_var($num_cuenta, FILTER_VALIDATE_REGEXP, $cuenta_regexp)) {
+                $errores['num_cuenta'] = 'El número de cuenta debe ser 20 números';
             }
         }
 
@@ -283,13 +307,19 @@ class Cuentas extends Controller
             if (empty($id_cliente)) {
                 $errores['id_cliente'] = 'El campo cliente es obligatorio';
             } else if (!filter_var($id_cliente, FILTER_VALIDATE_INT)) {
-                $errores['id_cliente'] = 'Cliente no válido';
+                $errores['id_cliente'] = 'Debe introducir un cliente';
+            } else if (!$this->model->validateCliente($id_cliente)) {
+                $errores['id_cliente'] = 'El cliente seleccionado no existe';
             }
         }
 
         // fecha_alta
-        if (empty($fecha_alta)) {
-            $errores['fecha_alta'] = 'Debe introducir una fecha de alta';
+        if (strcmp($cuenta->id_cliente, $cuentaOG->id_cliente) !== 0) {
+            if (empty($fecha_alta)) {
+                $errores['fecha_alta'] = 'El campo fecha alta es obligatorio';
+            } else if (!$this->model->validateFechaAlta($fecha_alta)) {
+                $errores['fecha_alta'] = 'La fecha no tiene un formato correcto';
+            }
         }
 
         // // fecha_ul_mov
@@ -303,17 +333,17 @@ class Cuentas extends Controller
         // }
 
         // num_movtos
-        if (strcmp($cuenta->num_movtos, $cuentaOG->num_movtos) !== 0) {
-            if (empty($num_movtos)) {
-                $errores['num_movtos'] = 'La cuenta debe tener al menos un movimiento';
-            }
-        }
+        // if (strcmp($cuenta->num_movtos, $cuentaOG->num_movtos) !== 0) {
+        //     if (empty($num_movtos)) {
+        //         $errores['num_movtos'] = 'La cuenta debe tener al menos un movimiento';
+        //     }
+        // }
 
         // saldo
-        if (strcmp($cuenta->saldo, $cuentaOG->saldo) !== 0) {
-            if (empty($saldo)) {
-                $errores['saldo'] = 'La cuenta debe tener saldo';
-            }
+        if (empty($saldo)) {
+            $errores['saldo'] = 'El campo saldo es obligatorio';
+        } else if (!is_numeric($saldo)) {
+            $errores['saldo'] = 'El campo saldo debe ser numérico';
         }
 
         # 4. Comprobar validación
@@ -326,12 +356,12 @@ class Cuentas extends Controller
             $_SESSION['errores'] = $errores;
 
             # Redireccionamos a new
-            header('Location:' . URL . 'cuenta/edit/' . $id);
+            header('Location:' . URL . 'cuentas/edit/' . $id);
 
         } else {
             $this->model->update($id, $cuenta);
 
-            $_SESSION['mensaje'] = "Cuenta editado correctamente";
+            $_SESSION['mensaje'] = "Cuenta editada correctamente";
 
             header('location:' . URL . 'cuentas');
         }

@@ -11,7 +11,7 @@
 
 <body>
     <!-- Menú Principal -->
-    <?php require_once("template/partials/menuAut.php") ?>
+    <?php require_once("template/partials/menu.php") ?>
     <br><br><br>
 
     <!-- Capa principal -->
@@ -67,15 +67,23 @@
                 <?php endif; ?>
             </div>
             <!-- fecha_ul_mov -->
-            <!-- <div class="mb-3">
-                <label for="fecha_ul_mov" class="form-label">Fecha último movimiento</label>
-                <input type="datetime-local" class="form-control" name="fecha_ul_mov"
-                    value="<?= $this->cuenta->fecha_ul_mov ?>">
-            </div> -->
+            <div class="mb-3">
+                <label for="" class="form-label">Fecha último movimiento</label>
+                <input type="datetime-local"
+                    class="form-control <?= (isset($this->errores['fecha_ul_mov'])) ? 'is-invalid' : null ?>"
+                    name="fecha_ul_mov" value="<?= $this->cuenta->fecha_ul_mov ?>" readonly>
+
+                <?php if (isset($this->errores['fecha_ul_mov'])): ?>
+                    <span class="form-text text-danger" role="alert">
+                        <?= $this->errores['fecha_ul_mov'] ?>
+                    </span>
+                <?php endif; ?>
+            </div>
             <!-- num_movtos -->
             <div class="mb-3">
                 <label for="num_movtos" class="form-label">Nº de movimientos totales</label>
-                <input type="text" class="form-control" name="num_movtos" value="<?= $this->cuenta->num_movtos ?>">
+                <input type="text" class="form-control" name="num_movtos" value="<?= $this->cuenta->num_movtos ?>"
+                    readonly>
                 <?php if (isset($this->errores['num_movtos'])): ?>
                     <span class="form-text text-danger" role="alert">
                         <?= $this->errores['num_movtos'] ?>

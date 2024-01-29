@@ -151,33 +151,32 @@ class cuentasModel extends Model
     public function update(int $id, classCuenta $cuenta)
     {
         try {
-            $sql = "UPDATE cuentas
-                    SET
+
+            $sql = " UPDATE cuentas SET
                         num_cuenta = :num_cuenta,
                         id_cliente = :id_cliente,
                         fecha_alta = :fecha_alta,
                         fecha_ul_mov = :fecha_ul_mov,
                         num_movtos = :num_movtos,
-                        saldo = :saldo
+                        saldo=:saldo,
+                        update_at = now()
                     WHERE
-                        id = :id
-                    LIMIT 1
-                ";
+                        id=:id";
 
             $conexion = $this->db->connect();
             $pdoSt = $conexion->prepare($sql);
 
-            $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
-            $pdoSt->bindParam(':num_cuenta', $cuenta->num_cuenta, PDO::PARAM_INT);
-            $pdoSt->bindParam(':id_cliente', $cuenta->id_cliente, PDO::PARAM_INT);
-            $pdoSt->bindParam(':fecha_alta', $cuenta->fecha_alta, PDO::PARAM_STR);
-            $pdoSt->bindParam(':fecha_ul_mov', $cuenta->fecha_ul_mov, PDO::PARAM_STR);
-            $pdoSt->bindParam(':num_movtos', $cuenta->num_movtos, PDO::PARAM_INT);
-            $pdoSt->bindParam(':saldo', $cuenta->saldo, PDO::PARAM_STR);
+            $pdoSt->bindParam(":num_cuenta", $cuenta->num_cuenta, PDO::PARAM_STR, 20);
+            $pdoSt->bindParam(":id_cliente", $cuenta->id_cliente, PDO::PARAM_INT);
+            $pdoSt->bindParam(":fecha_alta", $cuenta->fecha_alta, PDO::PARAM_STR);
+            $pdoSt->bindParam(":fecha_ul_mov", $cuenta->fecha_ul_mov, PDO::PARAM_STR);
+            $pdoSt->bindParam(":num_movtos", $cuenta->num_movtos, PDO::PARAM_INT);
+            $pdoSt->bindParam(":saldo", $cuenta->saldo, PDO::PARAM_INT);
+            $pdoSt->bindParam(":id", $id, PDO::PARAM_INT);
 
             $pdoSt->execute();
         } catch (PDOException $e) {
-            include_once('template/partials/errorDB.php');
+            require_once("template/partials/errorDB.php");
             exit();
         }
     }
@@ -326,15 +325,64 @@ class cuentasModel extends Model
     public function existeCuenta($num_cuenta)
     {
         try {
-            $sql = "SELECT COUNT(*) FROM cuentas WHERE num_cuenta = :num_cuenta";
+            $sql = "SELECT * FROM cuentas 
+                     WHERE num_cuenta = :num_cuenta";
+
+
+            //Conectar con la base de datos
+            $conexion = $this->db->connect();
+
+            $pdost = $conexion->prepare($sql);
+            $pdost->bindParam(':num_cuenta', $num_cuenta, PDO::PARAM_INT);
+
+            $pdost->execute();
+
+            if ($pdost->rowCount() != 0) {
+                return false;
+            }
+
+            return true;
+        } catch (PDOException $e) {
+
+            include_once('template/partials/errorDB.php');
+            exit();
+        }
+    }
+
+    public function validateFechaAlta($fecha_alta)
+    {
+        $formatoFecha = DateTime::createFromFormat('Y-m-d\TH:i', $fecha_alta);
+        if ($formatoFecha !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getClienteById($id)
+    {
+        try {
+            $sql = " SELECT     
+                        id,
+                        apellidos,
+                        nombre,
+                        telefono,
+                        ciudad,
+                        dni,
+                        email
+                    FROM  
+                        clientes  
+                    WHERE
+                        id = :id";
+
             $conexion = $this->db->connect();
             $pdoSt = $conexion->prepare($sql);
-            $pdoSt->bindParam(':num_cuenta', $num_cuenta, PDO::PARAM_INT);
+            $pdoSt->bindParam(":id", $id, PDO::PARAM_INT);
+            $pdoSt->setFetchMode(PDO::FETCH_OBJ);
             $pdoSt->execute();
-            $count = $pdoSt->fetchColumn();
-            return $count > 0;
+            return $pdoSt->fetch();
         } catch (PDOException $e) {
-            include_once('template/partials/errorDB.php');
+            require_once("template/partials/errorDB.php");
             exit();
         }
     }
