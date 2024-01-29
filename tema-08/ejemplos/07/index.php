@@ -3,7 +3,7 @@
 /*
     Ejemplo 7
     
-    Obtener daatos del archivo
+    Obtener datos del archivo
 */
 
 // Abrir archivo
