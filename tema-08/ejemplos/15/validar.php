@@ -15,7 +15,7 @@ $observaciones = filter_var($_POST['observaciones'] ??= null, FILTER_SANITIZE_SP
 $fichero = $_FILES['fichero'];
 
 // Genero array de error de fichero
-$fileUploadErrors = [
+$FileUploadErrors = [
     0 => 'No hay error, el archivo se subió con exito',
     1 => 'El archivo excede la directiva "upload_max_filesize" en php.ini',
     2 => 'El archivo excede la directiva "MAX_FILE_SIZE" en el formulario HTML',
@@ -29,7 +29,15 @@ $fileUploadErrors = [
 // Validación
 $errores = [];
 
-if ($fichero['error'] !== UPLOAD_ERR_OK) {
+if (($fichero['error']) !== UPLOAD_ERR_OK) {
+
+    // Comprobar que error se ha producido
+    if (is_null($fichero)) {
+        $errores['fichero'] = $FileUploadErrors[1];
+
+    } else {
+        $errores['fichero'] = $FileUploadErrors[$fichero['error']];
+    }
 
 } else if (is_uploaded_file($fichero['tmp_name'])) {
     // Validar máximo tamaño
@@ -46,17 +54,30 @@ if ($fichero['error'] !== UPLOAD_ERR_OK) {
     if (!in_array(strtoupper($info->getExtension()), $tipos_permitidos)) {
         $errores['fichero'] = "El archivo debe ser JPG, GIF o PNG.";
     }
-
-    if (!empty($errores)) {
-        // Formulario no validado
-        header('Location: index.php');
-
-    } else {
-        // Mover fichero desde la carpeta temporal a la carpeta del servidor
-        move_uploaded_file($fichero['tmp_name'], 'files/' . $fichero['name']);
-        header('Location: index.php');
-    }
-
 }
+
+if (!empty($errores)) {
+    // Creamos las variables de sesión
+    $_SESSION['error'] = 'Formulario no validado';
+    $_SESSION['errores'] = $errores;
+
+    $_SESSION['nombre'] = $nombre;
+    $_SESSION['observaciones'] = $observaciones;
+    $_SESSION['fichero'] = $fichero;
+
+    // Formulario no validado
+    header('Location: index.php');
+
+} else {
+    // Mover fichero desde la carpeta temporal a la carpeta del servidor
+    move_uploaded_file($fichero['tmp_name'], 'files/' . $fichero['name']);
+
+    # Genero mensaje
+    $_SESSION['mensaje'] = 'Archivo subido con éxito';
+
+    # Regreso al formulario
+    header('location: index.php');
+}
+
 
 ?>
