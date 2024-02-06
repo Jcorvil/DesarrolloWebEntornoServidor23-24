@@ -66,27 +66,28 @@ class Album extends Controller
 
             # Comprobar si vuelvo de  un registro no validado
             if (isset($_SESSION['error'])) {
-
                 # Mensaje de error
                 $this->view->error = $_SESSION['error'];
 
-                # Autorrellenar formulario con los detalles del  album
-                $this->view->album = unserialize($_SESSION['album']);
+                # Autorrellenar formulario con los detalles del album
+                if (isset($_SESSION['album'])) {
+                    $this->view->album = unserialize($_SESSION['album']);
+                } else {
+                    $this->view->album = new classalbum();
+                }
 
-                # Recupero array errores  específicos
+                # Recupero array errores específicos
                 $this->view->errores = $_SESSION['errores'];
 
                 # Elimino las variables de sesión
                 unset($_SESSION['error']);
                 unset($_SESSION['album']);
                 unset($_SESSION['errores']);
+            } else {
+                $this->view->album = new classalbum();
             }
-
             # etiqueta title de la vista
             $this->view->title = "Añadir - Gestión albumes";
-
-            #  obtener los cursos  para generar dinámicamente lista cursos
-            $this->view->cursos = $this->model->getCursos();
 
             # cargo la vista con el formulario nuevo album
             $this->view->render('album/new/index');
@@ -110,84 +111,75 @@ class Album extends Controller
         } else {
 
             # 1. Seguridad. Saneamos los  datos del formulario
-            $nombre = filter_var($_POST['nombre'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $apellidos = filter_var($_POST['apellidos'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $email = filter_var($_POST['email'] ??= '', FILTER_SANITIZE_EMAIL);
-            $telefono = filter_var($_POST['telefono'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $poblacion = filter_var($_POST['poblacion'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $dni = filter_var($_POST['dni'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $fechaNac = filter_var($_POST['fechaNac'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $id_curso = filter_var($_POST['id_curso'] ??= '', FILTER_SANITIZE_NUMBER_INT);
+            $titulo = filter_var($_POST['titulo'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $descripcion = filter_var($_POST['descripcion'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $autor = filter_var($_POST['autor'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $fecha = filter_var($_POST['fecha'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $lugar = filter_var($_POST['lugar'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $categoria = filter_var($_POST['categoria'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $etiquetas = filter_var($_POST['categoria'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $carpeta = filter_var($_POST['carpeta'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+
 
             # 2. Creamos album con los datos saneados
             $album = new classalbum(
                 null,
-                $nombre,
-                $apellidos,
-                $email,
-                $telefono,
-                null,
-                $poblacion,
-                null,
-                null,
-                $dni,
-                $fechaNac,
-                $id_curso
+                $titulo,
+                $descripcion,
+                $autor,
+                $fecha,
+                $lugar,
+                $categoria,
+                $etiquetas,
+                $carpeta
+
             );
 
             # 3. Validación
             $errores = [];
 
-            // Nombre: obligatorio
-            if (empty($nombre)) {
-                $errores['nombre'] = 'El campo nombre es  obligatorio';
+            // titulo: obligatorio, máximo 100 caracteres
+            if (empty($titulo)) {
+                $errores['titulo'] = 'El campo titulo es  obligatorio';
+            } elseif (strlen($titulo) > 100) {
+                $errores['titulo'] = 'El titulo no puede tener más de 100 caracteres';
             }
 
-            // Apellidos: obligatorio
-            if (empty($apellidos)) {
-                $errores['apellidos'] = 'El campo apellidos es  obligatorio';
+            // descripcion: obligatorio
+            if (empty($descripcion)) {
+                $errores['descripcion'] = 'El campo descripcion es  obligatorio';
             }
 
-            // FechaNac: obligatorio y valor fecha válido
-            // $valores = explode('/', $fechaNac);
-            // if (empty($fechaNac)) {
-            //     $errores['fechaNac'] = 'Campo obligatorio';
-            // } else if (!checkdate($valores[1], $valores[0], $valores[2])) {
-            //     $errores['fechaNac'] = 'Fecha no válida';
+            // autor: obligatorio
+            if (empty($autor)) {
+                $errores['autor'] = 'El campo autor es obligatorio';
+            }
+
+            // fecha: obligatorio
+            if (empty($fecha)) {
+                $errores['fecha'] = 'El campo fecha es obligatorio';
+            }
+
+            // lugar: obligatorio
+            if (empty($lugar)) {
+                $errores['lugar'] = 'El campo lugar es obligatorio';
+            }
+
+            // categoria: obligatorio
+            if (empty($categoria)) {
+                $errores['categoria'] = 'El campo categoria es obligatorio';
+            }
+
+            // etiquetas: no obligatorio
+            // if (empty($etiquetas)) {
+            //     $errores['etiquetas'] = 'El campo etiquetas es obligatorio';
             // }
 
-            // Email: obligatorio, formáto válido y clave secundaria
-            if (empty($email)) {
-                $errores['email'] = 'El campo email es  obligatorio';
-            } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errores['email'] = 'Formato email incorrecto';
-            } else if (!$this->model->validateUniqueEmail($email)) {
-                $errores['email'] = 'Email existente';
-            }
-
-            // Dni: obligatorio, formáto válido y clave secundaria
-            // Expresión regular
-            $options = [
-                'options' => [
-                    'regexp' => '/^(\d{8})([A-Za-z])$/'
-                ]
-            ];
-
-            if (empty($dni)) {
-                $errores['dni'] = 'El campo dni es  obligatorio';
-            } else if (!filter_var($dni, FILTER_VALIDATE_REGEXP, $options)) {
-                $errores['dni'] = 'Formato DNI incorrecto';
-            } else if (!$this->model->validateUniqueDNI($dni)) {
-                $errores['dni'] = 'DNI existente';
-            }
-
-            // id_curso: obligatorio, entero, existente
-            if (empty($id_curso)) {
-                $errores['id_curso'] = 'Debe seleccionar un curso';
-            } else if (!filter_var($id_curso, FILTER_VALIDATE_INT)) {
-                $errores['id_curso'] = 'Curso no válido';
-            } else if (!$this->model->validateCurso($id_curso)) {
-                $errores['id_curso'] = 'Curso no existente';
+            // carpeta obligatorio (sin espacios)
+            if (empty($carpeta)) {
+                $errores['carpeta'] = 'El campo carpeta es obligatorio';
+            } else if (preg_match('/\s/', $carpeta)) {
+                $errores['carpeta'] = 'El campo carpeta no puede contener espacios';
             }
 
             # 4. Comprobar  validación
@@ -205,15 +197,31 @@ class Album extends Controller
 
             } else {
 
-                # Añadir registro a la tabla
-                $this->model->create($album);
+                # Crear la carpeta para el álbum en el directorio 'images'
+                $rutaCarpeta = 'images/' . $carpeta;
 
-                # Mensaje
-                $_SESSION['mensaje'] = "album creado correctamente";
+                if (!file_exists($rutaCarpeta)) {
+                    // Verificar si la carpeta no existe para evitar duplicados
+                    if (mkdir($rutaCarpeta, 0777, true)) {
+                        // Crear la carpeta y establecer permisos
+                        # Añadir registro a la tabla
+                        $this->model->create($album);
 
-                # Redirigimos al main de albumes
-                header('location:' . URL . 'album');
+                        # Mensaje
+                        $_SESSION['mensaje'] = "Álbum creado correctamente";
 
+                        # Redirigimos al main de álbumes
+                        header('location:' . URL . 'album');
+                    } else {
+                        // Si hubo un error al crear la carpeta
+                        $_SESSION['error'] = "Error al crear la carpeta para el álbum";
+                        header('location:' . URL . 'album/new');
+                    }
+                } else {
+                    // Si la carpeta ya existe
+                    $_SESSION['error'] = "La carpeta para el álbum ya existe";
+                    header('location:' . URL . 'album/new');
+                }
             }
 
         }
@@ -474,32 +482,63 @@ class Album extends Controller
 
     public function delete($param = [])
     {
-
-        # inicar sesión
+        # Iniciar sesión
         session_start();
 
         if (!isset($_SESSION['id'])) {
             $_SESSION['mensaje'] = "Usuario debe autentificarse";
-
             header("location:" . URL . "login");
-
         } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['album']['delete']))) {
             $_SESSION['mensaje'] = "Operación sin privilegios";
             header('location:' . URL . 'album');
         } else {
-
-            # obtenemos id del  album
+            # Obtener el ID del álbum
             $id = $param[0];
 
-            # eliminar album
+            # Obtener la carpeta asociada al álbum
+            $album = $this->model->read($id);
+            $carpeta = $album->carpeta;
+
+            // Ruta de la carpeta a eliminar
+            $rutaCarpeta = 'images/' . $carpeta;
+            chdir($rutaCarpeta);
+
+            $carpetaBorrar = getcwd();
+
+            // Obtener la lista de archivos y subdirectorios dentro de la carpeta
+            $files = glob($carpetaBorrar . '/*');
+
+            // Eliminar todos los archivos y subdirectorios dentro de la carpeta
+            foreach ($files as $file) {
+                if (is_file($file)) {
+                    unlink($file);
+                } elseif (is_dir($file)) {
+                    // Si es un directorio, eliminarlo recursivamente
+                    $this->eliminarDirectorio($file);
+                }
+            }
+
+            // Una vez que la carpeta está vacía, eliminar la carpeta misma
+            rmdir($carpetaBorrar);
+
+
             $this->model->delete($id);
 
-            # generar mensaje
-            $_SESSION['mensaje'] = 'album eliminado correctamente';
+            $_SESSION['mensaje'] = 'Álbum eliminado correctamente';
 
-            # redirecciono al main de albumes
             header('location:' . URL . 'album');
         }
     }
+
+    private function eliminarDirectorio($dir)
+    {
+        $files = array_diff(scandir($dir), array('.', '..'));
+        foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? $this->eliminarDirectorio("$dir/$file") : unlink("$dir/$file");
+        }
+        return rmdir($dir);
+    }
+
+
 }
 

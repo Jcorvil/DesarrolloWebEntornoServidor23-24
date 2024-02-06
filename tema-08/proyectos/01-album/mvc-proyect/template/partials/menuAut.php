@@ -14,7 +14,7 @@
           <a class="nav-link active" aria-current="page" href="<?= URL ?>index">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="<?= URL ?>alumno">Alumnos</a>
+          <a class="nav-link active" aria-current="page" href="<?= URL ?>album">Álbumes</a>
         </li>
       </ul>
       <div class="d-flex">

@@ -3,7 +3,7 @@
 <html lang="es"> 
 <head>
 	<?php require_once("template/partials/head.php") ?>
-	<title>Gestión Alumnos - FP. MVC</title>
+	<title>Gestión Albumes</title>
 </head>
 
 

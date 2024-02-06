@@ -4,7 +4,7 @@
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">MVC - Gestión FP</a>
+    <a class="navbar-brand" href="#">MVC - Gestión album</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
