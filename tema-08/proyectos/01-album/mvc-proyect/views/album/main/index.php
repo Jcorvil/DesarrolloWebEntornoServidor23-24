@@ -33,10 +33,10 @@
 			<!-- Estilo card de bootstrap -->
 			<div class="card">
 				<div class="card-header">
-					Tabla de albumes
+					Tabla de Albumes
 				</div>
 				<div class="card-header">
-					<!-- menu albumes -->
+					<!-- menu alumnos -->
 					<?php require_once("views/album/partials/menu.php") ?>
 				</div>
 				<div class="card-body">
@@ -48,7 +48,7 @@
 							<tr>
 								<!-- personalizado -->
 								<th>Id</th>
-								<th>Título</th>
+								<th>Titulo</th>
 								<th>Descripción</th>
 								<th>Autor</th>
 								<th>Fecha</th>
@@ -65,7 +65,7 @@
 								<tr>
 									<!-- Formatos distintos para cada  columna -->
 
-									<!-- Detalles de albumes -->
+									<!-- Detalles de alumnos -->
 									<td>
 										<?= $album->id ?>
 									</td>
@@ -112,6 +112,12 @@
 												'disabled' : null ?>">
 											<i class="bi bi-card-text"></i>
 										</a>
+										<!-- botón  subir imagen -->
+										<!-- <a href="<?= URL ?>album/add/<?= $album->id ?> ?>" title="Subir imagenes" class="btn btn-success
+											<?= (!in_array($_SESSION['id_rol'], $GLOBALS['album']['show'])) ?
+												'disabled' : null ?>">
+											<i class="bi bi-image"></i>
+										</a> -->
 
 									</td>
 								</tr>
@@ -125,7 +131,7 @@
 
 				</div>
 				<div class="card-footer">
-					<small class="text-muted"> Nº albumes:
+					<small class="text-muted"> Albumes:
 						<?= $this->albumes->rowCount(); ?>
 					</small>
 				</div>
