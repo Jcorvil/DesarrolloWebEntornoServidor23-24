@@ -22,6 +22,9 @@
 
         <legend>Formulario Nueva Cuenta</legend>
 
+        <!-- comprobamos si existe error -->
+        <?php include 'template/partials/error.php' ?>
+
         <!-- Formulario Nueva Cuenta -->
         <form action="<?= URL ?>cuentas/create" method="POST">
 

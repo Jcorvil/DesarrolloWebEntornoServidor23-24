@@ -4,19 +4,24 @@
 <head>
     <!-- head -->
     <?php require_once("template/partials/head.php") ?>
-    <title><?= $this->title ?></title>
+    <title>
+        <?= $this->title ?>
+    </title>
 </head>
 
 <body>
     <!-- Menú Principal -->
-	<?php require_once("template/partials/menuAut.php") ?>
-	<br><br><br>
+    <?php require_once("template/partials/menuAut.php") ?>
+    <br><br><br>
 
     <!-- Capa principal -->
     <div class="container">
 
         <!-- header -->
         <?php include 'views/clientes/partials/header.php' ?>
+
+        <!-- comprobamos si existe error -->
+        <?php include 'template/partials/error.php' ?>
 
         <legend>Formulario Editar Cliente</legend>
 
@@ -25,7 +30,7 @@
 
             <!-- id oculto -->
             <input type="number" class="form-control" name="id" value="<?= $this->cliente->id ?>" hidden>
-           
+
             <!-- Nombre -->
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>

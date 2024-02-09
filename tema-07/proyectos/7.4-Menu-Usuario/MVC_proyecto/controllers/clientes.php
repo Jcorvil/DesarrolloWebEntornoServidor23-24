@@ -191,7 +191,7 @@ class Clientes extends Controller
     {
         session_start();
 
-        # obtengo el id del cliente que voy a editar
+        # obtengo el id del cliente que voy a edit
         // cliente/edit/4
 
         if (!isset($_SESSION['id'])) {
@@ -209,17 +209,15 @@ class Clientes extends Controller
         $this->view->id = $id;
 
         # title
-        $this->view->title = "Editar - Panel de control Clientes";
+        $this->view->title = "edit - Panel de control Clientes";
 
         # obtener objeto de la clase cliente
         $this->view->cliente = $this->model->read($id);
 
         //Comprobar si el formulario viene de una validación
         if (isset($_SESSION['error'])) {
-
             # Mensaje de error
             $this->view->error = $_SESSION['error'];
-
 
             # Autorrellenar el formulario con los detalles del cliente
             $this->view->cliente = unserialize($_SESSION['cliente']);
@@ -242,8 +240,6 @@ class Clientes extends Controller
 
         session_start();
 
-        # Cargo id del cliente
-        $id = $param[0];
 
         if (!isset($_SESSION['id'])) {
             $_SESSION['mensaje'] = "Usuario no autentificado";
@@ -254,20 +250,95 @@ class Clientes extends Controller
             header('location:' . URL . 'clientes');
         }
 
-        # Con los detalles del formulario creo objeto cliente
+        # Cargo id del cliente
+        $id = $param[0];
+
+        // 1. Seguridad. Saneamos los datos del formulario
+        $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_SPECIAL_CHARS);
+        $apellidos = filter_input(INPUT_POST, 'apellidos', FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $telefono = filter_input(INPUT_POST, 'telefono', FILTER_SANITIZE_NUMBER_INT);
+        $ciudad = filter_input(INPUT_POST, 'ciudad', FILTER_SANITIZE_SPECIAL_CHARS);
+        $dni = filter_input(INPUT_POST, 'dni', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        # Cargamos los datos del formulario
         $cliente = new classCliente(
             null,
-            $_POST['nombre'],
-            $_POST['apellidos'],
-            $_POST['email'],
-            $_POST['telefono'],
-            $_POST['ciudad'],
-            $_POST['dni'],
+            $nombre,
+            $apellidos,
+            $email,
+            $telefono,
+            $ciudad,
+            $dni
         );
 
-        $this->model->update($id, $cliente);
+        // Validación
+        $errores = [];
 
-        header('location:' . URL . 'clientes');
+        // Nombre
+        if (empty($nombre)) {
+            $errores['nombre'] = 'Nombre del cliente obligatorio';
+        } elseif (strlen($nombre) > 20) {
+            $errores['nombre'] = 'El nombre no puede tener más de 20 caracteres';
+        }
+
+        // Apellidos
+        if (empty($apellidos)) {
+            $errores['apellidos'] = 'Apellidos del cliente obligatorio';
+        } elseif (strlen($apellidos) > 45) {
+            $errores['apellidos'] = 'Los apellidos no pueden tener más de 45 caracteres';
+        }
+
+        // Email
+        if (empty($email)) {
+            $errores['email'] = 'Email obligatorio';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errores['email'] = 'Email inválido';
+        } elseif ($this->model->existeEmail($email)) {
+            $errores['email'] = 'Este email ya está registrado';
+        }
+
+        // Teléfono
+        if (!empty($telefono) && strlen($telefono) != 9) {
+            $errores['telefono'] = 'El teléfono debe tener exactamente 9 dígitos';
+        }
+
+        // Ciudad
+        if (empty($ciudad)) {
+            $errores['ciudad'] = 'Ciudad obligatoria';
+        } elseif (strlen($ciudad) > 20) {
+            $errores['ciudad'] = 'La ciudad no puede tener más de 20 caracteres';
+        }
+
+        // Dni
+        if (empty($dni)) {
+            $errores['dni'] = 'DNI obligatorio';
+        } elseif (!preg_match('/^\d{8}[A-Z]$/', $dni)) {
+            $errores['dni'] = 'El DNI debe tener 8 dígitos seguidos de una letra mayúscula';
+        } elseif ($this->model->existeDNI($dni)) {
+            $errores['dni'] = 'Este DNI ya está registrado';
+        }
+
+        # comprobamos la validación
+        if (!empty($errores)) {
+            // Errores de validación
+            $_SESSION['cliente'] = serialize($cliente);
+            $_SESSION['error'] = 'Formulario no validado';
+            $_SESSION['errores'] = $errores;
+
+            // Redireccionamos
+            header('location:' . URL . 'clientes/edit/' . $id);
+        }
+        // Actualizamos el registro
+        $this->model->update($cliente, $id);
+
+        // Añadimos a la variable de sesión un mensaje
+        $_SESSION['mensaje'] = 'Cliente actualizado correctamente';
+
+        // Redireccionamos al main de clientes
+        header("Location:" . URL . "clientes");
+
+
 
     }
 

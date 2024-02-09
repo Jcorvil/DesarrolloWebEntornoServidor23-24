@@ -22,6 +22,9 @@
 
         <legend>Formulario Editar cuenta</legend>
 
+        <!-- comprobamos si existe error -->
+        <?php include 'template/partials/error.php' ?>
+
         <!-- Formulario Editar cuenta -->
         <form action="<?= URL ?>cuentas/update/<?= $this->id ?>" method="POST">
 

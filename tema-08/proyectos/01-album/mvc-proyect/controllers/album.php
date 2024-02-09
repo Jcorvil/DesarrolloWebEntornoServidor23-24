@@ -265,7 +265,7 @@ class Album extends Controller
             $lugar = filter_var($_POST['lugar'] ?? $album_orig->lugar, FILTER_SANITIZE_SPECIAL_CHARS);
             $categoria = filter_var($_POST['categoria'] ?? $album_orig->categoria, FILTER_SANITIZE_SPECIAL_CHARS);
             $etiquetas = filter_var($_POST['etiquetas'] ?? $album_orig->etiquetas, FILTER_SANITIZE_SPECIAL_CHARS);
-            $carpeta = filter_var($_POST['carpeta'] ?? $album_orig->carpeta, FILTER_SANITIZE_SPECIAL_CHARS); // Nuevo nombre de la carpeta
+            $carpeta = filter_var($_POST['carpeta'] ?? $album_orig->carpeta, FILTER_SANITIZE_SPECIAL_CHARS);
 
             # creamos un nuevo objeto album con los datos actualizados
             $album = new classalbum(
@@ -489,7 +489,6 @@ class Album extends Controller
     }
 
 
-<<<<<<< HEAD
     function add($param = [])
     {
         // Usamod el método del repositorio "02-subida"
@@ -516,26 +515,6 @@ class Album extends Controller
         }
         
     }
-=======
-    // function add($param = [])
-    // {
-    //     // Usamod el método del repositorio "02-subida"
-
-    //     session_start();
-
-    //     if (!isset($_SESSION['id'])) {
-    //         $_SESSION['mensaje'] = "Usuario debe autentificarse";
-    //         header("location:" . URL . "login");
-    //     } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['album']['delete']))) {
-    //         $_SESSION['mensaje'] = "Operación sin privilegios";
-    //         header('location:' . URL . 'album');
-    //     } else {
-    //         $album = $this->model->read($param[0]);
-    //         $this->model->upload($_FILES['archivos'], $album->carpeta);
-    //         header("location:" . URL . "album");
-    //     }
-    // }
->>>>>>> 86e190547080294c43a9a04f6ef65cd92481c785
 
 
 

@@ -190,8 +190,7 @@ class cuentasModel extends Model
             $sql = "SELECT 
                         cuentas.id,
                         cuentas.num_cuenta,
-                        clientes.nombre,
-                        clientes.apellidos,
+                        concat_ws(', ', clientes.apellidos, clientes.nombre) as cliente,
                         cuentas.fecha_alta,
                         cuentas.fecha_ul_mov,
                         cuentas.num_movtos,

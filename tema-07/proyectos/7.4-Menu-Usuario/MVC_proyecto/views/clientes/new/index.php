@@ -20,6 +20,9 @@
         <!-- header -->
         <?php include 'views/clientes/partials/header.php' ?>
 
+        <!-- comprobamos si existe error -->
+        <?php include 'template/partials/error.php' ?>
+
         <legend>Formulario Nuevo Cliente</legend>
 
         <!-- Formulario Nuevo Cliente -->
