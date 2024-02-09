@@ -4,125 +4,112 @@
 <head>
     <!-- head -->
     <?php require_once("template/partials/head.php") ?>
-    <title><?= $this->title ?></title>
+    <title>
+        <?= $this->title ?>
+    </title>
 </head>
 
 <body>
     <!-- Menú Principal -->
-	<?php require_once("template/partials/menuAut.php") ?>
-	<br><br><br>
+    <?php require_once("template/partials/menuAut.php") ?>
+    <br><br><br>
 
     <!-- Capa principal -->
     <div class="container">
 
         <!-- header -->
-        <?php include 'views/alumno/partials/header.php' ?>
+        <?php include 'views/album/partials/header.php' ?>
 
         <!-- comprobamos si existe error -->
         <?php include 'template/partials/error.php' ?>
 
-        <legend>Formulario Editar Alumno</legend>
+        <legend>Formulario Editar Album</legend>
 
-        <!-- Formulario Editar Alumno -->
-        <form action="<?= URL ?>alumno/update/<?= $this->id ?>" method="POST">
+        <!-- Formulario Editar Album -->
+        <form action="<?= URL ?>album/update/<?= $this->id ?>" method="POST">
 
             <!-- id -->
-            
-            <!-- Nombre -->
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" name="nombre" value="<?=$this->alumno->nombre ?>">
-                 <!-- Mostrar posible error -->
-                 <?php if(isset($this->errores['nombre'])): ?>
-                    <span class="form-text text-danger" role="alert">
-                            <?= $this->errores['nombre'] ?>
-                    </span>
-                <?php endif; ?>
-            </div>
-            <!-- Apellidos -->
-            <div class="mb-3">
-                <label for="apellidos" class="form-label">Apellidos</label>
-                <input type="text" class="form-control" name="apellidos" value="<?=$this->alumno->apellidos ?>">
-                 <!-- Mostrar posible error -->
-                 <?php if(isset($this->errores['apellidos'])): ?>
-                    <span class="form-text text-danger" role="alert">
-                            <?= $this->errores['apellidos'] ?>
-                    </span>
-                <?php endif; ?>
-            </div>
-            <!-- Fecha Nacimiento -->
-            <div class="mb-3">
-                <label for="fechaNac" class="form-label">Fecha Nacimiento</label>
-                <input type="date" class="form-control" name="fechaNac" value="<?=$this->alumno->fechaNac ?>">
-                <!-- Mostrar posible error -->
-                <?php if(isset($this->errores['fechaNac'])): ?>
-                    <span class="form-text text-danger" role="alert">
-                            <?= $this->errores['fechaNac'] ?>
-                    </span>
-                <?php endif; ?>
-            </div>
-            <!-- Dni -->
-            <div class="mb-3">
-                <label for="dni" class="form-label">Dni</label>
-                <input type="text" class="form-control" name="dni" value="<?=$this->alumno->dni ?>">
-                <!-- Mostrar posible error -->
-                <?php if(isset($this->errores['dni'])): ?>
-                    <span class="form-text text-danger" role="alert">
-                            <?= $this->errores['dni'] ?>
-                    </span>
-                <?php endif; ?>
-            </div>
 
-            <!-- Email -->
+            <!-- Titulo -->
             <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" value="<?=$this->alumno->email ?>">
-                 <!-- Mostrar posible error -->
-                 <?php if(isset($this->errores['email'])): ?>
+                <label for="titulo" class="form-label">Titulo</label>
+                <input type="text" class="form-control" name="titulo" value="<?= $this->album->titulo ?>">
+                <!-- Mostrar posible error -->
+                <?php if (isset($this->errores['titulo'])): ?>
                     <span class="form-text text-danger" role="alert">
-                            <?= $this->errores['email'] ?>
+                        <?= $this->errores['titulo'] ?>
                     </span>
                 <?php endif; ?>
             </div>
-            <!-- Telefono -->
+            <!-- Descripción -->
             <div class="mb-3">
-                <label for="telefono" class="form-label">Teléfono</label>
-                <input type="tel" class="form-control" name="telefono" value="<?=$this->alumno->telefono ?>">
-            </div>
-            <!-- Dirección -->
-            
-            <!-- Población -->
-            <div class="mb-3">
-                <label for="poblacion" class="form-label">Población</label>
-                <input type="text" class="form-control" name="poblacion" value="<?=$this->alumno->poblacion ?>">
-            </div>
-            <!-- Provincia  -->
-            
-            <!-- Nacionalidad -->
-            
-            <!-- Curso Select -->
-            <div class="mb-3">
-                <label for="id_curso" class="form-label">Curso</label>
-                <select class="form-select" aria-label="Default select example" name="id_curso">
-                    <option selected disabled>Seleccione Curso</option>
-                    <?php foreach ($this->cursos as $data): ?>
-                        <option value="<?= $data->id ?>"
-                            <?= ($this->alumno->id_curso == $data->id)? 'selected': null ?>
-                        >
-                            <?= $data->curso ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <label for="descripcion" class="form-label">Descripción</label>
+                <input type="text" class="form-control" name="descripcion" value="<?= $this->album->descripcion ?>">
                 <!-- Mostrar posible error -->
-                <?php if(isset($this->errores['id_curso'])): ?>
+                <?php if (isset($this->errores['descripcion'])): ?>
                     <span class="form-text text-danger" role="alert">
-                            <?= $this->errores['id_curso'] ?>
+                        <?= $this->errores['descripcion'] ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+            <!-- Autor -->
+            <div class="mb-3">
+                <label for="autor" class="form-label">Autor</label>
+                <input type="text" class="form-control" name="autor" value="<?= $this->album->autor ?>">
+                <!-- Mostrar posible error -->
+                <?php if (isset($this->errores['autor'])): ?>
+                    <span class="form-text text-danger" role="alert">
+                        <?= $this->errores['autor'] ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+            <!-- Fecha -->
+            <div class="mb-3">
+                <label for="fecha" class="form-label">Fecha</label>
+                <input type="datetime-local" class="form-control" name="fecha" value="<?= $this->album->fecha ?>">
+                <!-- Mostrar posible error -->
+                <?php if (isset($this->errores['fecha'])): ?>
+                    <span class="form-text text-danger" role="alert">
+                        <?= $this->errores['fecha'] ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+            <!-- Categoría -->
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoría</label>
+                <input type="text" class="form-control" name="categoria" value="<?= $this->album->categoria ?>">
+                <!-- Mostrar posible error -->
+                <?php if (isset($this->errores['categoria'])): ?>
+                    <span class="form-text text-danger" role="alert">
+                        <?= $this->errores['categoria'] ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+            <!-- Etiquetas -->
+            <div class="mb-3">
+                <label for="etiquetas" class="form-label">Etiquetas</label>
+                <input type="text" class="form-control" name="etiquetas" value="<?= $this->album->etiquetas ?>">
+                <!-- Mostrar posible error -->
+                <?php if (isset($this->errores['etiquetas'])): ?>
+                    <span class="form-text text-danger" role="alert">
+                        <?= $this->errores['etiquetas'] ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+            <!-- Carpeta -->
+            <div class="mb-3">
+                <label for="carpeta" class="form-label">Carpeta</label>
+                <input type="text" class="form-control" name="carpeta" value="<?= $this->album->carpeta ?>">
+                <!-- Mostrar posible error -->
+                <?php if (isset($this->errores['carpeta'])): ?>
+                    <span class="form-text text-danger" role="alert">
+                        <?= $this->errores['carpeta'] ?>
                     </span>
                 <?php endif; ?>
             </div>
 
             <!-- botones de acción -->
-            <a class="btn btn-secondary" href="<?= URL ?>alumno" role="button">Cancelar</a>
+            <a class="btn btn-secondary" href="<?= URL ?>album" role="button">Cancelar</a>
             <button type="reset" class="btn btn-danger">Reset</button>
             <button type="submit" class="btn btn-primary">Actualizar</button>
 

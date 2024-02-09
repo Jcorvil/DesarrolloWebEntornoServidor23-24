@@ -47,7 +47,7 @@
 							<!-- personalizado -->
 							<th>Id</th>
 							<th>Nº de cuenta</th>
-							<th>Cliente</th>
+							<th>cuenta</th>
 							<th>Fecha Alta</th>
 							<th>Fecha último movimiento</th>
 							<th>Movimientos Totales</th>
@@ -87,21 +87,24 @@
 								</td>
 								<!-- botones de acción -->
 								<td>
-
 									<!-- botón eliminar -->
 									<a href="<?= URL ?>cuentas/delete/<?= $cuenta->id ?>" title="Eliminar"
-										onclick="return confirm('Confirme la eliminación de la cuenta')">
-										<i class="bi bi-trash-fill"></i>
+										class="btn btn-danger <?= (!in_array($_SESSION['id_rol'], $GLOBALS['cuenta']['delete'])) ? 'disabled' : '' ?>"
+										onclick="return confirm('Confirmar eliminación del cuenta')">
+										<i class="bi bi-trash"></i>
 									</a>
 
 									<!-- botón editar -->
-									<a href="<?= URL ?>cuentas/edit/<?= $cuenta->id ?>" title="Editar">
-										<i class="bi bi-pencil-square"></i></a>
+									<a href="<?= URL ?>cuentas/edit/<?= $cuenta->id ?>" title="Editar"
+										class="btn btn-primary <?= (!in_array($_SESSION['id_rol'], $GLOBALS['cuenta']['edit'])) ? 'disabled' : '' ?>">
+										<i class="bi bi-pencil"></i>
+									</a>
 
 									<!-- botón mostrar -->
-									<a href="<?= URL ?>cuentas/show/<?= $cuenta->id ?> ?>" title="Mostrar">
-										<i class="bi bi-card-text"></i></a>
-
+									<a href="<?= URL ?>cuentas/show/<?= $cuenta->id ?>" title="Mostrar"
+										class="btn btn-warning <?= (!in_array($_SESSION['id_rol'], $GLOBALS['cuenta']['show'])) ? 'disabled' : '' ?>">
+										<i class="bi bi-card-text"></i>
+									</a>
 								</td>
 							</tr>
 

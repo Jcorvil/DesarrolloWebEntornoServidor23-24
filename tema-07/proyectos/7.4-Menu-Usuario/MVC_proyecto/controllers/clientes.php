@@ -68,15 +68,15 @@ class Clientes extends Controller
             # Mensaje de error
             $this->view->error = $_SESSION['error'];
 
-            # Autorrellenar el formulario con los detalles de la cuenta
-            $this->view->cuenta = unserialize($_SESSION['cuenta']);
+            # Autorrellenar el formulario con los detalles de la cliente
+            $this->view->cliente = unserialize($_SESSION['cliente']);
 
             # Recupero array de errores específicos
             $this->view->errores = $_SESSION['errores'];
 
             unset($_SESSION['error']);
             unset($_SESSION['errores']);
-            unset($_SESSION['cuenta']);
+            unset($_SESSION['cliente']);
         }
 
         # etiqueta title de la vista

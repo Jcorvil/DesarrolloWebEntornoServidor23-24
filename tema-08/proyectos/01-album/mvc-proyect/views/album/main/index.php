@@ -33,10 +33,10 @@
 			<!-- Estilo card de bootstrap -->
 			<div class="card">
 				<div class="card-header">
-					Tabla de albumes
+					Tabla de Albumes
 				</div>
 				<div class="card-header">
-					<!-- menu albumes -->
+					<!-- menu alumnos -->
 					<?php require_once("views/album/partials/menu.php") ?>
 				</div>
 				<div class="card-body">
@@ -48,12 +48,14 @@
 							<tr>
 								<!-- personalizado -->
 								<th>Id</th>
-								<th>Título</th>
+								<th>Titulo</th>
 								<th>Descripción</th>
 								<th>Autor</th>
+								<th>Lugar</th>
 								<th>Fecha</th>
 								<th>Categoría</th>
 								<th>Etiquetas</th>
+								<th>Carpetas</th>
 								<th>Acciones</th>
 							</tr>
 						</thead>
@@ -62,9 +64,8 @@
 
 							<!-- Objeto clase pdostatement en foreach -->
 							<?php foreach ($this->albumes as $album): ?>
+								<?php require('template/partials/modal.php'); ?>
 								<tr>
-									<!-- Formatos distintos para cada  columna -->
-
 									<!-- Detalles de albumes -->
 									<td>
 										<?= $album->id ?>
@@ -79,6 +80,9 @@
 										<?= $album->autor ?>
 									</td>
 									<td>
+										<?= $album->lugar ?>
+									</td>
+									<td>
 										<?= $album->fecha ?>
 									</td>
 									<td>
@@ -86,6 +90,9 @@
 									</td>
 									<td>
 										<?= $album->etiquetas ?>
+									</td>
+									<td>
+										<?= $album->carpeta ?>
 									</td>
 
 
@@ -112,7 +119,12 @@
 												'disabled' : null ?>">
 											<i class="bi bi-card-text"></i>
 										</a>
-
+										<!-- botón  subir imagen -->
+										<a href="#" title="Subir" data-bs-toggle="modal"
+											data-bs-target="#add<?= $album->id ?>" <?= (!in_array($_SESSION['id_rol'], $GLOBALS['album']['add'])) ?
+											  	'disabled' : null ?> class="btn btn-success">
+											<i class="bi bi-image"></i>
+										</a>
 									</td>
 								</tr>
 
@@ -125,7 +137,7 @@
 
 				</div>
 				<div class="card-footer">
-					<small class="text-muted"> Nº albumes:
+					<small class="text-muted"> Albumes:
 						<?= $this->albumes->rowCount(); ?>
 					</small>
 				</div>
