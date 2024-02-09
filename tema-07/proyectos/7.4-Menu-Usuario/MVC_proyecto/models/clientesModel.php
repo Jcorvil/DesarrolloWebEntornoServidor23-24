@@ -283,14 +283,15 @@ class clientesModel extends Model
     }
 
 
-    public function existeEmail($email)
+    public function existeEmail($email, $id)
     {
         try {
-            $sql = "SELECT COUNT(*) FROM clientes WHERE email = :email";
+            $sql = "SELECT COUNT(*) FROM clientes WHERE email = :email AND id != :id";
 
             $conexion = $this->db->connect();
             $pdoSt = $conexion->prepare($sql);
             $pdoSt->bindParam(':email', $email, PDO::PARAM_STR);
+            $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
             $pdoSt->execute();
 
             $count = $pdoSt->fetchColumn();
@@ -302,14 +303,15 @@ class clientesModel extends Model
         }
     }
 
-    public function existeDNI($dni)
+    public function existeDNI($dni, $id)
     {
         try {
-            $sql = "SELECT COUNT(*) FROM clientes WHERE dni = :dni";
+            $sql = "SELECT COUNT(*) FROM clientes WHERE dni = :dni AND id != :id";
 
             $conexion = $this->db->connect();
             $pdoSt = $conexion->prepare($sql);
             $pdoSt->bindParam(':dni', $dni, PDO::PARAM_STR);
+            $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
             $pdoSt->execute();
 
             $count = $pdoSt->fetchColumn();

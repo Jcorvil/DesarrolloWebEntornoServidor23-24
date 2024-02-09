@@ -209,7 +209,7 @@ class Clientes extends Controller
         $this->view->id = $id;
 
         # title
-        $this->view->title = "edit - Panel de control Clientes";
+        $this->view->title = "Edit - Panel de control Clientes";
 
         # obtener objeto de la clase cliente
         $this->view->cliente = $this->model->read($id);
@@ -294,7 +294,7 @@ class Clientes extends Controller
             $errores['email'] = 'Email obligatorio';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errores['email'] = 'Email inválido';
-        } elseif ($this->model->existeEmail($email)) {
+        } elseif ($this->model->existeEmail($email, $id)) {
             $errores['email'] = 'Este email ya está registrado';
         }
 
@@ -315,10 +315,9 @@ class Clientes extends Controller
             $errores['dni'] = 'DNI obligatorio';
         } elseif (!preg_match('/^\d{8}[A-Z]$/', $dni)) {
             $errores['dni'] = 'El DNI debe tener 8 dígitos seguidos de una letra mayúscula';
-        } elseif ($this->model->existeDNI($dni)) {
+        } elseif ($this->model->existeDNI($dni, $id)) {
             $errores['dni'] = 'Este DNI ya está registrado';
         }
-
         # comprobamos la validación
         if (!empty($errores)) {
             // Errores de validación
@@ -330,7 +329,7 @@ class Clientes extends Controller
             header('location:' . URL . 'clientes/edit/' . $id);
         }
         // Actualizamos el registro
-        $this->model->update($cliente, $id);
+        $this->model->update($id, $cliente);
 
         // Añadimos a la variable de sesión un mensaje
         $_SESSION['mensaje'] = 'Cliente actualizado correctamente';

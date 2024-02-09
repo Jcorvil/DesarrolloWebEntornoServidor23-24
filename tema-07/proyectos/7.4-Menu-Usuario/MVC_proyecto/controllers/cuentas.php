@@ -355,7 +355,7 @@ class Cuentas extends Controller
                 $errores['id_cliente'] = 'El campo cliente es obligatorio';
             } else if (!filter_var($id_cliente, FILTER_VALIDATE_INT)) {
                 $errores['id_cliente'] = 'Debe introducir un cliente';
-            } else if (!$this->model->validateCliente($id_cliente)) {
+            } else if (!$this->model->getClienteCuenta($id_cliente)) {
                 $errores['id_cliente'] = 'El cliente seleccionado no existe';
             }
         }

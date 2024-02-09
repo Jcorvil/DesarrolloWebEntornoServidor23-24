@@ -231,13 +231,11 @@ class cuentasModel extends Model
             $sql = "SELECT 
                         cuentas.id,
                         cuentas.num_cuenta,
-                        cuentas.id_cliente,
+                        concat_ws(', ', clientes.apellidos, clientes.nombre) as cliente,
                         cuentas.fecha_alta,
                         cuentas.fecha_ul_mov,
                         cuentas.num_movtos,
-                        cuentas.saldo,
-                        clientes.nombre,
-                        clientes.apellidos
+                        cuentas.saldo
                     FROM
                         cuentas
                     INNER JOIN clientes 
