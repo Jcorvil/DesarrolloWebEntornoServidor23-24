@@ -66,7 +66,13 @@
 							<?php foreach ($this->albumes as $album): ?>
 								<?php require('template/partials/modal.php'); ?>
 								<tr>
+<<<<<<< HEAD
 									<!-- Detalles de albumes -->
+=======
+									<!-- Formatos distintos para cada  columna -->
+
+									<!-- Detalles de alumnos -->
+>>>>>>> 86e190547080294c43a9a04f6ef65cd92481c785
 									<td>
 										<?= $album->id ?>
 									</td>
@@ -120,11 +126,20 @@
 											<i class="bi bi-card-text"></i>
 										</a>
 										<!-- botón  subir imagen -->
+<<<<<<< HEAD
 										<a href="#" title="Subir" data-bs-toggle="modal"
 											data-bs-target="#add<?= $album->id ?>" <?= (!in_array($_SESSION['id_rol'], $GLOBALS['album']['add'])) ?
 											  	'disabled' : null ?> class="btn btn-success">
 											<i class="bi bi-image"></i>
 										</a>
+=======
+										<!-- <a href="<?= URL ?>album/add/<?= $album->id ?> ?>" title="Subir imagenes" class="btn btn-success
+											<?= (!in_array($_SESSION['id_rol'], $GLOBALS['album']['show'])) ?
+												'disabled' : null ?>">
+											<i class="bi bi-image"></i>
+										</a> -->
+
+>>>>>>> 86e190547080294c43a9a04f6ef65cd92481c785
 									</td>
 								</tr>
 

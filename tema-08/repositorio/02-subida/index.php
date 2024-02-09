@@ -16,7 +16,6 @@
 
         // autocompletar formulario
         $nombre = $_SESSION['nombre'];
-        $observaciones = $_SESSION['observaciones'];
         $fichero = $_SESSION['fichero'];
 
         // elimino variables de sesión afectadas

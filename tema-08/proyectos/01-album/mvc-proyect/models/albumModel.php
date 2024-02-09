@@ -255,8 +255,12 @@ class albumModel extends Model
                         albumes.fecha,
                         albumes.lugar,
                         albumes.categoria,
+<<<<<<< HEAD
                         albumes.etiquetas,
                         albumes.carpeta
+=======
+                        albumes.etiquetas
+>>>>>>> 86e190547080294c43a9a04f6ef65cd92481c785
                     FROM
                         albumes
                     WHERE
@@ -268,8 +272,12 @@ class albumModel extends Model
                                 albumes.fecha,
                                 albumes.lugar,
                                 albumes.categoria,
+<<<<<<< HEAD
                                 albumes.etiquetas,
                                 albumes.carpeta
+=======
+                                albumes.etiquetas
+>>>>>>> 86e190547080294c43a9a04f6ef65cd92481c785
                                 ) 
                     like :expresion
                 ORDER BY 
@@ -315,6 +323,7 @@ class albumModel extends Model
         }
     }
 
+<<<<<<< HEAD
     public function upload($ficheros, $carpeta)
     {
 
@@ -379,6 +388,56 @@ class albumModel extends Model
     //     $this->model->contador($album->$id, $numFotos);
 
     //     header("Location" . URL . "albumes");
+=======
+    // public function upload($ficheros, $carpeta)
+    // {
+
+    //     // Usamos el mismo método usado en el repositorio "02-subida"
+
+    //     $num = count($ficheros['tmp_name']);
+
+    //     $FileUploadErrors = array(
+    //         0 => 'No hay error, fichero subido con éxito.',
+    //         1 => 'El fichero subido excede la directiva upload_max_filesize de php.ini.',
+    //         2 => 'El fichero subido excede la directiva MAX_FILE_SIZE especificada en el formulario HTML.',
+    //         3 => 'El fichero fue sólo parcialmente subido.',
+    //         4 => 'No se subió ningún fichero.',
+    //         6 => 'Falta la carpeta temporal.',
+    //         7 => 'No se pudo escribir el fichero en el disco.',
+    //         8 => 'Una extensión de PHP detuvo la subida de ficheros.',
+    //     );
+
+    //     $error = null;
+
+    //     for ($i = 0; $i <= $num - 1 && is_null($error); $i++) {
+    //         if ($ficheros['error'][$i] != UPLOAD_ERR_OK) {
+    //             $error = $FileUploadErrors[$ficheros['error'][$i]];
+    //         } else {
+    //             $tamMaximo = 4194304;
+    //             if ($ficheros['size'][$i] > $tamMaximo) {
+
+    //                 $error = "Archivo excede tamaño maximo 4MB";
+
+    //             }
+    //             $info = new SplFileInfo($ficheros['name'][$i]);
+    //             $tipos_permitidos = ['JPG', 'JPEG', 'GIF', 'PNG'];
+    //             if (!in_array(strtoupper($info->getExtension()), $tipos_permitidos)) {
+    //                 $error = "Archivo no permitido. Seleccione una imagen.";
+    //             }
+    //         }
+    //     }
+
+    //     if (is_null($error)) {
+    //         for ($i = 0; $i <= $num - 1; $i++) {
+    //             if (is_uploaded_file($ficheros['tmp_name'][$i])) {
+    //                 move_uploaded_file($ficheros['tmp_name'][$i], "images/" . $carpeta . "/" . $ficheros['name'][$i]);
+    //             }
+    //         }
+    //         $_SESSION['mensaje'] = "Los archivos se han subido correctamente";
+    //     } else {
+    //         $_SESSION['error'] = $error;
+    //     }
+>>>>>>> 86e190547080294c43a9a04f6ef65cd92481c785
 
     // }
 

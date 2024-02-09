@@ -489,6 +489,7 @@ class Album extends Controller
     }
 
 
+<<<<<<< HEAD
     function add($param = [])
     {
         // Usamod el método del repositorio "02-subida"
@@ -515,6 +516,26 @@ class Album extends Controller
         }
         
     }
+=======
+    // function add($param = [])
+    // {
+    //     // Usamod el método del repositorio "02-subida"
+
+    //     session_start();
+
+    //     if (!isset($_SESSION['id'])) {
+    //         $_SESSION['mensaje'] = "Usuario debe autentificarse";
+    //         header("location:" . URL . "login");
+    //     } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['album']['delete']))) {
+    //         $_SESSION['mensaje'] = "Operación sin privilegios";
+    //         header('location:' . URL . 'album');
+    //     } else {
+    //         $album = $this->model->read($param[0]);
+    //         $this->model->upload($_FILES['archivos'], $album->carpeta);
+    //         header("location:" . URL . "album");
+    //     }
+    // }
+>>>>>>> 86e190547080294c43a9a04f6ef65cd92481c785
 
 
 
