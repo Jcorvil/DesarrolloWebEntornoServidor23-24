@@ -16,7 +16,6 @@
 
     <!-- Capa principal -->
     <div class="container">
-
         <!-- header -->
         <?php include 'views/clientes/partials/header.php' ?>
 
@@ -31,11 +30,9 @@
             <button type="submit" class="btn btn-primary">Importar</button>
         </form>
 
-
         <br>
         <br>
         <br>
-
 
         <!-- Pié del documento -->
         <?php include 'template/partials/footer.php' ?>

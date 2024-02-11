@@ -525,19 +525,17 @@ class Clientes extends Controller
             $handle = fopen($file, "r");
 
             if ($handle !== FALSE) {
-
+                // Iterar sobre el archivo CSV y procesar cada línea
                 while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-
+                    // Obtener los datos de cada fila y guardarlos en variables
                     $apellidos = $data[0];
                     $nombre = $data[1];
                     $telefono = $data[2];
                     $ciudad = $data[3];
                     $dni = $data[4];
                     $email = $data[5];
-                    $create_at = $data[6];
-                    $update_at = $data[7];
-
-                    $this->model->insertCliente($apellidos, $nombre, $telefono, $ciudad, $dni, $email, $create_at, $update_at);
+                    // Insertar los datos en la base de datos usando tu método insertCliente()
+                    $this->model->insertCliente($apellidos, $nombre, $telefono, $ciudad, $dni, $email);
                 }
 
                 fclose($handle);
@@ -553,7 +551,6 @@ class Clientes extends Controller
             }
 
         } else {
-
             $_SESSION['error'] = "No se ha seleccionado ningún archivo CSV";
             header('location:' . URL . 'clientes');
             exit();

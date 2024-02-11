@@ -8,12 +8,12 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= URL ?>clientes/new"> | Nuevo</a>
+                    <a class="nav-link" href="<?= URL ?>clientes/new"> Nuevo</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        | Ordenar
+                        Ordenar
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<?= URL ?>clientes/order/1">Id</a></li>
@@ -26,11 +26,11 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= URL ?>clientes/export"
-                        onclick="return confirm('Se va a proceder a la exportación de los datos. ¿Desea continuar?')"> |
+                        onclick="return confirm('Se va a proceder a la exportación de los datos. ¿Desea continuar?')">
                         Exportar</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= URL ?>clientes/import"> | Importar</a>
+                <li class="nav-item" >
+                    <a class="nav-link" href="<?= URL ?>clientes/import"> Importar</a>
                 </li>
 
 
