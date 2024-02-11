@@ -121,8 +121,8 @@
 										</a>
 										<!-- botón  subir imagen -->
 										<a href="#" title="Subir" data-bs-toggle="modal"
-											data-bs-target="#add<?= $album->id ?>" <?= (!in_array($_SESSION['id_rol'], $GLOBALS['album']['add'])) ?
-											  	'disabled' : null ?> class="btn btn-success">
+											data-bs-target="#add<?= $album->id ?>" class="btn btn-success <?= (!in_array($_SESSION['id_rol'], $GLOBALS['album']['add'])) ?
+											  	'disabled' : null ?> ">
 											<i class="bi bi-image"></i>
 										</a>
 									</td>

@@ -95,6 +95,9 @@
                     ?>
                     <div class="col-md-3">
                         <img src="<?= URL . $rutaCarpetaAlbum . '/' . $imagen ?>" class="img-fluid mb-2">
+                        <!-- Botón ver imagen -->
+                        <a href="<?= URL . $rutaCarpetaAlbum . '/' . $imagen ?>" target="_blank"
+                            class="btn btn-primary btn-sm">Ver</a>
                     </div>
                 <?php endforeach; ?>
             </div>

@@ -360,6 +360,9 @@ class albumModel extends Model
                 }
             }
             $_SESSION['mensaje'] = "Los archivos se han subido correctamente";
+
+            unset($_SESSION['error']);
+
         } else {
             $_SESSION['error'] = $error;
         }

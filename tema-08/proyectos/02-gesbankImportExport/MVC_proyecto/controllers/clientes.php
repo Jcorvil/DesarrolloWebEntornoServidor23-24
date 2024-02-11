@@ -452,6 +452,115 @@ class Clientes extends Controller
     }
 
 
+    // Al descargar el archivo importado éste no se muestra hasta que se actualiza la carpeta (cerrar y abrir o
+    // actualizar el escritorio.)
+    function export()
+    {
+
+        session_start();
+
+        if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario no autentificado";
+
+            header("location:" . URL . "login");
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['cliente']['export']))) {
+            $_SESSION['mensaje'] = "Operación sin privilegios";
+            header('location:' . URL . 'clientes');
+        }
+
+        $clientes = $this->model->getCSV()->fetchAll(PDO::FETCH_ASSOC);
+
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="clientes.csv"');
+
+
+        $ficheroExport = fopen('php://output', 'w');
+
+        fputcsv($ficheroExport, array('apellidos', 'nombre', 'telefono', 'ciudad', 'dni', 'email', 'create_at', 'update_at'), ';');
+
+
+        foreach ($clientes as $cliente) {
+
+            $fecha = date("Y-m-d H:i:s");
+
+            $cliente['create_at'] = $fecha;
+            $cliente['update_at'] = $fecha;
+
+            $cliente = array(
+                'apellidos' => $cliente['apellidos'],
+                'nombre' => $cliente['nombre'],
+                'telefono' => $cliente['telefono'],
+                'ciudad' => $cliente['ciudad'],
+                'dni' => $cliente['dni'],
+                'email' => $cliente['email'],
+                'create_at' => $cliente['create_at'],
+                'update_at' => $cliente['update_at']
+            );
+
+
+            fputcsv($ficheroExport, $cliente, ';');
+        }
+
+        fclose($ficheroExport);
+    }
+
+
+    function import()
+    {
+        session_start();
+
+        if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario no autentificado";
+            header("location:" . URL . "login");
+            exit();
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['cliente']['import']))) {
+            $_SESSION['mensaje'] = "Operación sin privilegios";
+            header('location:' . URL . 'clientes');
+            exit();
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["archivo_csv"]) && $_FILES["archivo_csv"]["error"] == UPLOAD_ERR_OK) {
+            $file = $_FILES["archivo_csv"]["tmp_name"];
+
+            $handle = fopen($file, "r");
+
+            if ($handle !== FALSE) {
+
+                while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+
+                    $apellidos = $data[0];
+                    $nombre = $data[1];
+                    $telefono = $data[2];
+                    $ciudad = $data[3];
+                    $dni = $data[4];
+                    $email = $data[5];
+                    $create_at = $data[6];
+                    $update_at = $data[7];
+
+                    $this->model->insertCliente($apellidos, $nombre, $telefono, $ciudad, $dni, $email, $create_at, $update_at);
+                }
+
+                fclose($handle);
+                $_SESSION['mensaje'] = "Importación completada correctamente";
+                header('location:' . URL . 'clientes');
+                exit();
+
+            } else {
+                $_SESSION['error'] = "Error al abrir el archivo CSV";
+                header('location:' . URL . 'clientes');
+                exit();
+
+            }
+
+        } else {
+
+            $_SESSION['error'] = "No se ha seleccionado ningún archivo CSV";
+            header('location:' . URL . 'clientes');
+            exit();
+        }
+    }
+
+
 }
 
 ?>

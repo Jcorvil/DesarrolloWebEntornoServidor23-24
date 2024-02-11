@@ -491,7 +491,6 @@ class Album extends Controller
 
     function add($param = [])
     {
-        // Usamod el método del repositorio "02-subida"
         session_start();
 
         if (!isset($_SESSION['id'])) {
@@ -506,15 +505,16 @@ class Album extends Controller
 
             $this->model->upload($_FILES['archivos'], $album->carpeta);
 
-            // $numFotos = count(glob("images/" . $album->carpeta . "/*"));
-
-            // $this->model->contadorFotos($album->id, $numFotos);
+            // Limpiar mensaje de error
+            if (!isset($_SESSION['error'])) {
+                unset($_SESSION['error']);
+            }
 
             header("Location:" . URL . "album");
 
         }
-        
     }
+
 
 
 

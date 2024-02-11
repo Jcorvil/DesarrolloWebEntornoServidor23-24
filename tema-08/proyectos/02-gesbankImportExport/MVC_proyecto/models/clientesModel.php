@@ -335,6 +335,94 @@ class clientesModel extends Model
     }
 
 
+    function getCSV()
+    {
+
+        try {
+
+            # comando sql
+            $sql = "SELECT 
+                        clientes.id,
+                        clientes.apellidos,
+                        clientes.nombre,
+                        clientes.email,
+                        clientes.telefono,
+                        clientes.ciudad,
+                        clientes.dni
+                    FROM
+                        clientes
+                    ORDER BY 
+                        id";
+
+            # conectamos con la base de datos
+
+            // $this->db es un objeto de la clase database
+            // ejecuto el método connect de esa clase
+
+            $conexion = $this->db->connect();
+
+            # ejecutamos mediante prepare
+            $pdost = $conexion->prepare($sql);
+
+            # establecemos  tipo fetch
+            $pdost->setFetchMode(PDO::FETCH_OBJ);
+
+            #  ejecutamos 
+            $pdost->execute();
+
+            # devuelvo objeto pdostatement
+            return $pdost;
+
+        } catch (PDOException $e) {
+
+            include_once('template/partials/errorDB.php');
+            exit();
+
+        }
+    }
+
+    function insertCliente($nombre, $apellidos, $email, $telefono, $ciudad, $dni)
+    {
+        try {
+            $sql = "INSERT INTO clientes (
+                                    nombre,
+                                    apellidos,
+                                    email,
+                                    telefono,
+                                    ciudad,
+                                    dni) 
+                           VALUES (
+                                    :nombre,
+                                    :apellidos,
+                                    :email,
+                                    :telefono,
+                                    :ciudad,
+                                    :dni)";
+
+            // Conectar con la base de datos
+            $conexion = $this->db->connect();
+
+            $pdoSt = $conexion->prepare($sql);
+
+            $pdoSt->bindParam(':nombre', $nombre, PDO::PARAM_STR, 30);
+            $pdoSt->bindParam(':apellidos', $apellidos, PDO::PARAM_STR, 50);
+            $pdoSt->bindParam(':email', $email, PDO::PARAM_STR, 50);
+            $pdoSt->bindParam(':telefono', $telefono, PDO::PARAM_STR, 13);
+            $pdoSt->bindParam(':ciudad', $ciudad, PDO::PARAM_STR, 30);
+            $pdoSt->bindParam(':dni', $dni, PDO::PARAM_STR, 9);
+
+            $pdoSt->execute();
+
+            // Devolver el ID del cliente insertado
+            return $conexion->lastInsertId();
+            
+        } catch (PDOException $e) {
+            include_once('template/partials/errorDB.php');
+            exit();
+        }
+    }
+
+
 }
 
 ?>
