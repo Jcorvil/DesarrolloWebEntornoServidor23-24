@@ -28,7 +28,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?= URL ?>cuentas/export"
                         onclick="return confirm('Se va a proceder a la exportación de los datos. ¿Desea continuar?')">
-                         Exportar</a>
+                        Exportar</a>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link btn btn-link" data-bs-toggle="modal"
+                        data-bs-target="#importModalCuentas">Importar</button>
                 </li>
             </ul>
             <form class="d-flex" role="search" method="GET" action="<?= URL ?>cuentas/filter">

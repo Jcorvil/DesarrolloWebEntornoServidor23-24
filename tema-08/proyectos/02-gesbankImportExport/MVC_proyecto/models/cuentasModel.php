@@ -322,11 +322,9 @@ class cuentasModel extends Model
     public function existeCuenta($num_cuenta)
     {
         try {
-            $sql = "SELECT * FROM cuentas 
-                     WHERE num_cuenta = :num_cuenta";
+            $sql = "SELECT COUNT(*) FROM cuentas WHERE num_cuenta = :num_cuenta";
 
-
-            //Conectar con la base de datos
+            // Conectar con la base de datos
             $conexion = $this->db->connect();
 
             $pdost = $conexion->prepare($sql);
@@ -334,17 +332,15 @@ class cuentasModel extends Model
 
             $pdost->execute();
 
-            if ($pdost->rowCount() != 0) {
-                return false;
-            }
+            $count = $pdost->fetchColumn();
 
-            return true;
+            return $count > 0;
         } catch (PDOException $e) {
-
             include_once('template/partials/errorDB.php');
             exit();
         }
     }
+
 
     public function validateFechaAlta($fecha_alta)
     {

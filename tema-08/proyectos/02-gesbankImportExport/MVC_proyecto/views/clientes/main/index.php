@@ -26,7 +26,8 @@
 		<!-- errores -->
 		<?php require_once("template/partials/error.php") ?>
 
-
+		<!-- Modal -->
+		<?php require('template/partials/modalClientes.php'); ?>
 
 		<!-- Estilo card de bootstrap -->
 		<div class="card">
@@ -59,6 +60,7 @@
 
 						<!-- Objeto clase pdostatement en foreach -->
 						<?php foreach ($this->clientes as $cliente): ?>
+
 							<tr>
 								<!-- Formatos distintos para cada  columna -->
 

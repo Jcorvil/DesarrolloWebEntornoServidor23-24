@@ -473,14 +473,9 @@ class Clientes extends Controller
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="clientes.csv"');
 
-
         $ficheroExport = fopen('php://output', 'w');
 
-        fputcsv($ficheroExport, array('apellidos', 'nombre', 'telefono', 'ciudad', 'dni', 'email', 'create_at', 'update_at'), ';');
-
-
         foreach ($clientes as $cliente) {
-
             $fecha = date("Y-m-d H:i:s");
 
             $cliente['create_at'] = $fecha;
@@ -489,14 +484,13 @@ class Clientes extends Controller
             $cliente = array(
                 'apellidos' => $cliente['apellidos'],
                 'nombre' => $cliente['nombre'],
+                'email' => $cliente['email'],
                 'telefono' => $cliente['telefono'],
                 'ciudad' => $cliente['ciudad'],
                 'dni' => $cliente['dni'],
-                'email' => $cliente['email'],
                 'create_at' => $cliente['create_at'],
                 'update_at' => $cliente['update_at']
             );
-
 
             fputcsv($ficheroExport, $cliente, ';');
         }
@@ -530,12 +524,29 @@ class Clientes extends Controller
                     // Obtener los datos de cada fila y guardarlos en variables
                     $apellidos = $data[0];
                     $nombre = $data[1];
-                    $telefono = $data[2];
-                    $ciudad = $data[3];
-                    $dni = $data[4];
-                    $email = $data[5];
-                    // Insertar los datos en la base de datos usando tu método insertCliente()
-                    $this->model->insertCliente($apellidos, $nombre, $telefono, $ciudad, $dni, $email);
+                    $email = $data[2];
+                    $telefono = $data[3];
+                    $ciudad = $data[4];
+                    $dni = $data[5];
+
+                    // Verificar si ya existe un cliente con el mismo correo electrónico (email) o número de identificación (DNI),
+                    // ya que no se pueden repetir.
+                    if (!$this->model->existeEmail($email) && !$this->model->existeDNI($dni)) {
+                        // Si no existe, crear un nuevo cliente
+                        $cliente = new classCliente();
+                        $cliente->apellidos = $apellidos;
+                        $cliente->nombre = $nombre;
+                        $cliente->email = $email;
+                        $cliente->telefono = $telefono;
+                        $cliente->ciudad = $ciudad;
+                        $cliente->dni = $dni;
+
+                        // Insertar el cliente en la base de datos
+                        $this->model->create($cliente);
+                    } else {
+                        // Si ya existe, se ignora el cliente
+                        echo "El cliente con correo electrónico $email o DNI $dni ya existe en la base de datos. Se ha ignorado el cliente.";
+                    }
                 }
 
                 fclose($handle);

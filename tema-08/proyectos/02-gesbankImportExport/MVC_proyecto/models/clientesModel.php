@@ -381,47 +381,6 @@ class clientesModel extends Model
         }
     }
 
-    function insertCliente($nombre, $apellidos, $email, $telefono, $ciudad, $dni)
-    {
-        try {
-            $sql = "INSERT INTO clientes (
-                                    nombre,
-                                    apellidos,
-                                    email,
-                                    telefono,
-                                    ciudad,
-                                    dni) 
-                           VALUES (
-                                    :nombre,
-                                    :apellidos,
-                                    :email,
-                                    :telefono,
-                                    :ciudad,
-                                    :dni)";
-
-            // Conectar con la base de datos
-            $conexion = $this->db->connect();
-
-            $pdoSt = $conexion->prepare($sql);
-
-            $pdoSt->bindParam(':nombre', $nombre, PDO::PARAM_STR, 30);
-            $pdoSt->bindParam(':apellidos', $apellidos, PDO::PARAM_STR, 50);
-            $pdoSt->bindParam(':email', $email, PDO::PARAM_STR, 50);
-            $pdoSt->bindParam(':telefono', $telefono, PDO::PARAM_STR, 13);
-            $pdoSt->bindParam(':ciudad', $ciudad, PDO::PARAM_STR, 30);
-            $pdoSt->bindParam(':dni', $dni, PDO::PARAM_STR, 9);
-
-            $pdoSt->execute();
-
-            // Devolver el ID del cliente insertado
-            return $conexion->lastInsertId();
-            
-        } catch (PDOException $e) {
-            include_once('template/partials/errorDB.php');
-            exit();
-        }
-    }
-
 
 }
 

@@ -532,12 +532,10 @@ class Cuentas extends Controller
     // actualizar el escritorio.)
     function export()
     {
-
         session_start();
 
         if (!isset($_SESSION['id'])) {
             $_SESSION['mensaje'] = "Usuario no autentificado";
-
             header("location:" . URL . "login");
         } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['cuenta']['export']))) {
             $_SESSION['mensaje'] = "Operación sin privilegios";
@@ -549,12 +547,9 @@ class Cuentas extends Controller
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="cuentas.csv"');
 
-
         $ficheroExport = fopen('php://output', 'w');
 
-        fputcsv($ficheroExport, array('num_cuenta', 'id_cliente', 'fecha_alta', 'fecha_ul_mov', 'num_movtos', 'saldo', 'create_at', 'update_at'), ';');
-
-
+        // Iterar sobre las cuentas y escribir los datos en el archivo CSV
         foreach ($cuentas as $cuenta) {
 
             $fecha = date("Y-m-d H:i:s");
@@ -573,11 +568,80 @@ class Cuentas extends Controller
                 'update_at' => $cuenta['update_at']
             );
 
-
             fputcsv($ficheroExport, $cuenta, ';');
         }
 
         fclose($ficheroExport);
+    }
+
+
+    function import()
+    {
+        session_start();
+
+        if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario no autentificado";
+            header("location:" . URL . "login");
+            exit();
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['cuenta']['import']))) {
+            $_SESSION['mensaje'] = "Operación sin privilegios";
+            header('location:' . URL . 'cuentas');
+            exit();
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["archivo_csv"]) && $_FILES["archivo_csv"]["error"] == UPLOAD_ERR_OK) {
+            $file = $_FILES["archivo_csv"]["tmp_name"];
+
+            $handle = fopen($file, "r");
+
+            if ($handle !== FALSE) {
+                // Iterar sobre el archivo CSV y procesar cada línea
+                while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+                    // Obtener los datos de cada fila y guardarlos en variables
+                    $num_cuenta = $data[0];
+                    $id_cliente = $data[1];
+                    $fecha_alta = $data[2];
+                    $fecha_ul_mov = $data[3];
+                    $num_movtos = $data[4];
+                    $saldo = $data[5];
+
+                    // Verificar si ya existe una cuenta con el mismo numero de cuenta,
+                    // ya que no se pueden repetir.
+                    if (!$this->model->existeCuenta($num_cuenta)) {
+                        // Si no existe, crear una nueva cuenta
+                        $cuenta = new classCuenta();
+                        $cuenta->num_cuenta = $num_cuenta;
+                        $cuenta->id_cliente = $id_cliente;
+                        $cuenta->fecha_alta = $fecha_alta;
+                        $cuenta->fecha_ul_mov = $fecha_ul_mov;
+                        $cuenta->num_movtos = $num_movtos;
+                        $cuenta->saldo = $saldo;
+
+                        // Insertar la cuenta en la base de datos
+                        $this->model->create($cuenta);
+                    } else {
+                        // Si ya existe, se ignora la cuenta
+                        echo "Ya existe una cuenta registrada con ese número. Se ha ignorado la cuenta.";
+                    }
+                }
+
+                fclose($handle);
+                $_SESSION['mensaje'] = "Importación completada correctamente";
+                header('location:' . URL . 'cuentas');
+                exit();
+
+            } else {
+                $_SESSION['error'] = "Error al abrir el archivo CSV";
+                header('location:' . URL . 'cuentas');
+                exit();
+
+            }
+
+        } else {
+            $_SESSION['error'] = "No se ha seleccionado ningún archivo CSV";
+            header('location:' . URL . 'cuentas');
+            exit();
+        }
     }
 
 }

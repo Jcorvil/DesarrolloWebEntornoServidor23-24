@@ -26,6 +26,8 @@
 		<!-- errores -->
 		<?php require_once("template/partials/error.php") ?>
 
+		<!-- Modal -->
+		<?php require('template/partials/modalCuentas.php'); ?>
 
 
 		<!-- Estilo card de bootstrap -->

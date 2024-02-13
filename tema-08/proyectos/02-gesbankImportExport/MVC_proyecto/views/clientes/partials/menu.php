@@ -29,10 +29,10 @@
                         onclick="return confirm('Se va a proceder a la exportación de los datos. ¿Desea continuar?')">
                         Exportar</a>
                 </li>
-                <li class="nav-item" >
-                    <a class="nav-link" href="<?= URL ?>clientes/import"> Importar</a>
+                <li class="nav-item">
+                    <button type="button" class="nav-link btn btn-link" data-bs-toggle="modal"
+                        data-bs-target="#importModalClientes">Importar</button>
                 </li>
-
 
             </ul>
             <form class="d-flex" role="search" method="GET" action="<?= URL ?>clientes/filter">
