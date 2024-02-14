@@ -24,8 +24,8 @@ $GLOBALS['cliente']['delete'] = [1];
 $GLOBALS['cliente']['show'] = [1, 2, 3];
 $GLOBALS['cliente']['filter'] = [1, 2, 3];
 $GLOBALS['cliente']['order'] = [1, 2, 3];
-$GLOBALS['cliente']['export'] = [1, 2, 3];
-$GLOBALS['cliente']['import'] = [1, 2, 3];
+$GLOBALS['cliente']['export'] = [1];
+$GLOBALS['cliente']['import'] = [1];
 
 $GLOBALS['cuenta']['main'] = [1, 2, 3];
 $GLOBALS['cuenta']['new'] = [1, 2];
@@ -34,7 +34,7 @@ $GLOBALS['cuenta']['delete'] = [1];
 $GLOBALS['cuenta']['show'] = [1, 2, 3];
 $GLOBALS['cuenta']['filter'] = [1, 2, 3];
 $GLOBALS['cuenta']['order'] = [1, 2, 3];
-$GLOBALS['cuenta']['export'] = [1, 2, 3];
-$GLOBALS['cuenta']['import'] = [1, 2, 3];
+$GLOBALS['cuenta']['export'] = [1];
+$GLOBALS['cuenta']['import'] = [1];
 
 ?>

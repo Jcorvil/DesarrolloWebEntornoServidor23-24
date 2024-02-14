@@ -382,6 +382,76 @@ class clientesModel extends Model
     }
 
 
+    public function getCuentasCliente($idCliente)
+    {
+
+        try {
+
+            # comando sql
+            $sql = "SELECT 
+                        cuentas.id,
+                        cuentas.num_cuenta,
+                        cuentas.id_cliente,
+                        cuentas.fecha_alta,
+                        cuentas.fecha_ul_mov,
+                        cuentas.num_movtos,
+                        cuentas.saldo
+                    FROM
+                        cuentas
+                    WHERE id_cliente = :idCliente
+                    ORDER BY 
+                        cuentas.id";
+
+
+            $conexion = $this->db->connect();
+
+            # ejecutamos mediante prepare
+            $pdost = $conexion->prepare($sql);
+
+            $pdost->bindParam(":idCliente", $idCliente, PDO::PARAM_INT);
+
+            # establecemos  tipo fetch
+            $pdost->setFetchMode(PDO::FETCH_OBJ);
+
+            #  ejecutamos 
+            $pdost->execute();
+
+            # devuelvo objeto pdostatement
+            return $pdost->fetchAll();
+
+        } catch (PDOException $e) {
+
+            include_once('template/partials/errorDB.php');
+            exit();
+
+        }
+    }
+
+    function deleteCuentas($idCuenta)
+    {
+        try {
+
+            $sql = "DELETE FROM Cuentas WHERE id = :idCuenta";
+
+            $conexion = $this->db->connect();
+
+            # ejecutamos mediante prepare
+            $pdost = $conexion->prepare($sql);
+
+            $pdost->bindParam(":idCuenta", $idCuenta, PDO::PARAM_INT);
+
+            # establecemos  tipo fetch
+            $pdost->setFetchMode(PDO::FETCH_OBJ);
+
+            #  ejecutamos 
+            $pdost->execute();
+
+        } catch (PDOException $e) {
+            require_once("template/partials/errorDB.php");
+            exit();
+        }
+    }
+
 }
 
 ?>

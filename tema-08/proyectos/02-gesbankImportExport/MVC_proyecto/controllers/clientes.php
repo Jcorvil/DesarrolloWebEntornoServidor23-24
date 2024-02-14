@@ -429,26 +429,36 @@ class Clientes extends Controller
 
     function delete($param = [])
     {
-
+        # Inicio o continúo la sesión
         session_start();
 
+        //Comprobar si el usuario está identificado
         if (!isset($_SESSION['id'])) {
-            $_SESSION['mensaje'] = "Usuario no autentificado";
-
+            $_SESSION['mensaje'] = "Usuario No Autentificado";
             header("location:" . URL . "login");
         } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['cliente']['delete']))) {
             $_SESSION['mensaje'] = "Operación sin privilegios";
             header('location:' . URL . 'clientes');
+        } else {
+            //Obteneemos id del cliente
+            $idCliente = $param[0];
+
+            // Obtener todas las cuentas asociadas al cliente
+            $cuentasDelCliente = $this->model->getCuentasCliente($idCliente);
+
+            // Eliminar cada cuenta asociada al cliente
+            foreach ($cuentasDelCliente as $cuenta) {
+                $this->model->deleteCuentas($cuenta->id);
+            }
+
+            // Eliminar el cliente
+            $this->model->delete($idCliente);
+
+            //Generar mensaje
+            $_SESSION['notify'] = 'Clientes y sus cuentas borrados.';
+
+            header("Location:" . URL . "clientes");
         }
-
-        // Obtengo la id del cliente que quiero eliminar
-        $id = $param[0];
-
-        // Llamo al método "delete" y le envío la id del cliente
-        $this->model->delete($id);
-
-        // Cargo de nuevo la vista clientes actualizada
-        header('location:' . URL . 'clientes');
     }
 
 

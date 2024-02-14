@@ -1,5 +1,6 @@
 <?php
 require_once 'class/class.cuenta.php';
+require_once 'models/clientesModel.php';
 
 
 class Cuentas extends Controller
@@ -63,14 +64,14 @@ class Cuentas extends Controller
         # etiqueta title de la vista
         $this->view->title = "Añadir - Gestión cuentas";
 
-        $cuentaModel = new cuentasModel();
-        $cuentasDisponibles = $cuentaModel->get();
+        $clienteModel = new clientesModel();
+        $clientesDisponibles = $clienteModel->get();
 
 
-        $listacuentas = [];
-        foreach ($cuentasDisponibles as $cuenta) {
-            $nombreCompleto = $cuenta->cuenta . ', ';
-            $listacuentas[$cuenta->id] = $nombreCompleto;
+        $listaClientes = [];
+        foreach ($clientesDisponibles as $cliente) {
+            $nombreCompleto = $cliente->cliente . ', ';
+            $listaClientes[$cliente->id] = $nombreCompleto;
         }
 
         # Comprobar si vuelvo de un registro no validado
@@ -90,9 +91,9 @@ class Cuentas extends Controller
         }
 
 
-        $this->view->cuentas = $listacuentas;
+        $this->view->clientes = $listaClientes;
 
-        # cargo la vista con el formulario nuevo cuenta
+        # cargo la vista con el formulario nuevo cliente
         $this->view->render('cuentas/new/index');
     }
 
@@ -113,7 +114,7 @@ class Cuentas extends Controller
 
         # 1. Seguridad. Saneamos los datos del formulario
         $num_cuenta = filter_input(INPUT_POST, 'num_cuenta', FILTER_SANITIZE_NUMBER_INT);
-        $id_cuenta = filter_input(INPUT_POST, 'id_cuenta', FILTER_SANITIZE_NUMBER_INT);
+        $id_cliente = filter_input(INPUT_POST, 'id_cliente', FILTER_SANITIZE_NUMBER_INT);
         $fecha_alta = filter_input(INPUT_POST, 'fecha_alta', FILTER_SANITIZE_SPECIAL_CHARS);
         // $fecha_ul_mov = filter_input(INPUT_POST, 'fecha_ul_mov', FILTER_SANITIZE_SPECIAL_CHARS);
         // $num_movtos = filter_input(INPUT_POST, 'num_movtos', FILTER_SANITIZE_NUMBER_INT);
@@ -125,7 +126,7 @@ class Cuentas extends Controller
         $cuenta = new classCuenta(
             null,
             $num_cuenta,
-            $id_cuenta,
+            $id_cliente,
             $fecha_alta,
             null,
             null,
@@ -150,13 +151,13 @@ class Cuentas extends Controller
             $errores['num_cuenta'] = "El número de cuenta ya existe";
         }
 
-        //id_cuenta. Campo obligatorio, valor numérico, debe existir en la tabla de cuentas
-        if (empty($id_cuenta)) {
-            $errores['id_cuenta'] = 'El campo cuenta es obligatorio';
-        } else if (!filter_var($id_cuenta, FILTER_VALIDATE_INT)) {
-            $errores['id_cuenta'] = 'Deberá introducir un valor númerico en este campo';
-        } else if (!$this->model->getcuentaCuenta($id_cuenta)) {
-            $errores['id_cuenta'] = 'El cuenta seleccionado no existe';
+        //id_cliente. Campo obligatorio, valor numérico, debe existir en la tabla de clientes
+        if (empty($id_cliente)) {
+            $errores['id_cliente'] = 'El campo cliente es obligatorio';
+        } else if (!filter_var($id_cliente, FILTER_VALIDATE_INT)) {
+            $errores['id_cliente'] = 'Deberá introducir un valor númerico en este campo';
+        } else if (!$this->model->getClienteCuenta($id_cliente)) {
+            $errores['id_cliente'] = 'El cliente seleccionado no existe';
         }
 
         // fecha_alta
@@ -291,7 +292,7 @@ class Cuentas extends Controller
 
         # 1. Seguridad. Saneamos los datos del formulario
         $num_cuenta = filter_input(INPUT_POST, 'num_cuenta', FILTER_SANITIZE_NUMBER_INT);
-        $id_cuenta = filter_input(INPUT_POST, 'id_cuenta', FILTER_SANITIZE_NUMBER_INT);
+        $id_cliente = filter_input(INPUT_POST, 'id_cliente', FILTER_SANITIZE_NUMBER_INT);
         $fecha_alta = filter_input(INPUT_POST, 'fecha_alta', FILTER_SANITIZE_SPECIAL_CHARS);
         // $fecha_ul_mov = filter_input(INPUT_POST, 'fecha_ul_mov', FILTER_SANITIZE_SPECIAL_CHARS);
         // $num_movtos = filter_input(INPUT_POST, 'num_movtos', FILTER_SANITIZE_NUMBER_INT);
@@ -302,7 +303,7 @@ class Cuentas extends Controller
         $cuenta = new classCuenta(
             null,
             $num_cuenta,
-            $id_cuenta,
+            $id_cliente,
             $fecha_alta,
             null,
             null,
@@ -319,7 +320,7 @@ class Cuentas extends Controller
         $cuenta = new classCuenta(
             null,
             $_POST['num_cuenta'],
-            $_POST['id_cuenta'],
+            $_POST['id_cliente'],
             $_POST['fecha_alta'],
             null,
             null,
@@ -348,19 +349,19 @@ class Cuentas extends Controller
             }
         }
 
-        // id_cuenta
-        if (strcmp($cuenta->id_cuenta, $cuentaOG->id_cuenta) !== 0) {
-            if (empty($id_cuenta)) {
-                $errores['id_cuenta'] = 'El campo cuenta es obligatorio';
-            } else if (!filter_var($id_cuenta, FILTER_VALIDATE_INT)) {
-                $errores['id_cuenta'] = 'Debe introducir un cuenta';
-            } else if (!$this->model->getcuentaCuenta($id_cuenta)) {
-                $errores['id_cuenta'] = 'El cuenta seleccionado no existe';
+        // id_cliente
+        if (strcmp($cuenta->id_cliente, $cuentaOG->id_cliente) !== 0) {
+            if (empty($id_cliente)) {
+                $errores['id_cliente'] = 'El campo cliente es obligatorio';
+            } else if (!filter_var($id_cliente, FILTER_VALIDATE_INT)) {
+                $errores['id_cliente'] = 'Debe introducir un cliente';
+            } else if (!$this->model->getClienteCuenta($id_cliente)) {
+                $errores['id_cliente'] = 'El cliente seleccionado no existe';
             }
         }
 
         // fecha_alta
-        if (strcmp($cuenta->id_cuenta, $cuentaOG->id_cuenta) !== 0) {
+        if (strcmp($cuenta->id_cliente, $cuentaOG->id_cliente) !== 0) {
             if (empty($fecha_alta)) {
                 $errores['fecha_alta'] = 'El campo fecha alta es obligatorio';
             } else if (!$this->model->validateFechaAlta($fecha_alta)) {

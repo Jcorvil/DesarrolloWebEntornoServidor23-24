@@ -25,13 +25,15 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= URL ?>clientes/export"
+                    <a class="nav-link <?= (!in_array($_SESSION['id_rol'], $GLOBALS['cliente']['export'])) ? 'disabled' : '' ?>"
+                        href="<?= URL ?>clientes/export"
                         onclick="return confirm('Se va a proceder a la exportación de los datos. ¿Desea continuar?')">
                         Exportar</a>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link btn btn-link" data-bs-toggle="modal"
-                        data-bs-target="#importModalClientes">Importar</button>
+                    <button type="button"
+                        class="nav-link btn btn-link <?= (!in_array($_SESSION['id_rol'], $GLOBALS['cliente']['import'])) ? 'disabled' : '' ?>"
+                        data-bs-toggle="modal" data-bs-target="#importModalClientes">Importar</button>
                 </li>
 
             </ul>

@@ -322,9 +322,10 @@ class cuentasModel extends Model
     public function existeCuenta($num_cuenta)
     {
         try {
-            $sql = "SELECT COUNT(*) FROM cuentas WHERE num_cuenta = :num_cuenta";
+            $sql = "SELECT * FROM cuentas 
+                     WHERE num_cuenta = :num_cuenta";
 
-            // Conectar con la base de datos
+            //Conectar con la base de datos
             $conexion = $this->db->connect();
 
             $pdost = $conexion->prepare($sql);
@@ -332,10 +333,13 @@ class cuentasModel extends Model
 
             $pdost->execute();
 
-            $count = $pdost->fetchColumn();
+            if ($pdost->rowCount() != 0) {
+                return false;
+            }
 
-            return $count > 0;
+            return true;
         } catch (PDOException $e) {
+
             include_once('template/partials/errorDB.php');
             exit();
         }

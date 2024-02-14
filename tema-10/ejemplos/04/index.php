@@ -1,46 +1,57 @@
 <?php
 
-// Cargar clase PHPMailer
+// Procesar email con PHPMailer
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '/PHPMailer/src/Exception.php';
-require '/PHPMailer/src/PHPMailer.php';
-require '/PHPMailer/src/SMTP.php';
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
 
+// Creo objeto clase PHPMailer
+$mail = new PHPMailer(true);
 
+// En caso de error lanza Exception
 try {
 
-    // Creo un objeto de la clase PHPMailer
-    $mail = new PHPMailer(true);
-
     // Configuración juego caracteres
-    $mail->CharSet = 'UTF-8';
+    $mail->CharSet = "UTF-8";
     $mail->Encoding = "quoted-printable";
 
-    $mail->Username = "coronilvjorge@gmail.com";
-    $mail->Password = "";
+    // Credenciales SMPT gmail
+    $mail->Username = 'coronilvjorge@gmail.com';
+    $mail->Password = 'lmcj gzso ovqg kzos';
 
-    //Configuración SPMT gmail
+    // Configuración SMPT gmail
     $mail->SMTPDebug = 2;                                       //Enable verbose debug output
     $mail->isSMTP();                                            //Send using SMTP
-    $mail->Host = 'smtp.gmail.com';                             //Set the SMTP server to send through
-    $mail->SMTPAuth = true;                                     //Enable SMTP authentication
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-    $mail->Port = 587;                                          //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    $mail->Host = 'smtp.gmail.com';                       //Set the SMTP server to send through
+    $mail->SMTPAuth = true;                                   //Enable SMTP authentication                             //SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // tls Enable implicit TLS encryption
+    $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-    //Cabecera del email
-    $destinatario = 'jcorvil600@g.educaand.es';
+    //Cabecera del emial
+    $destinatario = 'coronilvjorge@gmail.com';
     $remitente = 'coronilvjorge@gmail.com';
-    $asunto = 'Email con PHPMailer';
-    $mensaje = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    $asunto = "Email con PHPMailer";
+    $mensaje = "
+    <h1>Lorem ipsum dolor sit amet</h1>
+    <b>Cádiz</b> consectetur adipiscing elit. 
+    Curabitur pellentesque metus sit amet tellus placerat, quis interdum nibh fermentum. 
+    Aenean porttitor arcu sit amet orci placerat aliquet. Sed in ex sed tellus volutpat 
+    finibus ac sed nibh. Mauris vitae magna nunc. Vivamus ornare massa imperdiet purus 
+    rhoncus, quis ultrices odio faucibus. Duis efficitur id urna nec semper. 
+    Vivamus rutrum ac felis id egestas. Duis consequat, eros vel luctus eleifend, 
+    ligula nibh hendrerit nibh, eget ultrices sapien eros ut ipsum. 
+    Donec vel sollicitudin elit, ut elementum diam.
+    ";
 
-    $mail->setFrom($remitente, '<' . $remitente . '>');
-    $mail->addAddress($destinatario, '<' . $destinatario . '>');
-    $mail->addReplyTo($remitente, '<' . $remitente . '>');
+    $mail->setFrom($remitente, 'Jorge');
+    $mail->addAddress($destinatario, 'Jorge');
+    $mail->addReplyTo($remitente, 'Jorge');
+    // $mail->addCC('cc@example.com');
+    // $mail->addBCC('bcc@example.com');
 
     //Attachments
     // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
@@ -51,12 +62,12 @@ try {
     $mail->Subject = $asunto;
     $mail->Body = $mensaje;
 
+    // Enviamos el mensaje
     $mail->send();
-    echo 'Mensaje enviado correctamente';
 
-} catch (exception $e) {
+    echo 'Message has been sent';
 
+} catch (Exception $e) {
+
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
-
-
-?>
