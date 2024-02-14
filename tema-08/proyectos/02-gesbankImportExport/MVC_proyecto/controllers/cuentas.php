@@ -608,7 +608,7 @@ class Cuentas extends Controller
 
                     // Verificar si ya existe una cuenta con el mismo numero de cuenta,
                     // ya que no se pueden repetir.
-                    if (!$this->model->existeCuenta($num_cuenta)) {
+                    if ($this->model->existeCuenta($num_cuenta)) {
                         // Si no existe, crear una nueva cuenta
                         $cuenta = new classCuenta();
                         $cuenta->num_cuenta = $num_cuenta;
