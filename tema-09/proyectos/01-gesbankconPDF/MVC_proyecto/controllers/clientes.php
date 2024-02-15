@@ -183,6 +183,9 @@ class Clientes extends Controller
             // Añadir registro a la tabla
             $this->model->create($cliente);
 
+            // Añadimos a la variable de sesión un mensaje
+            $_SESSION['mensaje'] = 'Cliente creado correctamente';
+
             // Redirigimos al main de clientes
             header('location:' . URL . 'clientes');
         }
@@ -598,6 +601,13 @@ class Clientes extends Controller
 
         // Crear instancia de pdfClientes
         $pdf = new pdfClientes();
+
+        // Se puede establecer el comienzo de la tabla casi al final de la página para comprobar que
+        // el salto de línea y el encabezado automático funcionan correctamente.
+        // $pdf->SetY(260);
+
+        // Agregar contenido al PDF
+        $pdf->contenido($clientes);
 
         // Salida del PDF
         $pdf->Output();

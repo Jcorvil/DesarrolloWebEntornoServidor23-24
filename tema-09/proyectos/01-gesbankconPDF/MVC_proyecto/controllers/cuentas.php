@@ -661,11 +661,18 @@ class Cuentas extends Controller
             exit();
         }
 
-        // Obtener los datos de los cuentas
-        $cuentas = $this->model->get();
+        // Obtener los datos de las cuentas
+        $cuentas = $this->model->getCSV();
 
         // Crear instancia de pdfCuentas
         $pdf = new pdfCuentas();
+
+        // Se puede establecer el comienzo de la tabla casi al final de la página para comprobar que
+        // el salto de línea y el encabezado automático funcionan correctamente.
+        // $pdf->SetY(260);
+
+        // Agregar contenido al PDF
+        $pdf->contenido($cuentas);
 
         // Salida del PDF
         $pdf->Output();
