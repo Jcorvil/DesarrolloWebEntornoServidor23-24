@@ -25,12 +25,14 @@ Route::get('/client', function () {
 
 
 Route::get('/client/edit/{id}', function ($id) {
-    return "Cliente Editado: {$id}";
+    // return "Cliente Editado: {$id}";
+    return "Cliente Editado: 5";
 });
 
 
 Route::get('/client/show/{id}', function ($id) {
-    return "Mostrando el cliente {$id}";
+    // return "Mostrando el cliente {$id}";
+    return "Mostrando el cliente 5";
 });
 
 
@@ -42,7 +44,9 @@ Route::get('/client/new/', function () {
 // Al poner '?' se convierte el parámetro en opcional. Se debe establecer que el parámetro opcional es null por defecto. 
 Route::get('/client/delete/{id1}/{id2?}', function ($id1, $id2 = null) {
     if (!$id2)
-        return "Eliminar el cliente {$id1}";
+        // return "Eliminar el cliente {$id1}";
+        return "Eliminar el cliente 1";
     else
-        return "Eliminar los clientes del {$id1} al {$id2}";
+        // return "Eliminar los clientes del {$id1} al {$id2}";
+        return "Eliminar los clientes del 1 al 2";
 });
