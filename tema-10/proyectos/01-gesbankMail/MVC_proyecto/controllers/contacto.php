@@ -2,6 +2,13 @@
 
 require_once 'class/class.contacto.php';
 
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+require 'PHPMailer/auth.php';
+
+
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -16,106 +23,108 @@ class Contacto extends Controller
     {
 
 
-        # Comprobar si existe el mensaje
         if (isset($_SESSION['mensaje'])) {
             $this->view->mensaje = $_SESSION['mensaje'];
             unset($_SESSION['mensaje']);
         }
 
-        // Mostrar el formulario de contacto
         $this->view->render('contacto/index');
-
 
     }
 
     function validar()
     {
-
-        // 1. Seguridad. Saneamos los datos del formulario
+        // Obtener los datos del formulario
         $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $remitente = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         $asunto = filter_input(INPUT_POST, 'asunto', FILTER_SANITIZE_SPECIAL_CHARS);
         $mensaje = filter_input(INPUT_POST, 'mensaje', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        # Cargamos los datos del formulario
         $contacto = new classContacto(
             $nombre,
-            $email,
+            $remitente,
             $asunto,
             $mensaje
         );
 
-        // Validar el formulario de contacto
         $errores = [];
 
-        // Validar campos obligatorios
-        if (empty($_POST['nombre'])) {
+        if (empty($nombre)) {
             $errores['nombre'] = 'El nombre es obligatorio.';
         }
 
-        if (empty($_POST['email'])) {
+        if (empty($remitente)) {
             $errores['email'] = 'El correo electrónico es obligatorio.';
-        } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        } elseif (!filter_var($remitente, FILTER_VALIDATE_EMAIL)) {
             $errores['email'] = 'El correo electrónico no es válido.';
         }
 
-        if (empty($_POST['asunto'])) {
+        if (empty($asunto)) {
             $errores['asunto'] = 'El asunto es obligatorio.';
         }
 
-        if (empty($_POST['mensaje'])) {
+        if (empty($mensaje)) {
             $errores['mensaje'] = 'El mensaje es obligatorio.';
         }
 
-        // Comprobar validación
         if (!empty($errores)) {
-            // Errores de validación
-            $_SESSION['cliente'] = serialize($contacto);
+            // Si hay errores, redirigir de nuevo al formulario de contacto con los errores
+            $_SESSION['contacto'] = serialize($contacto);
             $_SESSION['error'] = 'Formulario no validado';
             $_SESSION['errores'] = $errores;
 
-            // Redireccionamos al formulario
             header('Location:' . URL . 'contacto');
             exit();
-
         } else {
-            // Enviar el correo electrónico
-            $nombre = $_POST['nombre'];
-            $email = $_POST['email'];
-            $asunto = $_POST['asunto'];
-            $mensaje = $_POST['mensaje'];
-
-            // Configurar SMTP de Gmail
-            // (Es necesario habilitar el acceso de aplicaciones menos seguras en la cuenta de Gmail)
-            $mail = new PHPMailer(true);
-            // Configuración del servidor SMTP
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'tu_correo@gmail.com'; // Cambiar por tu dirección de correo de Gmail
-            $mail->Password = 'tu_contraseña'; // Cambiar por tu contraseña
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-
-            // Configuración del correo electrónico
-            $mail->setFrom('tu_correo@gmail.com', 'Jorge'); // Cambiar por tu dirección de correo y nombre
-            $mail->addAddress('correo_destino@example.com', 'Nombre Destinatario'); // Cambiar por la dirección de correo del destinatario
-            $mail->Subject = 'Mensaje de contacto';
-            $mail->Body = "Nombre: $nombre\nCorreo electrónico: $email\nMensaje: $mensaje";
-
             try {
+                $mail = new PHPMailer(true);
+
+                // Configuración juego caracteres
+                $mail->CharSet = "UTF-8";
+                $mail->Encoding = "quoted-printable";
+
+                // Credenciales SMTP. Se encuentra en auth.php dentro de PHPMailer
+                $mail->Username = SMTP_USER;
+                $mail->Password = SMTP_PASS;
+
+                // Configuración SMPT gmail
+                $mail->SMTPDebug = 2;                                       //Enable verbose debug output
+                $mail->isSMTP();                                            //Send using SMTP
+                $mail->Host = 'smtp.gmail.com';                       //Set the SMTP server to send through
+                $mail->SMTPAuth = true;                                   //Enable SMTP authentication                             //SMTP password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // tls Enable implicit TLS encryption
+                $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+                //Capturando el remitente y el asunto del formulario
+                $remitente = $_POST['email'];
+                $asunto = $_POST['asunto'];
+
+                // Contenido del correo electrónico
+                $mail->setFrom($remitente, $nombre);
+                $mail->addAddress(SMTP_USER);
+                $mail->addReplyTo($remitente);
+
+                // Contenido
+                $mail->isHTML(true);                                  //Set email format to HTML
+                $mail->Subject = $asunto;
+                $mail->Body = $mensaje;
+
                 // Enviar correo electrónico
                 $mail->send();
-                // Mostrar mensaje de éxito
-                $this->view->mensaje = "Mensaje enviado correctamente.";
-                $this->view->render('contacto/exito');
+
+                // Redirigir a la página de éxito
+                $_SESSION['mensaje'] = 'Mensaje enviado correctamente.';
+                header('Location:' . URL . 'index');
+                exit();
             } catch (Exception $e) {
-                // Mostrar mensaje de error si falla el envío
-                $this->view->error = "Error al enviar el mensaje: {$mail->ErrorInfo}";
-                $this->render();
+                // Manejar excepciones
+                $_SESSION['error'] = 'Error al enviar el mensaje: ' . $mail->ErrorInfo;
+                header('Location:' . URL . 'contacto');
+                exit();
             }
         }
     }
+
 }
 
 ?>

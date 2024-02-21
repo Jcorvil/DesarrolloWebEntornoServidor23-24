@@ -15,8 +15,12 @@
     <!-- Capa principal -->
     <div class="container">
 
-        <!-- header -->
-        <?php include 'views/clientes/partials/header.php' ?>
+        <header class="pb-3 mb-4 border-bottom">
+            <div class="container">
+                <h4 class="display-7">Formulario Contacto </h4>
+                <p class="lead">Proyecto tema 10 - PHP y MYSQL</p>
+            </div>
+        </header>
 
         <!-- mensajes -->
         <?php require_once("template/partials/notify.php") ?>
@@ -27,7 +31,7 @@
         <legend>Formulario de Contacto</legend>
 
         <!-- Formulario de Contacto -->
-        <form action="<?= URL ?>envio" method="POST">
+        <form action="<?= URL ?>contacto/validar" method="POST">
 
             <!-- Nombre -->
             <div class="mb-3">
@@ -71,9 +75,9 @@
                 <textarea class="form-control" name="mensaje" rows="4"
                     value="<?= isset($this->contacto->mensaje) ? $this->contacto->mensaje : '' ?>">
                 <?php if (isset($this->errores['mensaje'])): ?>
-                                <span class="form-text text-danger" role="alert">
-                                    <?= $this->errores['mensaje'] ?>
-                                </span>
+                                    <span class="form-text text-danger" role="alert">
+                                        <?= $this->errores['mensaje'] ?>
+                                    </span>
                 <?php endif; ?>
             </textarea>
             </div>
