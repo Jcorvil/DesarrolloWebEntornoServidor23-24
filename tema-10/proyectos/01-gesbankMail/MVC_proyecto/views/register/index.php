@@ -3,7 +3,7 @@
 
 <head>
     <?php require_once("template/partials/head.php") ?>
-    <title>Register - FP Alumnos</title>
+    <title>Register - Gesbank</title>
 </head>
 
 

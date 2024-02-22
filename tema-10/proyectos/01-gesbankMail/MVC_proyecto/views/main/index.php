@@ -10,7 +10,10 @@
 	<div class="container">
 		<br><br><br><br>
 
-		<?php require_once("template/partials/notify.php") ?>
+        <!-- comprobamos si existe error -->
+        <?php include 'template/partials/error.php' ?>
+        <!-- mensaje -->
+        <?php include "template/partials/notify.php" ?>
 
 
 		<!-- Estilo card de bootstrap -->

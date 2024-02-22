@@ -1,5 +1,14 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'auth.php';
+
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+
 class Register extends Controller
 {
 
@@ -100,10 +109,58 @@ class Register extends Controller
         } else {
 
             # Añade nuevo usuario
-
             $this->model->crear($name, $email, $password);
 
-            $_SESSION['notify'] = "Usuario registrado correctamente";
+            $mail = new PHPMailer(true);
+            try {
+
+                $mail->CharSet = "UTF-8";
+                $mail->Encoding = "quoted-printable";
+
+                // Credenciales SMPT gmail
+                $mail->Username = SMTP_USER;
+                $mail->Password = SMTP_PASS;
+
+                // Configurar el servidor SMTP
+                $mail->SMTPDebug = 2;
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+
+                // Desactiva la verificación del certificado SSL de SMTP en PHPMailer
+                // Sin este comando, se bloquea el envío de correos de Gmail
+                $mail->SMTPOptions = array(
+                    'ssl' => array(
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                    )
+                );
+
+                //Cabecera del email
+                $remitente = SMTP_USER;
+                $destinatario = $email;
+
+                $mail->isHTML(true);
+                $mail->setFrom($destinatario, $name);
+                $mail->addAddress($remitente, 'Jorge Coronil Villalba');
+                $mail->addReplyTo($destinatario, $name);
+                $mail->Subject = 'Bienvenid@ a Gesbank';
+                $mail->Body = 'El registro ha sido todo un éxito. Sus credenciales son: <br>' .
+                    '<b>Nombre</b>: ' . $name . '<br>' .
+                    '<b>Email</b>: ' . $email . '<br>' .
+                    '<b>Contraseña</b>: ' . $password . ' <br>' .
+                    'Gracias por registrarte.';
+
+                // Enviar el correo electrónico
+                $mail->send();
+            } catch (Exception $e) {
+                echo "No se pudo enviar el correo electrónico: {$mail->ErrorInfo}";
+            }
+
+            $_SESSION['mensaje'] = "Usuario registrado correctamente";
             $_SESSION['email'] = $email;
             $_SESSION['password'] = $password;
 

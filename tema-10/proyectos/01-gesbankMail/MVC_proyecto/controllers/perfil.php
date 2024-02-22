@@ -1,5 +1,14 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'auth.php';
+
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+
 class Perfil extends Controller
 {
 
@@ -12,6 +21,8 @@ class Perfil extends Controller
 
         # Capa autentificación
         if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario No Autentificado";
+
             header("location:" . URL . "login");
         }
 
@@ -38,11 +49,11 @@ class Perfil extends Controller
         # Iniciamos o continuamos sesión
         session_start();
 
-        # Capa de autentificación
+        # Capa autentificación
         if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario No Autentificado";
 
-            header('location:' . URL . 'login');
-
+            header("location:" . URL . "login");
         }
 
         # Comprobamos si existe mensaje
@@ -88,6 +99,7 @@ class Perfil extends Controller
 
         # Capa autentificación
         if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario No Autentificado";
 
             header("location:" . URL . "login");
         }
@@ -146,10 +158,56 @@ class Perfil extends Controller
             # Actualizamos perfil
             $this->model->update($user);
 
+            $mail = new PHPMailer(true);
+            try {
+
+                $mail->CharSet = "UTF-8";
+                $mail->Encoding = "quoted-printable";
+
+                $mail->Username = SMTP_USER;
+                $mail->Password = SMTP_PASS;
+
+                // Configurar el servidor SMTP
+                $mail->SMTPDebug = 2;
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+
+                // Desactiva la verificación del certificado SSL de SMTP en PHPMailer
+                // Sin este comando, se bloquea el envío de correos de Gmail
+                $mail->SMTPOptions = array(
+                    'ssl' => array(
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                    )
+                );
+
+                //Cabecera del email
+                $remitente = SMTP_USER;
+                $destinatario = $email;
+
+                $mail->isHTML(true);
+                $mail->setFrom($destinatario, $name);
+                $mail->addAddress($remitente, 'Jorge Coronil Villalba');
+                $mail->addReplyTo($destinatario, $name);
+                $mail->Subject = 'Perfil modificado';
+                $mail->Body = 'Tu perfil ha sido modificado correctamente. Los nuevos detalles son: <br>' .
+                    '<b>Nombre</b>: ' . $name . '<br>' .
+                    '<b>Email</b>: ' . $email . '<br>';
+                $mail->send();
+
+            } catch (Exception $e) {
+                echo "No se pudo enviar el correo electrónico: {$mail->ErrorInfo}";
+            }
+
+
             $_SESSION['name_user'] = $name;
             $_SESSION['mensaje'] = 'Usuario modificado correctamente';
 
-            header('location:' . URL . 'perfil');
+            header('location:' . URL . 'perfil/edit');
 
         }
 
@@ -162,11 +220,11 @@ class Perfil extends Controller
         # Iniciamos o continuamos sesión
         session_start();
 
-        # Capa de autentificación
+        # Capa autentificación
         if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario No Autentificado";
 
-            header('location:' . URL . 'login');
-
+            header("location:" . URL . "login");
         }
 
         # Comprobamos si existe mensaje
@@ -204,6 +262,7 @@ class Perfil extends Controller
 
         # Capa autentificación
         if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario No Autentificado";
 
             header("location:" . URL . "login");
         }
@@ -255,29 +314,115 @@ class Perfil extends Controller
             # Actualiza password
             $this->model->updatePass($user);
 
+            # Obtener los detalles del usuario actualizados
+            $user = $this->model->getUserId($_SESSION['id']);
+
+            # Envío de correo electrónico
+            $mail = new PHPMailer(true);
+            try {
+
+                $mail->CharSet = "UTF-8";
+                $mail->Encoding = "quoted-printable";
+
+                $mail->Username = SMTP_USER;
+                $mail->Password = SMTP_PASS;
+
+                // Configurar el servidor SMTP
+                $mail->SMTPDebug = 2;
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+
+                // Desactiva la verificación del certificado SSL de SMTP en PHPMailer
+                // Sin este comando, se bloquea el envío de correos de Gmail
+                $mail->SMTPOptions = array(
+                    'ssl' => array(
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                    )
+                );
+
+                $remitente = SMTP_USER;
+                $destinatario = $user->email;
+
+                $mail->isHTML(true);
+                $mail->setFrom($destinatario, $user->name);
+                $mail->addAddress($remitente);
+                $mail->addReplyTo($destinatario, $user->name);
+                $mail->Subject = 'Cambio de contraseña';
+                $mail->Body = 'Tu contraseña ha sido modificada correctamente. Su nueva contraseña es: ' . $password;
+
+                $mail->send();
+
+            } catch (Exception $e) {
+                echo "No se pudo enviar el correo electrónico: {$mail->ErrorInfo}";
+            }
+
             $_SESSION['mensaje'] = "Password modificado correctamente";
 
-            #Vuelve corredores
-            header("location:" . URL . "perfil");
+            header("location:" . URL . "perfil/pass");
         }
 
-
-
     }
+
 
     # Elimina definitivamente el perfil
     public function delete()
     {
-
         # Iniciamos o continuamos con la sesión
         session_start();
 
         # Capa autentificación
         if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario No Autentificado";
 
             header("location:" . URL . "login");
-
         } else {
+            # Obtener los detalles del usuario
+            $user = $this->model->getUserId($_SESSION['id']);
+
+            # Envío de correo electrónico
+            $mail = new PHPMailer(true);
+            try {
+
+                $mail->CharSet = "UTF-8";
+                $mail->Encoding = "quoted-printable";
+
+                $mail->Username = SMTP_USER;
+                $mail->Password = SMTP_PASS;
+
+                // Configurar el servidor SMTP
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+
+                // Desactiva la verificación del certificado SSL de SMTP en PHPMailer
+                $mail->SMTPOptions = array(
+                    'ssl' => array(
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                    )
+                );
+
+                $remitente = SMTP_USER;
+                $destinatario = $user->email;
+
+                $mail->isHTML(true);
+                $mail->setFrom($destinatario, $user->name);
+                $mail->addAddress($remitente);
+                $mail->addReplyTo($destinatario, $user->name);
+                $mail->Subject = 'Eliminación de perfil';
+                $mail->Body = 'Tu perfil ha sido eliminado correctamente.';
+                $mail->send();
+            } catch (Exception $e) {
+                echo "No se pudo enviar el correo electrónico: {$mail->ErrorInfo}";
+            }
 
             # Elimino perfil de usuario
             $this->model->delete($_SESSION['id']);
@@ -288,8 +433,8 @@ class Perfil extends Controller
             # Salgo de la aplicación
             header('location:' . URL . 'index');
         }
-
     }
+
 
 
 

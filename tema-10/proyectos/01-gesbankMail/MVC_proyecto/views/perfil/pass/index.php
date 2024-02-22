@@ -30,9 +30,11 @@
                                 <div class="col-sm-7">
                                     <input type="password" class="form-control" name="password_actual" required
                                         autocomplete="current-password">
-                                    <span class="form-text text-danger" role="alert">
-                                        <?= $this->erroresVal['password_actual'] ??= null ?>
-                                    </span>
+                                    <?php if (isset($this->errores['password_actual'])): ?>
+                                        <span class="form-text text-danger" role="alert">
+                                            <?= $this->errores['password_actual'] ??= null ?>
+                                        </span>
+                                    <?php endif; ?>
                                 </div>
 
                             </div>
@@ -43,9 +45,11 @@
                                 <div class="col-sm-7">
                                     <input type="password" class="form-control" name="password" required
                                         autocomplete="current-password">
-                                    <span class="form-text text-danger" role="alert">
-                                        <?= $this->erroresVal['password'] ??= null ?>
-                                    </span>
+                                    <?php if (isset($this->errores['password'])): ?>
+                                        <span class="form-text text-danger" role="alert">
+                                            <?= $this->errores['password'] ??= null ?>
+                                        </span>
+                                    <?php endif; ?>
                                 </div>
 
                             </div>

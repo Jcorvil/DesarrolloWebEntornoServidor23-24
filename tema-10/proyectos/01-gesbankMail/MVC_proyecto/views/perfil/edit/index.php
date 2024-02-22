@@ -39,10 +39,11 @@
                                     <input type="text"
                                         class="form-control <?= (isset($this->errores['name'])) ? 'is-invalid' : null ?>"
                                         name="name" value="<?= $this->user->name; ?>" required autofocus>
-
-                                    <span class="form-text text-danger" role="alert">
-                                        <?= $this->errores['name'] ??= null ?>
-                                    </span>
+                                    <?php if (isset($this->errores['name'])): ?>
+                                        <span class="form-text text-danger" role="alert">
+                                            <?= $this->errores['name'] ??= null ?>
+                                        </span>
+                                    <?php endif; ?>
                                 </div>
 
                             </div>
@@ -55,10 +56,11 @@
                                         class="form-control <?= (isset($this->errores['email'])) ? 'is-invalid' : null ?>"
                                         name="email" value="<?= $this->user->email; ?>" required autocomplete="email"
                                         autofocus>
-
-                                    <span class="form-text text-danger" role="alert">
-                                        <?= $this->errores['email'] ??= null ?>
-                                    </span>
+                                    <?php if (isset($this->errores['email'])): ?>
+                                        <span class="form-text text-danger" role="alert">
+                                            <?= $this->errores['email'] ??= null ?>
+                                        </span>
+                                    <?php endif; ?>
 
                                 </div>
 
