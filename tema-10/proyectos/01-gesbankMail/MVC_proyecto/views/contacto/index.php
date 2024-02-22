@@ -25,6 +25,8 @@
 
         <!-- comprobamos si existe error -->
         <?php include 'template/partials/error.php' ?>
+        
+        <?php include 'template/partials/notify.php' ?>
 
         <form action="<?= URL ?>contacto/validar" method="POST">
 

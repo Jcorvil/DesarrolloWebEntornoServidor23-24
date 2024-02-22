@@ -129,7 +129,7 @@ class Contacto extends Controller
 
                 $_SESSION['mensaje'] = "Mensaje enviado correctamente";
 
-                header("Location: " . URL . "index");
+                header("Location: " . URL . "contacto");
                 exit();
 
             } catch (Exception $e) {
