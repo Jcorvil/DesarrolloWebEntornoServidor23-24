@@ -478,7 +478,7 @@ class Clientes extends Controller
             header('location:' . URL . 'clientes');
         }
 
-        $clientes = $this->model->getCSV()->fetchAll(PDO::FETCH_ASSOC);
+        $clientes = $this->model->getCSV();
 
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="clientes.csv"');
@@ -486,21 +486,6 @@ class Clientes extends Controller
         $ficheroExport = fopen('php://output', 'w');
 
         foreach ($clientes as $cliente) {
-            $fecha = date("Y-m-d H:i:s");
-
-            $cliente['create_at'] = $fecha;
-            $cliente['update_at'] = $fecha;
-
-            $cliente = array(
-                'apellidos' => $cliente['apellidos'],
-                'nombre' => $cliente['nombre'],
-                'email' => $cliente['email'],
-                'telefono' => $cliente['telefono'],
-                'ciudad' => $cliente['ciudad'],
-                'dni' => $cliente['dni'],
-                'create_at' => $cliente['create_at'],
-                'update_at' => $cliente['update_at']
-            );
 
             fputcsv($ficheroExport, $cliente, ';');
         }
