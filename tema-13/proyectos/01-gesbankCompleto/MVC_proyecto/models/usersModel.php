@@ -64,65 +64,19 @@ class usersModel extends Model
     }
 
 
-    public function create(classCliente $cliente)
-    {
-
-        try {
-            $sql = "INSERT INTO Clientes (
-                        nombre,
-                        apellidos,
-                        email,
-                        telefono,
-                        ciudad,
-                        dni
-                    )
-                    VALUES (
-                        :nombre,
-                        :apellidos,
-                        :email,
-                        :telefono,
-                        :ciudad,
-                        :dni
-                    )
-                ";
-            # Conectar con la base de datos
-            $conexion = $this->db->connect();
-
-            $pdoSt = $conexion->prepare($sql);
-
-            $pdoSt->bindParam(':nombre', $cliente->nombre, PDO::PARAM_STR, 30);
-            $pdoSt->bindParam(':apellidos', $cliente->apellidos, PDO::PARAM_STR, 50);
-            $pdoSt->bindParam(':email', $cliente->email, PDO::PARAM_STR, 50);
-            $pdoSt->bindParam(':telefono', $cliente->telefono, PDO::PARAM_STR, 13);
-            $pdoSt->bindParam(':ciudad', $cliente->ciudad, PDO::PARAM_STR, 30);
-            $pdoSt->bindParam(':dni', $cliente->dni, PDO::PARAM_STR, 9);
-
-            $pdoSt->execute();
-
-        } catch (PDOException $e) {
-            include_once('template/partials/errorDB.php');
-            exit();
-        }
-
-    }
-
     public function read($id)
     {
 
         try {
             $sql = "SELECT 
-                        id,
-                        nombre, 
-                        apellidos,
-                        email,
-                        telefono,
-                        ciudad,
-                        dni
+                        users.id,
+                        users.name,
+                        users.email,
+                        users.password                        
                     FROM 
-                        clientes
+                        users
                     WHERE
-                        id = :id
-                ";
+                        users.id = :id";
 
             # Conectar con la base de datos
             $conexion = $this->db->connect();
@@ -143,18 +97,14 @@ class usersModel extends Model
 
     }
 
-    public function update(int $id, classCliente $cliente)
+    public function update(int $id, classUser $user)
     {
         try {
-            $sql = "UPDATE clientes
+            $sql = "UPDATE users
                     SET
-                        nombre = :nombre,
-                        apellidos = :apellidos,
+                        name = :name,
                         email = :email,
-                        telefono = :telefono,
-                        ciudad = :ciudad,
-                        dni = :dni,
-                        update_at = now()
+                        password = :password
                     WHERE
                         id = :id
                     LIMIT 1
@@ -164,14 +114,12 @@ class usersModel extends Model
             $pdoSt = $conexion->prepare($sql);
 
             $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
-            $pdoSt->bindParam(':nombre', $cliente->nombre, PDO::PARAM_STR, 30);
-            $pdoSt->bindParam(':apellidos', $cliente->apellidos, PDO::PARAM_STR, 50);
-            $pdoSt->bindParam(':email', $cliente->email, PDO::PARAM_STR, 50);
-            $pdoSt->bindParam(':telefono', $cliente->telefono, PDO::PARAM_STR, 9);
-            $pdoSt->bindParam(':ciudad', $cliente->ciudad, PDO::PARAM_STR, 30);
-            $pdoSt->bindParam(':dni', $cliente->dni, PDO::PARAM_STR, 9);
+            $pdoSt->bindParam(':name', $user->name, PDO::PARAM_STR, 50);
+            $pdoSt->bindParam(':email', $user->email, PDO::PARAM_STR, 50);
+            $pdoSt->bindParam(':password', $user->password, PDO::PARAM_STR, 60);
 
             $pdoSt->execute();
+
         } catch (PDOException $e) {
             include_once('template/partials/errorDB.php');
             exit();
@@ -258,14 +206,19 @@ class usersModel extends Model
     public function delete($id)
     {
         try {
-            $sql = "DELETE FROM clientes
-                    WHERE id = :id";
+            $sql = "DELETE
+                    FROM
+                        users
+                    WHERE 
+                        id = :id";
 
             $conexion = $this->db->connect();
 
             $pdoSt = $conexion->prepare($sql);
             $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
+
             $pdoSt->execute();
+
         } catch (PDOException $e) {
             include_once('template/partials/errorDB.php');
             exit();
@@ -273,170 +226,115 @@ class usersModel extends Model
     }
 
 
-    public function existeEmail($email, $id = null)
+    public function validateName($username)
     {
+        if ((strlen($username) < 5) || (strlen($username) > 50)) {
+            return false;
+        }
+        return true;
+    }
+
+    #Validar password
+    public function validatePass($pass)
+    {
+        if ((strlen($pass) < 5) || (strlen($pass) > 50)) {
+            return false;
+        }
+        return true;
+    }
+
+    #Validar email unique
+    public function validateEmailUnique($email)
+    {
+
         try {
-            $sql = "SELECT COUNT(*) FROM clientes WHERE email = :email";
-            if ($id !== null) {
-                $sql .= " AND id != :id";
-            }
 
-            $conexion = $this->db->connect();
-            $pdoSt = $conexion->prepare($sql);
-            $pdoSt->bindParam(':email', $email, PDO::PARAM_STR);
-            if ($id !== null) {
-                $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
-            }
-            $pdoSt->execute();
-
-            $count = $pdoSt->fetchColumn();
-
-            return $count > 0;
+            $selectSQL = "SELECT * FROM users WHERE email = :email";
+            $pdo = $this->db->connect();
+            $pdost = $pdo->prepare($selectSQL);
+            $pdost->bindParam(':email', $email, PDO::PARAM_STR, 50);
+            $pdost->execute();
+            if ($pdost->rowCount() > 0)
+                return false;
+            else
+                return true;
         } catch (PDOException $e) {
+
             include_once('template/partials/errorDB.php');
             exit();
+
+        }
+
+
+    }
+
+    # Creo nuevo usuario a partir de los datos de formulario de registro
+    public function crear($name, $email, $pass)
+    {
+        try {
+
+            $password_encriptado = password_hash($pass, CRYPT_BLOWFISH);
+
+            $insertarsql = "INSERT INTO users VALUES (
+                 null,
+                :nombre,
+                :email,
+                :pass,
+                default,
+                default)";
+
+            $pdo = $this->db->connect();
+            $stmt = $pdo->prepare($insertarsql);
+
+            $stmt->bindParam(':nombre', $name, PDO::PARAM_STR, 50);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR, 50);
+            $stmt->bindParam(':pass', $password_encriptado, PDO::PARAM_STR, 60);
+
+            $stmt->execute();
+
+            # Asignamos rol de registrado
+            // Rol que asignaremos por defecto
+            $role_id = 3;
+            $insertarsql = "INSERT INTO roles_users VALUES (
+                null,
+                :user_id,
+                :role_id,
+                default,
+                default)";
+
+            # Obtener id del último usuario insertado
+            $ultimo_id = $pdo->lastInsertId();
+
+            $stmt = $pdo->prepare($insertarsql);
+
+            $stmt->bindParam(':user_id', $ultimo_id);
+            $stmt->bindParam(':role_id', $role_id);
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+
+            include_once('template/partials/errorDB.php');
+            exit();
+
         }
     }
 
-
-    public function existeDNI($dni, $id = null)
+    public function getRoles()
     {
         try {
-            $sql = "SELECT COUNT(*) FROM clientes WHERE dni = :dni";
-            if ($id !== null) {
-                $sql .= " AND id != :id";
-            }
-
-            $conexion = $this->db->connect();
-            $pdoSt = $conexion->prepare($sql);
-            $pdoSt->bindParam(':dni', $dni, PDO::PARAM_STR);
-            if ($id !== null) {
-                $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
-            }
-            $pdoSt->execute();
-
-            $count = $pdoSt->fetchColumn();
-
-            return $count > 0;
-        } catch (PDOException $e) {
-            include_once('template/partials/errorDB.php');
-            exit();
-        }
-    }
-
-
-    function getCSV()
-    {
-
-        try {
-
-            # comando sql
             $sql = "SELECT 
-                        clientes.apellidos,
-                        clientes.nombre,
-                        clientes.email,
-                        clientes.telefono,
-                        clientes.ciudad,
-                        clientes.dni
-                    FROM
-                        clientes
-                    ORDER BY 
-                        id";
-
-            # conectamos con la base de datos
-
-            // $this->db es un objeto de la clase database
-            // ejecuto el método connect de esa clase
+                        roles.id, 
+                        roles.name 
+                    FROM 
+                        roles";
 
             $conexion = $this->db->connect();
-
-            # ejecutamos mediante prepare
             $pdost = $conexion->prepare($sql);
-
-            # establecemos  tipo fetch
-            $pdost->setFetchMode(PDO::FETCH_NUM);
-
-            #  ejecutamos 
             $pdost->execute();
 
-            # devuelvo objeto pdostatement
-            return $pdost;
-
+            return $pdost->fetchAll(PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-
             include_once('template/partials/errorDB.php');
-            exit();
-
-        }
-    }
-
-
-    public function getCuentasCliente($idCliente)
-    {
-
-        try {
-
-            # comando sql
-            $sql = "SELECT 
-                        cuentas.id,
-                        cuentas.num_cuenta,
-                        cuentas.id_cliente,
-                        cuentas.fecha_alta,
-                        cuentas.fecha_ul_mov,
-                        cuentas.num_movtos,
-                        cuentas.saldo
-                    FROM
-                        cuentas
-                    WHERE id_cliente = :idCliente
-                    ORDER BY 
-                        cuentas.id";
-
-
-            $conexion = $this->db->connect();
-
-            # ejecutamos mediante prepare
-            $pdost = $conexion->prepare($sql);
-
-            $pdost->bindParam(":idCliente", $idCliente, PDO::PARAM_INT);
-
-            # establecemos  tipo fetch
-            $pdost->setFetchMode(PDO::FETCH_OBJ);
-
-            #  ejecutamos 
-            $pdost->execute();
-
-            # devuelvo objeto pdostatement
-            return $pdost->fetchAll();
-
-        } catch (PDOException $e) {
-
-            include_once('template/partials/errorDB.php');
-            exit();
-
-        }
-    }
-
-    function deleteCuentas($idCuenta)
-    {
-        try {
-
-            $sql = "DELETE FROM Cuentas WHERE id = :idCuenta";
-
-            $conexion = $this->db->connect();
-
-            # ejecutamos mediante prepare
-            $pdost = $conexion->prepare($sql);
-
-            $pdost->bindParam(":idCuenta", $idCuenta, PDO::PARAM_INT);
-
-            # establecemos  tipo fetch
-            $pdost->setFetchMode(PDO::FETCH_OBJ);
-
-            #  ejecutamos 
-            $pdost->execute();
-
-        } catch (PDOException $e) {
-            require_once("template/partials/errorDB.php");
             exit();
         }
     }

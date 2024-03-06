@@ -18,15 +18,15 @@
     <div class="container">
 
         <!-- header -->
-        <?php include 'views/clientes/partials/header.php' ?>
+        <?php include 'views/users/partials/header.php' ?>
 
         <!-- comprobamos si existe error -->
         <?php include 'template/partials/error.php' ?>
 
-        <legend>Formulario Nuevo Cliente</legend>
+        <legend>Formulario Nuevo user</legend>
 
-        <!-- Formulario Nuevo Cliente -->
-        <form action="<?= URL ?>clientes/create" method="POST">
+        <!-- Formulario Nuevo user -->
+        <form action="<?= URL ?>users/validate" method="POST">
 
             <!-- id -->
             <!-- <div class="mb-3">
@@ -34,75 +34,83 @@
                 <input type="text" class="form-control" name="id">
             </div>  -->
 
-            <!-- Nombre -->
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" name="nombre"
-                    value="<?= isset($this->cliente->nombre) ? $this->cliente->nombre : '' ?>">
-                <?php if (isset($this->errores['nombre'])): ?>
-                    <span class="form-text text-danger" role="alert">
-                        <?= $this->errores['nombre'] ?>
-                    </span>
-                <?php endif; ?>
+            <!-- campo name -->
+            <div class="mb-3 row">
+                <label for="num_cuenta" class="form-label">Nombre</label>
+                <div class="col-md-6">
+                    <input id="name" type="text"
+                        class="form-control <?= (isset($this->errores['name'])) ? 'is-invalid' : null ?>" name="name"
+                        value="<?= isset($this->user->name) ? $this->user->name : '' ?>" required autocomplete="name"
+                        autofocus>
+                    <?php if (isset($this->errores['name'])): ?>
+                        <span class="form-text text-danger" role="alert">
+                            <?= $this->errores['name'] ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
             </div>
-            <!-- Apellidos -->
-            <div class="mb-3">
-                <label for="apellidos" class="form-label">Apellidos</label>
-                <input type="text" class="form-control" name="apellidos"
-                    value="<?= isset($this->cliente->apellidos) ? $this->cliente->apellidos : '' ?>">
-                <?php if (isset($this->errores['apellidos'])): ?>
-                    <span class="form-text text-danger" role="alert">
-                        <?= $this->errores['apellidos'] ?>
-                    </span>
-                <?php endif; ?>
+
+            <!-- campo email -->
+            <div class="mb-3 row">
+                <label for="num_cuenta" class="form-label">Email</label>
+
+                <div class="col-md-6">
+                    <input id="email" type="email"
+                        class="form-control <?= (isset($this->errores['email'])) ? 'is-invalid' : null ?>" name="email"
+                        value="<?= isset($this->user->email) ? $this->user->email : '' ?>" required autocomplete="email"
+                        autofocus>
+                    <?php if (isset($this->errores['email'])): ?>
+                        <span class="form-text text-danger" role="alert">
+                            <?= $this->errores['email'] ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
             </div>
-            <!-- Email -->
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email"
-                    value="<?= isset($this->cliente->email) ? $this->cliente->email : '' ?>">
-                <?php if (isset($this->errores['email'])): ?>
-                    <span class="form-text text-danger" role="alert">
-                        <?= $this->errores['email'] ?>
-                    </span>
-                <?php endif; ?>
+
+            <!-- campo password -->
+            <div class="mb-3 row">
+                <label for="num_cuenta" class="form-label">Contraseña</label>
+
+                <div class="col-md-6">
+                    <input id="password" type="password"
+                        class="form-control <?= (isset($this->errores['password'])) ? 'is-invalid' : null ?>"
+                        name="password" value="<?= isset($this->user->password) ? $this->user->password : '' ?>"
+                        required autocomplete="new-password">
+                    <?php if (isset($this->errores['password'])): ?>
+                        <span class="form-text text-danger" role="alert">
+                            <?= $this->errores['password'] ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
             </div>
-            <!-- Telefono -->
-            <div class="mb-3">
-                <label for="telefono" class="form-label">Teléfono</label>
-                <input type="tel" class="form-control" name="telefono"
-                    value="<?= isset($this->cliente->telefono) ? $this->cliente->telefono : '' ?>">
-                <?php if (isset($this->errores['telefono'])): ?>
-                    <span class="form-text text-danger" role="alert">
-                        <?= $this->errores['telefono'] ?>
-                    </span>
-                <?php endif; ?>
+
+            <!-- password confirm -->
+            <div class="mb-3 row">
+                <label for="num_cuenta" class="form-label">Confirmación Contraseña</label>
+                <div class="col-md-6">
+                    <input id="password" type="password" class="form-control" name="password-confirm" required
+                        autocomplete="new-password">
+                </div>
             </div>
-            <!-- Ciudad -->
-            <div class="mb-3">
-                <label for="ciudad" class="form-label">Ciudad</label>
-                <input type="text" class="form-control" name="ciudad"
-                    value="<?= isset($this->cliente->ciudad) ? $this->cliente->ciudad : '' ?>">
-                <?php if (isset($this->errores['ciudad'])): ?>
-                    <span class="form-text text-danger" role="alert">
-                        <?= $this->errores['ciudad'] ?>
-                    </span>
-                <?php endif; ?>
-            </div>
-            <!-- Dni -->
-            <div class="mb-3">
-                <label for="dni" class="form-label">Dni</label>
-                <input type="text" class="form-control" name="dni" minlength="9" maxlength="9" pattern=".{9}"
-                    value="<?= isset($this->cliente->dni) ? $this->cliente->dni : '' ?>">
-                <?php if (isset($this->errores['dni'])): ?>
-                    <span class="form-text text-danger" role="alert">
-                        <?= $this->errores['dni'] ?>
-                    </span>
-                <?php endif; ?>
+
+            <!-- campo rol -->
+            <div class="mb-3 row">
+                <label for="rol" class="form-label">Rol</label>
+                <div class="col-md-6">
+                    <select id="rol" class="form-select" name="rol" required>
+                        <!-- Opción por defecto -->
+                        <option value="" selected>Seleccione un rol</option>
+                        <?php foreach ($roles as $rol): ?>
+                            <option value="<?= $rol->id ?>">
+                                <?= $rol->name ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </div>
 
             <!-- botones de acción -->
-            <a class="btn btn-secondary" href="<?= URL ?>clientes" role="button">Cancelar</a>
+            <a class="btn btn-secondary" href="<?= URL ?>users" role="button">Cancelar</a>
             <button type="reset" class="btn btn-danger">Borrar</button>
             <button type="submit" class="btn btn-primary">Enviar</button>
 

@@ -60,6 +60,9 @@ class Users extends Controller
             header('location:' . URL . 'users');
         }
 
+        // Obtener los roles
+        $this->view->roles = $this->model->getRoles();
+
         # obtener objeto de la clase user
         $this->view->user = $this->model->read($id);
 
@@ -68,7 +71,7 @@ class Users extends Controller
             # Mensaje de error
             $this->view->error = $_SESSION['error'];
 
-            # Autorrellenar el formulario con los detalles de la user
+            # Autorrellenar el formulario con los detalles del usuario
             $this->view->user = unserialize($_SESSION['user']);
 
             # Recupero array de errores específicos
@@ -85,6 +88,74 @@ class Users extends Controller
         # cargo la vista con el formulario nuevo user
         $this->view->render('users/new/index');
     }
+
+
+    public function validate()
+    {
+
+        # Iniciamos o continuamos con la sesión
+        session_start();
+
+        # Saneamos el formulario
+        $name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $password = filter_var($_POST['password'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $password_confirm = filter_var($_POST['password-confirm'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+        # Validaciones
+
+        $errores = array();
+
+        # Validar name
+        if (empty($name)) {
+            $errores['name'] = "Campo Obligatorio";
+        } else if (!$this->model->validateName($name)) {
+            $errores['name'] = "Nombre de usuario no válido";
+        }
+
+        # Validar Email
+        if (empty($email)) {
+            $errores['email'] = "Campo Obligatorio.";
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errores['email'] = "Email: Email no válido";
+        } elseif (!$this->model->validateEmailUnique($email)) {
+            $errores['email'] = "Email existente, ya está registrado";
+        }
+
+        # Validar password
+        if (empty($password)) {
+            $errores['password'] = "Debe introducir una contraseña.";
+        } else if (strcmp($password, $password_confirm) !== 0) {
+            $errores['password'] = "Password no coincidentes";
+        } else if (!$this->model->validatePass($password)) {
+            $errores['password'] = "Password: No permitido";
+        }
+
+        if (!empty($errores)) {
+
+            $_SESSION['errores'] = $errores;
+            $_SESSION['name'] = $name;
+            $_SESSION['email'] = $email;
+            $_SESSION['password'] = $password;
+            $_SESSION['error'] = "Fallo en la validación del formulario";
+
+            header("location:" . URL . "users/new");
+
+        } else {
+
+            # Añade nuevo usuario
+            $this->model->crear($name, $email, $password);
+
+            $_SESSION['mensaje'] = "Usuario registrado correctamente";
+            $_SESSION['email'] = $email;
+            $_SESSION['password'] = $password;
+
+            #Vuelve login
+            header("location:" . URL . "users");
+        }
+
+    }
+
 
     function create($param = [])
     {
@@ -338,7 +409,7 @@ class Users extends Controller
         $user = $this->model->read($id);
 
         // Configuro las propiedades de la vista
-        $this->view->title = "Detalles del user";
+        $this->view->title = "Detalles del Usuario";
         $this->view->user = $user;
 
         // Cargo la vista de detalles del user
@@ -411,164 +482,27 @@ class Users extends Controller
 
         //Comprobar si el usuario está identificado
         if (!isset($_SESSION['id'])) {
+
             $_SESSION['mensaje'] = "Usuario No Autentificado";
             header("location:" . URL . "login");
+
         } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['user']['delete']))) {
             $_SESSION['mensaje'] = "Operación sin privilegios";
             header('location:' . URL . 'users');
+
         } else {
-            //Obteneemos id del user
+
+            //Obtenemos id del user
             $iduser = $param[0];
-
-            // Obtener todas las cuentas asociadas al user
-            $cuentasDeluser = $this->model->getCuentasuser($iduser);
-
-            // Eliminar cada cuenta asociada al user
-            foreach ($cuentasDeluser as $cuenta) {
-                $this->model->deleteCuentas($cuenta->id);
-            }
 
             // Eliminar el user
             $this->model->delete($iduser);
 
             //Generar mensaje
-            $_SESSION['notify'] = 'users y sus cuentas borrados.';
+            $_SESSION['notify'] = 'Usuario eliminado.';
 
             header("Location:" . URL . "users");
         }
-    }
-
-
-    // Al descargar el archivo importado éste no se muestra hasta que se actualiza la carpeta (cerrar y abrir o
-    // actualizar el escritorio.)
-    function export()
-    {
-
-        session_start();
-
-        if (!isset($_SESSION['id'])) {
-            $_SESSION['mensaje'] = "Usuario no autentificado";
-
-            header("location:" . URL . "login");
-        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['user']['export']))) {
-            $_SESSION['mensaje'] = "Operación sin privilegios";
-            header('location:' . URL . 'users');
-        }
-
-        $users = $this->model->getCSV();
-
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="users.csv"');
-
-        $ficheroExport = fopen('php://output', 'w');
-
-        foreach ($users as $user) {
-
-            fputcsv($ficheroExport, $user, ';');
-        }
-
-        fclose($ficheroExport);
-    }
-
-
-    function import()
-    {
-        session_start();
-
-        if (!isset($_SESSION['id'])) {
-            $_SESSION['mensaje'] = "Usuario no autentificado";
-            header("location:" . URL . "login");
-            exit();
-        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['user']['import']))) {
-            $_SESSION['mensaje'] = "Operación sin privilegios";
-            header('location:' . URL . 'users');
-            exit();
-        }
-
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["archivo_csv"]) && $_FILES["archivo_csv"]["error"] == UPLOAD_ERR_OK) {
-            $file = $_FILES["archivo_csv"]["tmp_name"];
-
-            $handle = fopen($file, "r");
-
-            if ($handle !== FALSE) {
-                // Iterar sobre el archivo CSV y procesar cada línea
-                while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-                    // Obtener los datos de cada fila y guardarlos en variables
-                    $apellidos = $data[0];
-                    $nombre = $data[1];
-                    $email = $data[2];
-                    $telefono = $data[3];
-                    $ciudad = $data[4];
-                    $dni = $data[5];
-
-                    // Verificar si ya existe un user con el mismo correo electrónico (email) o número de identificación (DNI),
-                    // ya que no se pueden repetir.
-                    if (!$this->model->existeEmail($email) && !$this->model->existeDNI($dni)) {
-                        // Si no existe, crear un nuevo user
-                        $user = new classUser();
-                        $user->apellidos = $apellidos;
-                        $user->nombre = $nombre;
-                        $user->email = $email;
-                        $user->telefono = $telefono;
-                        $user->ciudad = $ciudad;
-                        $user->dni = $dni;
-
-                        // Insertar el user en la base de datos
-                        $this->model->create($user);
-                    } else {
-                        // Si ya existe, se ignora el user
-                        echo "El user con correo electrónico $email o DNI $dni ya existe en la base de datos. Se ha ignorado el user.";
-                    }
-                }
-
-                fclose($handle);
-                $_SESSION['mensaje'] = "Importación completada correctamente";
-                header('location:' . URL . 'users');
-                exit();
-
-            } else {
-                $_SESSION['error'] = "Error al abrir el archivo CSV";
-                header('location:' . URL . 'users');
-                exit();
-
-            }
-
-        } else {
-            $_SESSION['error'] = "No se ha seleccionado ningún archivo CSV";
-            header('location:' . URL . 'users');
-            exit();
-        }
-    }
-
-    function pdf()
-    {
-        session_start();
-
-        if (!isset($_SESSION['id'])) {
-            $_SESSION['mensaje'] = "Usuario no autentificado";
-            header("location:" . URL . "login");
-            exit();
-        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['user']['pdf']))) {
-            $_SESSION['mensaje'] = "Operación sin privilegios";
-            header('location:' . URL . 'users');
-            exit();
-        }
-
-        // Obtener los datos de los users
-        $users = $this->model->get();
-
-        // Crear instancia de pdfusers
-        $pdf = new pdfusers();
-
-        // Se puede establecer el comienzo de la tabla casi al final de la página para comprobar que
-        // el salto de línea y el encabezado automático funcionan correctamente.
-        // $pdf->SetY(260);
-
-        // Agregar contenido al PDF
-        $pdf->contenido($users);
-
-        // Salida del PDF
-        $pdf->Output();
     }
 
 
