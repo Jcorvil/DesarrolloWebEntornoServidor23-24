@@ -44,11 +44,12 @@
                         <tr>
                             <!-- personalizado -->
                             <th>Id</th>
-                            <th>Id cuenta</th>
+                            <th>Nº Cuenta</th>
                             <th>Fecha</th>
                             <th>Concepto</th>
                             <th>Tipo</th>
-                            <th>Cantidad</th>
+                            <th class="text-end">Cantidad</th>
+                            <th class="text-end">Saldo</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -66,7 +67,7 @@
                                     <?= $movimiento->id ?>
                                 </td>
                                 <td>
-                                    <?= $movimiento->id_cuenta ?>
+                                    <?= $movimiento->num_cuenta ?>
                                 </td>
                                 <td>
                                     <?= $movimiento->fecha_hora ?>
@@ -77,8 +78,11 @@
                                 <td>
                                     <?= $movimiento->tipo ?>
                                 </td>
-                                <td>
-                                    <?= $movimiento->cantidad ?>
+                                <td class="text-end">
+                                    <?= $movimiento->cantidad . ' €' ?>
+                                </td>
+                                <td class="text-end">
+                                    <?= $movimiento->saldo . ' €' ?>
                                 </td>
 
                                 <!-- botones de acción -->

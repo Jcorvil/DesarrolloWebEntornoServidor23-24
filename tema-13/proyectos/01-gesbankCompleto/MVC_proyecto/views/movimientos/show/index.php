@@ -25,10 +25,10 @@
         <!-- Formulario Mostrar movimiento -->
         <form action="<?= URL ?>movimientos/update/<?= $this->id ?>" method="POST">
 
-            <!-- Nombre -->
+            <!-- Nº Cuenta -->
             <div class="mb-3">
-                <label for="nombre" class="form-label">Id cuenta</label>
-                <input type="text" class="form-control" name="nombre" value="<?= $this->movimiento->id_cuenta ?>"
+                <label for="num_cuenta" class="form-label">Nº Cuenta</label>
+                <input type="text" class="form-control" name="num_cuenta" value="<?= $this->movimiento->num_cuenta ?>"
                     disabled>
             </div>
             <!-- fecha_hora -->
@@ -51,13 +51,14 @@
             <!-- cantidad -->
             <div class="mb-3">
                 <label for="cantidad" class="form-label">Cantidad</label>
-                <input type="float" class="form-control" name="cantidad" value="<?= $this->movimiento->cantidad ?>"
-                    disabled>
+                <input type="float" class="form-control" name="cantidad"
+                    value="<?= $this->movimiento->cantidad . ' €' ?>" disabled>
             </div>
             <!-- saldo -->
             <div class="mb-3">
                 <label for="saldo" class="form-label">saldo</label>
-                <input type="float" class="form-control" name="saldo" value="<?= $this->movimiento->saldo ?>" disabled>
+                <input type="float" class="form-control" name="saldo" value="<?= $this->movimiento->saldo . ' €' ?>"
+                    disabled>
             </div>
 
             <!-- botones de acción -->

@@ -13,7 +13,7 @@ class movimientosModel extends Model
             # comando sql
             $sql = "SELECT 
                         movimientos.id,
-                        movimientos.id_cuenta,
+                        cuentas.num_cuenta,
                         movimientos.fecha_hora,
                         movimientos.concepto,
                         movimientos.tipo,
@@ -21,8 +21,12 @@ class movimientosModel extends Model
                         movimientos.saldo
                     FROM
                         movimientos
+                    INNER JOIN
+                        cuentas
+                    ON
+                        movimientos.id_cuenta = cuentas.id
                     ORDER BY 
-                        id";
+                        movimientos.id";
 
             # conectamos con la base de datos
 
@@ -51,29 +55,30 @@ class movimientosModel extends Model
         }
     }
 
-    public function read()
+    public function read($id)
     {
-
         try {
             $sql = "SELECT 
-                        id,
-                        id_cuenta, 
-                        fecha_hora,
-                        concepto,
-                        tipo,
-                        cantidad,
-                        saldo
-                    FROM 
+                        movimientos.id,
+                        cuentas.num_cuenta, 
+                        movimientos.fecha_hora,
+                        movimientos.concepto,
+                        movimientos.tipo,
+                        movimientos.cantidad,
+                        movimientos.saldo
+                    FROM
                         movimientos
+                    INNER JOIN
+                        cuentas
+                    ON
+                        movimientos.id_cuenta = cuentas.id
                     WHERE
-                        id = :id";
+                        movimientos.id = :id
+                    ORDER BY 
+                        movimientos.id";
 
-            # Conectar con la base de datos
             $conexion = $this->db->connect();
-
-
             $pdoSt = $conexion->prepare($sql);
-
             $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
             $pdoSt->setFetchMode(PDO::FETCH_OBJ);
             $pdoSt->execute();
@@ -84,8 +89,8 @@ class movimientosModel extends Model
             include_once('template/partials/errorDB.php');
             exit();
         }
-
     }
+
 
     public function filter($expresion)
     {
