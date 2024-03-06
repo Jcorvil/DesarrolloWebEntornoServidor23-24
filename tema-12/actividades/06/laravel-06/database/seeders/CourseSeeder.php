@@ -7,6 +7,9 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+use App\Models\Course;
+
+
 class CourseSeeder extends Seeder
 {
     /**
@@ -33,16 +36,19 @@ class CourseSeeder extends Seeder
                 [
                     'course' => '2AD',
                     'ciclo' => 'Asistencia a la Dirección'
-                ],
-                [
-                    'course' => Str::random(20),
-                    'ciclo' => Str::random(15) . 'FP'
-                ],
-                [
-                    'course' => Str::random(20),
-                    'ciclo' => Str::random(15) . 'FP'
                 ]
+                // [
+                //     'course' => Str::random(20),
+                //     'ciclo' => Str::random(15) . 'FP'
+                // ],
+                // [
+                //     'course' => Str::random(20),
+                //     'ciclo' => Str::random(15) . 'FP'
+                // ]
             ]
         );
+
+        // Añadir registros desde la factoría
+        $courses = Course::factory()->count(20)->create();
     }
 }

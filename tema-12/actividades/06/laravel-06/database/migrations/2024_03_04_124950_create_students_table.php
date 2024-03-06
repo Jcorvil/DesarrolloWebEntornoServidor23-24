@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('last_name', 45);
             $table->date('birth_date');
             $table->char('phone', 13)->nullable(false);
-            $table->string('city', 20);
+            $table->string('city', 40);
             $table->char('dni', 9)->unique()->nullable(false);
             $table->string('email', 40)->unique();
             $table->unsignedBigInteger('course_id');
