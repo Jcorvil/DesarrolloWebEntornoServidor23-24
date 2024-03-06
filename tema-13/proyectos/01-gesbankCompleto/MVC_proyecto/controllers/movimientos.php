@@ -1,5 +1,7 @@
 <?php
 
+require_once 'class/class.movimiento.php';
+
 class Movimientos extends Controller
 {
 
@@ -42,7 +44,7 @@ class Movimientos extends Controller
     }
 
 
-    function new()
+    function new($param = [])
     {
         # Iniciar o continuar sesión
         session_start();
@@ -57,8 +59,7 @@ class Movimientos extends Controller
             header('location:' . URL . 'movimientos');
         }
 
-        # obtener objeto de la clase movimiento
-        $this->view->movimiento = $this->model->read();
+        $this->view->cuentas = $this->model->getCuentas();
 
         # Comprobar si vuelvo de un registro no validado
         if (isset($_SESSION['error'])) {
@@ -125,11 +126,6 @@ class Movimientos extends Controller
             $errores['id_cuenta'] = 'Cuenta del movimiento obligatorio';
         }
 
-        // fecha_hora
-        // if (empty($fecha_hora)) {
-        //     $errores['fecha_hora'] = 'fecha_hora del movimiento obligatorio';
-        // } 
-
         // concepto
         if (empty($concepto)) {
             $errores['concepto'] = 'concepto obligatorio';
@@ -147,13 +143,33 @@ class Movimientos extends Controller
         // cantidad
         if (!is_numeric($cantidad)) {
             $errores['cantidad'] = 'La cantidad debe ser un valor numérico';
-        } elseif ($tipo == 'R' && $cantidad > $saldo) {
+        } elseif ($tipo == 'R' && $cantidad > $saldo && $saldo >= 0) {
             $errores['cantidad'] = 'La cantidad no puede superar el saldo de la cuenta';
-        } elseif ($tipo == 'R') {
-            $cantidad *= -1; // Convertir a negativo para representar un reintegro
         }
 
-        // Saldo
+        // Obtener el saldo actual de la cuenta
+        $saldoActual = $this->model->getSaldoCuenta($id_cuenta);
+
+        // Validar si la cantidad a retirar es menor o igual al saldo actual
+        if ($tipo == 'R' && $cantidad > $saldoActual) {
+            $errores['cantidad'] = 'La cantidad no puede superar el saldo de la cuenta';
+        }
+
+        // Calcular el nuevo saldo
+        if ($tipo == 'I') {
+            // Ingreso
+            $nuevoSaldo = $saldoActual + $cantidad;
+        } elseif ($tipo == 'R') {
+            // Reintegro
+            $nuevoSaldo = $saldoActual - $cantidad;
+        }
+
+        // Actualizar el saldo de la cuenta
+        $this->model->updateSaldoCuenta($id_cuenta, $nuevoSaldo);
+
+        // Asignar el nuevo saldo al objeto movimiento
+        $movimiento->saldo = $nuevoSaldo;
+
 
         // Comprobar validación
         if (!empty($errores)) {
@@ -166,9 +182,8 @@ class Movimientos extends Controller
             // Redireccionamos a new
             header('Location:' . URL . 'movimientos/new');
             exit();
+
         } else {
-            // Actualizar el saldo de cuentas
-            $this->actualizarSaldoCuenta($id_cuenta, $cantidad);
 
             $this->model->create($movimiento);
 
@@ -177,20 +192,6 @@ class Movimientos extends Controller
             header('location:' . URL . 'movimientos');
         }
     }
-
-    // Función para actualizar el saldo de la cuenta
-    private function actualizarSaldoCuenta($id_cuenta, $cantidad)
-    {
-        // Obtener el saldo actual de la cuenta
-        $saldo_actual = $this->model->getSaldoCuenta($id_cuenta);
-
-        // Actualizar el saldo sumando o restando la cantidad del movimiento
-        $nuevo_saldo = $saldo_actual + $cantidad;
-
-        // Actualizar el saldo en la base de datos
-        $this->model->updateSaldoCuenta($id_cuenta, $nuevo_saldo);
-    }
-
 
 
     function show($param = [])

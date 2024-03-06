@@ -97,7 +97,7 @@ class movimientosModel extends Model
         try {
             $sql = "SELECT 
                         movimientos.id,
-                        movimientos.id_cuenta,
+                        cuentas.num_cuenta,
                         movimientos.fecha_hora,
                         movimientos.concepto,
                         movimientos.tipo,
@@ -105,10 +105,14 @@ class movimientosModel extends Model
                         movimientos.saldo
                     FROM
                         movimientos
+                    INNER JOIN
+                        cuentas
+                    ON
+                        movimientos.id_cuenta = cuentas.id
                     WHERE
                         CONCAT_WS(', ', 
                                 movimientos.id,
-                                movimientos.id_cuenta,
+                                cuentas.num_cuenta,
                                 movimientos.fecha_hora,
                                 movimientos.concepto,
                                 movimientos.tipo,
@@ -142,7 +146,7 @@ class movimientosModel extends Model
             # comando sql
             $sql = "SELECT 
                         movimientos.id,
-                        movimientos.id_cuenta,
+                        cuentas.num_cuenta,
                         movimientos.fecha_hora,
                         movimientos.concepto,
                         movimientos.tipo,
@@ -150,6 +154,10 @@ class movimientosModel extends Model
                         movimientos.saldo
                     FROM
                         movimientos
+                    INNER JOIN
+                        cuentas
+                    ON
+                        movimientos.id_cuenta = cuentas.id
                     ORDER BY 
                         :criterio";
 
@@ -269,6 +277,19 @@ class movimientosModel extends Model
     }
 
 
+    public function getCuentas() {
+
+        $sql = "SELECT
+                    id, num_cuenta
+                FROM 
+                    cuentas";
+
+        $conexion = $this->db->connect();
+        $pdoSt = $conexion->prepare($sql);
+        $pdoSt->execute();
+        return $pdoSt->fetchAll(PDO::FETCH_OBJ);
+    }
+    
 
 }
 

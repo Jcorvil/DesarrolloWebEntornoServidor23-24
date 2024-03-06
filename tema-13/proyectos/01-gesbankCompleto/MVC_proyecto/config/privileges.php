@@ -43,10 +43,19 @@ $GLOBALS['cuenta']['pdf'] = [1];
 $GLOBALS['contacto']['validar'] = [1, 2, 3];
 $GLOBALS['contacto']['render'] = [1, 2, 3];
 
-$GLOBALS['movimiento']['main'] = [1, 2];
+$GLOBALS['movimiento']['main'] = [1, 2, 3];
 $GLOBALS['movimiento']['new'] = [1, 2];
-$GLOBALS['movimiento']['show'] = [1, 2];
-$GLOBALS['movimiento']['filter'] = [1, 2];
-$GLOBALS['movimiento']['order'] = [1, 2];
+$GLOBALS['movimiento']['show'] = [1, 2, 3];
+$GLOBALS['movimiento']['filter'] = [1, 2, 3];
+$GLOBALS['movimiento']['order'] = [1, 2, 3];
+
+$GLOBALS['user']['main'] = [1];
+$GLOBALS['user']['new'] = [1];
+$GLOBALS['user']['delete'] = [1];
+$GLOBALS['user']['edit'] = [1];
+$GLOBALS['user']['show'] = [1];
+$GLOBALS['user']['filter'] = [1];
+$GLOBALS['user']['order'] = [1];
+
 
 ?>
