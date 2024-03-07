@@ -21,9 +21,6 @@
             <div class="card-header">
                 Movimientos de la cuenta
             </div>
-            <div class="card-header">
-                <?php require_once("views/cuentas/partials/menu.php") ?>
-            </div>
             <div class="card-body">
                 <table class="table">
                     <thead>
@@ -35,7 +32,6 @@
                             <th>Tipo</th>
                             <th class="text-end">Cantidad</th>
                             <th class="text-end">Saldo</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,12 +63,6 @@
                                 </td>
                                 <td class="text-end">
                                     <?= $movimiento->saldo . ' €' ?>
-                                </td>
-                                <td>
-                                    <a href="<?= URL ?>cuentas/show/<?= $movimiento->id ?>" title="Mostrar"
-                                        class="btn btn-warning <?= (!in_array($_SESSION['id_rol'], $GLOBALS['movimiento']['show'])) ? 'disabled' : '' ?>">
-                                        <i class="bi bi-card-text"></i>
-                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
