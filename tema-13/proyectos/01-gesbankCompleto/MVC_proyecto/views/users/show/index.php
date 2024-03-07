@@ -24,7 +24,6 @@
         <form action="<?= URL ?>users/update/<?= $this->id ?>" method="POST">
 
             <!-- id oculto -->
-            <input type="number" class="form-control" name="id" value="<?= $this->user->id ?>" disabled>
            
             <!-- Nombre -->
             <div class="mb-3">

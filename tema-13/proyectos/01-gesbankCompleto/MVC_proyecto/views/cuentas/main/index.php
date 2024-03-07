@@ -107,6 +107,12 @@
 										class="btn btn-warning <?= (!in_array($_SESSION['id_rol'], $GLOBALS['cuenta']['show'])) ? 'disabled' : '' ?>">
 										<i class="bi bi-card-text"></i>
 									</a>
+
+									<!-- botón mostrar movimientos -->
+									<a href="<?= URL ?>cuentas/showMov/<?= $cuenta->id ?>" title="Mostrar"
+										class="btn btn-success <?= (!in_array($_SESSION['id_rol'], $GLOBALS['cuenta']['showMov'])) ? 'disabled' : '' ?>">
+										<i class="bi bi-list-ol"></i>
+									</a>
 								</td>
 							</tr>
 

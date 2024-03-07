@@ -61,10 +61,10 @@ class Users extends Controller
         }
 
         // Obtener los roles
-        $this->view->roles = $this->model->getRoles();
+        $roles = $this->model->getRoles();
 
-        # obtener objeto de la clase user
-        $this->view->user = $this->model->read($id);
+        // Pasar los roles a la vista
+        $this->view->roles = $roles;
 
         # Comprobar si vuelvo de un registro no validado
         if (isset($_SESSION['error'])) {
@@ -101,6 +101,7 @@ class Users extends Controller
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $password = filter_var($_POST['password'], FILTER_SANITIZE_SPECIAL_CHARS);
         $password_confirm = filter_var($_POST['password-confirm'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $rol = filter_var($_POST['rol'], FILTER_SANITIZE_SPECIAL_CHARS);
 
         # Validaciones
 
@@ -131,6 +132,11 @@ class Users extends Controller
             $errores['password'] = "Password: No permitido";
         }
 
+        # Validar rol
+        if (empty($rol)) {
+            $errores['rol'] = "Debe seleccionar un rol.";
+        }
+
         if (!empty($errores)) {
 
             $_SESSION['errores'] = $errores;
@@ -144,14 +150,12 @@ class Users extends Controller
         } else {
 
             # Añade nuevo usuario
-            $this->model->crear($name, $email, $password);
+            $this->model->crear($name, $email, $password, $rol);
 
             $_SESSION['mensaje'] = "Usuario registrado correctamente";
-            $_SESSION['email'] = $email;
-            $_SESSION['password'] = $password;
 
-            #Vuelve login
             header("location:" . URL . "users");
+            exit();
         }
 
     }
@@ -172,16 +176,18 @@ class Users extends Controller
         }
 
         // 1. Seguridad. Saneamos los datos del formulario
-        $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+        $nombre = filter_var($_POST['nombre'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_var($_POST['email'] ??= '', FILTER_SANITIZE_EMAIL);
+        $password = filter_var($_POST['password'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $rol = filter_var($_POST['rol'] ??= '', FILTER_SANITIZE_NUMBER_INT);
 
         # Cargamos los datos del formulario
         $user = new classUser(
             null,
             $nombre,
             $email,
-            $password
+            $password,
+            $rol
         );
 
         // Validación
@@ -210,6 +216,10 @@ class Users extends Controller
             $errores['password'] = 'Contraseña inválida';
         }
 
+        // Rol
+        if (empty($rol)) {
+            $errores['rol'] = 'Rol obligatorio';
+        }
 
         // Comprobar validación
         if (!empty($errores)) {
@@ -240,9 +250,6 @@ class Users extends Controller
     {
         session_start();
 
-        # obtengo el id del user que voy a edit
-        // user/edit/4
-
         if (!isset($_SESSION['id'])) {
             $_SESSION['mensaje'] = "Usuario no autentificado";
 
@@ -262,6 +269,9 @@ class Users extends Controller
 
         # obtener objeto de la clase user
         $this->view->user = $this->model->read($id);
+
+        // Obtener los roles
+        $this->view->roles = $this->model->getRoles();
 
         //Comprobar si el formulario viene de una validación
         if (isset($_SESSION['error'])) {
@@ -284,6 +294,7 @@ class Users extends Controller
 
     }
 
+
     function update($param = [])
     {
 
@@ -302,22 +313,18 @@ class Users extends Controller
         $id = $param[0];
 
         // 1. Seguridad. Saneamos los datos del formulario
-        $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_SPECIAL_CHARS);
-        $apellidos = filter_input(INPUT_POST, 'apellidos', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $telefono = filter_input(INPUT_POST, 'telefono', FILTER_SANITIZE_NUMBER_INT);
-        $ciudad = filter_input(INPUT_POST, 'ciudad', FILTER_SANITIZE_SPECIAL_CHARS);
-        $dni = filter_input(INPUT_POST, 'dni', FILTER_SANITIZE_SPECIAL_CHARS);
+        $nombre = filter_var($_POST['nombre'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_var($_POST['email'] ??= '', FILTER_SANITIZE_EMAIL);
+        $password = $_POST['password'] ?? '';
+        $rol = filter_var($_POST['rol'] ??= '', FILTER_SANITIZE_NUMBER_INT);
 
         # Cargamos los datos del formulario
         $user = new classUser(
             null,
             $nombre,
-            $apellidos,
             $email,
-            $telefono,
-            $ciudad,
-            $dni
+            $password,
+            $rol
         );
 
         // Validación
@@ -325,16 +332,9 @@ class Users extends Controller
 
         // Nombre
         if (empty($nombre)) {
-            $errores['nombre'] = 'Nombre del user obligatorio';
+            $errores['nombre'] = 'Nombre del usuario obligatorio';
         } elseif (strlen($nombre) > 20) {
             $errores['nombre'] = 'El nombre no puede tener más de 20 caracteres';
-        }
-
-        // Apellidos
-        if (empty($apellidos)) {
-            $errores['apellidos'] = 'Apellidos del user obligatorio';
-        } elseif (strlen($apellidos) > 45) {
-            $errores['apellidos'] = 'Los apellidos no pueden tener más de 45 caracteres';
         }
 
         // Email
@@ -342,30 +342,26 @@ class Users extends Controller
             $errores['email'] = 'Email obligatorio';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errores['email'] = 'Email inválido';
-        } elseif ($this->model->existeEmail($email, $id)) {
+        } elseif ($this->model->validateEmailUnique($email, $user->id)) {
             $errores['email'] = 'Este email ya está registrado';
         }
 
-        // Teléfono
-        if (!empty($telefono) && strlen($telefono) != 9) {
-            $errores['telefono'] = 'El teléfono debe tener exactamente 9 dígitos';
+        // Password
+        if (!empty($password) && !$this->model->validatePass($password)) {
+            $errores['password'] = 'Contraseña no válida';
         }
 
-        // Ciudad
-        if (empty($ciudad)) {
-            $errores['ciudad'] = 'Ciudad obligatoria';
-        } elseif (strlen($ciudad) > 20) {
-            $errores['ciudad'] = 'La ciudad no puede tener más de 20 caracteres';
+        // Confirmar password
+        $password_confirm = filter_var($_POST['password-confirm'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!empty($password) && $password !== $password_confirm) {
+            $errores['password-confirm'] = 'Las contraseñas no coinciden';
         }
 
-        // Dni
-        if (empty($dni)) {
-            $errores['dni'] = 'DNI obligatorio';
-        } elseif (!preg_match('/^\d{8}[A-Z]$/', $dni)) {
-            $errores['dni'] = 'El DNI debe tener 8 dígitos seguidos de una letra mayúscula';
-        } elseif ($this->model->existeDNI($dni, $id)) {
-            $errores['dni'] = 'Este DNI ya está registrado';
+        // Rol
+        if (empty($rol)) {
+            $errores['rol'] = 'Rol obligatorio';
         }
+
         # comprobamos la validación
         if (!empty($errores)) {
             // Errores de validación
@@ -377,13 +373,11 @@ class Users extends Controller
             header('location:' . URL . 'users/edit/' . $id);
             exit();
         }
-        // Actualizamos el registro
+
         $this->model->update($id, $user);
 
-        // Añadimos a la variable de sesión un mensaje
-        $_SESSION['mensaje'] = 'user actualizado correctamente';
+        $_SESSION['mensaje'] = 'Usuario actualizado correctamente';
 
-        // Redireccionamos al main de users
         header("Location:" . URL . "users");
 
     }

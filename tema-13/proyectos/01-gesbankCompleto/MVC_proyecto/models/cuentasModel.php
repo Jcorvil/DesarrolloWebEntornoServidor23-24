@@ -431,6 +431,36 @@ class cuentasModel extends Model
         }
     }
 
+
+    public function getMovCuenta($idCuenta)
+    {
+        try {
+            $sql = "SELECT
+                        *
+                    FROM
+                        movimientos
+                    INNER JOIN
+                        cuentas ON movimientos.id_cuenta = cuentas.id
+                    WHERE
+                        movimientos.id_cuenta = :id_cuenta";
+
+            $conexion = $this->db->connect();
+            $pdost = $conexion->prepare($sql);
+            $pdost->bindParam(':id_cuenta', $idCuenta, PDO::PARAM_INT);
+            $pdost->setFetchMode(PDO::FETCH_OBJ);
+
+            $pdost->execute();
+
+            return $pdost->fetchAll();
+
+        } catch (PDOException $e) {
+
+            include_once('template/partials/errorDB.php');
+            exit();
+        }
+    }
+
+
 }
 
 ?>

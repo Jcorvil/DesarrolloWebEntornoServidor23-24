@@ -678,6 +678,35 @@ class Cuentas extends Controller
         $pdf->Output();
     }
 
+
+    function showMov($id)
+    {
+        session_start();
+
+        if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario No Autentificado";
+
+            header("location:" . URL . "login");
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['cuenta']['new']))) {
+            $_SESSION['mensaje'] = "Operación sin privilegios";
+            header('location:' . URL . 'cuentas');
+        }
+
+        $movimientos = $this->model->getMovCuenta($id);
+
+        if (empty($movimientos)) {
+            $_SESSION['mensaje'] = "La cuenta no tiene movimientos";
+            header('location:' . URL . 'cuentas');
+            exit();
+        }
+
+        $this->view->movimientos = $movimientos;
+
+        $this->view->render('cuentas/showMov/index');
+    }
+
+
+
 }
 
 ?>

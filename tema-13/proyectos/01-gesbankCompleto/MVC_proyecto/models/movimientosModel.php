@@ -195,14 +195,16 @@ class movimientosModel extends Model
                         fecha_hora,
                         concepto,
                         tipo,
-                        cantidad
+                        cantidad,
+                        saldo
                     )
                     VALUES (
                         :id_cuenta,
                         :fecha_hora,
                         :concepto,
                         :tipo,
-                        :cantidad
+                        :cantidad,
+                        :saldo
                     )
                 ";
             # Conectar con la base de datos
@@ -215,6 +217,7 @@ class movimientosModel extends Model
             $pdoSt->bindParam(':concepto', $movimiento->concepto, PDO::PARAM_STR, 50);
             $pdoSt->bindParam(':tipo', $movimiento->tipo, PDO::PARAM_STR);
             $pdoSt->bindParam(':cantidad', $movimiento->cantidad, PDO::PARAM_STR);
+            $pdoSt->bindParam(':saldo', $movimiento->saldo, PDO::PARAM_STR);
 
             $pdoSt->execute();
 
@@ -226,7 +229,7 @@ class movimientosModel extends Model
     }
 
 
-    public function getSaldoCuenta($id_cuenta)
+    public function getSaldoCuenta($id)
     {
         try {
             $sql = "SELECT
@@ -234,12 +237,12 @@ class movimientosModel extends Model
                     FROM
                         cuentas
                     WHERE 
-                        id = :id_cuenta";
+                        id = :id";
 
             $conexion = $this->db->connect();
             $pdoSt = $conexion->prepare($sql);
 
-            $pdoSt->bindParam(':id_cuenta', $id_cuenta, PDO::PARAM_INT);
+            $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
 
             $pdoSt->execute();
             $saldo = $pdoSt->fetchColumn();
@@ -252,7 +255,7 @@ class movimientosModel extends Model
     }
 
 
-    public function updateSaldoCuenta($id_cuenta, $nuevo_saldo)
+    public function updateSaldoCuenta($id, $nuevo_saldo)
     {
         try {
             $sql = "UPDATE
@@ -260,12 +263,12 @@ class movimientosModel extends Model
                     SET 
                         saldo = :nuevo_saldo
                     WHERE
-                        id = :id_cuenta";
+                        id = :id";
 
             $conexion = $this->db->connect();
             $pdoSt = $conexion->prepare($sql);
 
-            $pdoSt->bindParam(':id_cuenta', $id_cuenta, PDO::PARAM_INT);
+            $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
             $pdoSt->bindParam(':nuevo_saldo', $nuevo_saldo, PDO::PARAM_STR);
 
             $pdoSt->execute();
@@ -277,7 +280,8 @@ class movimientosModel extends Model
     }
 
 
-    public function getCuentas() {
+    public function getCuentas()
+    {
 
         $sql = "SELECT
                     id, num_cuenta
@@ -289,7 +293,7 @@ class movimientosModel extends Model
         $pdoSt->execute();
         return $pdoSt->fetchAll(PDO::FETCH_OBJ);
     }
-    
+
 
 }
 

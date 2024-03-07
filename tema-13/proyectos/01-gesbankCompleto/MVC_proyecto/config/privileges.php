@@ -39,6 +39,7 @@ $GLOBALS['cuenta']['order'] = [1, 2, 3];
 $GLOBALS['cuenta']['export'] = [1];
 $GLOBALS['cuenta']['import'] = [1];
 $GLOBALS['cuenta']['pdf'] = [1];
+$GLOBALS['cuenta']['showMov'] = [1, 2, 3];
 
 $GLOBALS['contacto']['validar'] = [1, 2, 3];
 $GLOBALS['contacto']['render'] = [1, 2, 3];

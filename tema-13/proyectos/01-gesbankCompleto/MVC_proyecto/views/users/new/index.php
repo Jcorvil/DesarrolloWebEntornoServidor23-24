@@ -98,9 +98,8 @@
                 <label for="rol" class="form-label">Rol</label>
                 <div class="col-md-6">
                     <select id="rol" class="form-select" name="rol" required>
-                        <!-- Opción por defecto -->
-                        <option value="" selected>Seleccione un rol</option>
-                        <?php foreach ($roles as $rol): ?>
+                        <option value="" selected disabled>Seleccione un rol</option>
+                        <?php foreach ($this->roles as $rol): ?>
                             <option value="<?= $rol->id ?>">
                                 <?= $rol->name ?>
                             </option>
@@ -108,6 +107,7 @@
                     </select>
                 </div>
             </div>
+
 
             <!-- botones de acción -->
             <a class="btn btn-secondary" href="<?= URL ?>users" role="button">Cancelar</a>

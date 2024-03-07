@@ -59,7 +59,7 @@ class Movimientos extends Controller
             header('location:' . URL . 'movimientos');
         }
 
-        $this->view->cuentas = $this->model->getCuentas();
+        $this->view->movimiento = new classMovimiento;
 
         # Comprobar si vuelvo de un registro no validado
         if (isset($_SESSION['error'])) {
@@ -76,6 +76,8 @@ class Movimientos extends Controller
             unset($_SESSION['errores']);
             unset($_SESSION['movimiento']);
         }
+
+        $this->view->cuentas = $this->model->getCuentas();
 
         # etiqueta title de la vista
         $this->view->title = "Añadir - Gestión movimientos";
@@ -100,12 +102,12 @@ class Movimientos extends Controller
         }
 
         // 1. Seguridad. Saneamos los datos del formulario
-        $id_cuenta = filter_input(INPUT_POST, 'id_cuenta', FILTER_SANITIZE_SPECIAL_CHARS);
-        $fecha_hora = filter_input(INPUT_POST, 'fecha_hora', FILTER_SANITIZE_SPECIAL_CHARS);
-        $concepto = filter_input(INPUT_POST, 'concepto', FILTER_SANITIZE_SPECIAL_CHARS);
-        $tipo = filter_input(INPUT_POST, 'tipo', FILTER_SANITIZE_SPECIAL_CHARS);
-        $cantidad = filter_input(INPUT_POST, 'cantidad', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $saldo = filter_input(INPUT_POST, 'saldo', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $id_cuenta = filter_var($_POST['id_cuenta'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $fecha_hora = filter_var($_POST['fecha_hora'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $concepto = filter_var($_POST['concepto'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $tipo = filter_var($_POST['tipo'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $cantidad = filter_var($_POST['cantidad'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $saldo = $this->model->getSaldoCuenta($id_cuenta);
 
         # Cargamos los datos del formulario
         $movimiento = new classMovimiento(
@@ -126,9 +128,15 @@ class Movimientos extends Controller
             $errores['id_cuenta'] = 'Cuenta del movimiento obligatorio';
         }
 
+        // fecha_hora
+        // En caso de dejarse en null, se pondrá la hora actual
+        if (!isset($fecha_hora) || $fecha_hora == '0000-00-00 00:00') {
+            $fecha_hora = date('Y-m-d\TH:i');
+        }
+
         // concepto
         if (empty($concepto)) {
-            $errores['concepto'] = 'concepto obligatorio';
+            $errores['concepto'] = 'Concepto obligatorio';
         } elseif (strlen($concepto) > 50) {
             $errores['concepto'] = 'El concepto no puede tener mas de 50 caracteres';
         }
@@ -141,34 +149,13 @@ class Movimientos extends Controller
         }
 
         // cantidad
-        if (!is_numeric($cantidad)) {
+        if (empty($cantidad)) {
+            $errores['cantidad'] = 'Cantidad obligatoria';
+        } else if (!is_numeric($cantidad)) {
             $errores['cantidad'] = 'La cantidad debe ser un valor numérico';
-        } elseif ($tipo == 'R' && $cantidad > $saldo && $saldo >= 0) {
-            $errores['cantidad'] = 'La cantidad no puede superar el saldo de la cuenta';
+        } else if ($tipo == 'R' && $cantidad > $saldo) {
+            $errores['cantidad'] = 'La cantidad a retirar no puede superar el saldo de la cuenta';
         }
-
-        // Obtener el saldo actual de la cuenta
-        $saldoActual = $this->model->getSaldoCuenta($id_cuenta);
-
-        // Validar si la cantidad a retirar es menor o igual al saldo actual
-        if ($tipo == 'R' && $cantidad > $saldoActual) {
-            $errores['cantidad'] = 'La cantidad no puede superar el saldo de la cuenta';
-        }
-
-        // Calcular el nuevo saldo
-        if ($tipo == 'I') {
-            // Ingreso
-            $nuevoSaldo = $saldoActual + $cantidad;
-        } elseif ($tipo == 'R') {
-            // Reintegro
-            $nuevoSaldo = $saldoActual - $cantidad;
-        }
-
-        // Actualizar el saldo de la cuenta
-        $this->model->updateSaldoCuenta($id_cuenta, $nuevoSaldo);
-
-        // Asignar el nuevo saldo al objeto movimiento
-        $movimiento->saldo = $nuevoSaldo;
 
 
         // Comprobar validación
@@ -185,7 +172,22 @@ class Movimientos extends Controller
 
         } else {
 
+            // Calcular el nuevo saldo
+            if ($tipo == 'I') {
+                // Ingreso
+                $nuevoSaldo = $saldo + $cantidad;
+            } elseif ($tipo == 'R') {
+                // Reintegro
+                $nuevoSaldo = $saldo - $cantidad;
+            }
+
+            // Asignar el nuevo saldo al objeto movimiento
+            $movimiento->saldo = $nuevoSaldo;
+
             $this->model->create($movimiento);
+
+            // Actualizar el saldo de la cuenta
+            $this->model->updateSaldoCuenta($id_cuenta, $nuevoSaldo);
 
             $_SESSION['mensaje'] = 'Movimiento creado correctamente';
 

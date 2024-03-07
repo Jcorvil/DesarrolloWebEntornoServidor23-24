@@ -54,13 +54,33 @@
             <!-- Contraseña -->
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="text" class="form-control" name="password" value="<?= $this->user->password ?>">
+                <input type="password" class="form-control" name="password" placeholder="Nueva Contraseña">
                 <?php if (isset($this->errores['password'])): ?>
                     <span class="form-text text-danger" role="alert">
                         <?= $this->errores['password'] ?>
                     </span>
                 <?php endif; ?>
             </div>
+            <div class="mb-3">
+                <label for="password-confirm" class="form-label">Confirmar Contraseña</label>
+                <input type="password" class="form-control" name="password-confirm">
+            </div>
+
+            <!-- campo rol -->
+            <div class="mb-3 row">
+                <label for="rol" class="form-label">Rol</label>
+                <div class="col-md-6">
+                    <select id="rol" class="form-select" name="rol" required>
+                        <option value="" selected disabled>Seleccione un rol</option>
+                        <?php foreach ($this->roles as $rol): ?>
+                            <option value="<?= $rol->id ?>">
+                                <?= $rol->name ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
 
             <!-- botones de acción -->
             <a class="btn btn-secondary" href="<?= URL ?>users" role="button">Cancelar</a>

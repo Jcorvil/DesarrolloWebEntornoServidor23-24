@@ -81,8 +81,8 @@
                 <label for="tipo" class="form-label">Tipo</label>
                 <select class="form-select" name="tipo" id="selectTipo">
                     <option value="" disabled selected>Seleccione un tipo</option>
-                    <option value="I">Ingreso</option>
-                    <option value="R">Reintegro</option>
+                    <option value="I" <?= ($this->movimiento->tipo == 'I') ? 'selected' : null ?>>Ingreso</option>
+                    <option value="R" <?= ($this->movimiento->tipo == 'R') ? 'selected' : null ?>>Reintegro</option>
                 </select>
                 <?php if (isset($this->errores['tipo'])): ?>
                     <span class="form-text text-danger" role="alert">
