@@ -679,18 +679,19 @@ class Cuentas extends Controller
     }
 
 
-    function showMov($id)
+    function showMov($param = [])
     {
         session_start();
 
         if (!isset($_SESSION['id'])) {
             $_SESSION['mensaje'] = "Usuario No Autentificado";
-
             header("location:" . URL . "login");
-        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['cuenta']['new']))) {
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['cuenta']['showMov']))) {
             $_SESSION['mensaje'] = "Operación sin privilegios";
             header('location:' . URL . 'cuentas');
         }
+
+        $id = $param[0];
 
         $movimientos = $this->model->getMovCuenta($id);
 
@@ -704,6 +705,7 @@ class Cuentas extends Controller
 
         $this->view->render('cuentas/showMov/index');
     }
+
 
 
 

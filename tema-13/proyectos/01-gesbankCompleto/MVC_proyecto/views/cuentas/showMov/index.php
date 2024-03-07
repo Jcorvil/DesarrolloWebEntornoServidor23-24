@@ -4,7 +4,7 @@
 <head>
     <?php require_once("template/partials/head.php") ?>
     <title>
-        <?= $this->title ?>
+        Movimientos
     </title>
 </head>
 
@@ -13,16 +13,16 @@
     <br><br><br>
 
     <div class="container">
-        <?php require_once("views/movimientos/partials/header.php") ?>
+        <?php require_once("views/cuentas/partials/header.php") ?>
         <?php require_once("template/partials/notify.php") ?>
         <?php require_once("template/partials/error.php") ?>
 
         <div class="card">
             <div class="card-header">
-                Tabla de movimientos
+                Movimientos de la cuenta
             </div>
             <div class="card-header">
-                <?php require_once("views/movimientos/partials/menu.php") ?>
+                <?php require_once("views/cuentas/partials/menu.php") ?>
             </div>
             <div class="card-body">
                 <table class="table">
@@ -81,7 +81,7 @@
             </div>
             <div class="card-footer">
                 <small class="text-muted"> Nº Movimientos:
-                    <?= $this->movimientos->rowCount(); ?>
+                    <?= count($this->movimientos) ?>
                 </small>
             </div>
         </div>
