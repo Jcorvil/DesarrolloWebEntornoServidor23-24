@@ -235,10 +235,10 @@ class Users extends Controller
         } else {
 
             // Añadir registro a la tabla
-            $this->model->create($user);
+            $this->model->crear($user);
 
             // Añadimos a la variable de sesión un mensaje
-            $_SESSION['mensaje'] = 'user creado correctamente';
+            $_SESSION['mensaje'] = 'Usuario creado correctamente';
 
             // Redirigimos al main de users
             header('location:' . URL . 'users');
