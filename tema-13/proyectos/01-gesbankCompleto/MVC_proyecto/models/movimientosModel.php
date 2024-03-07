@@ -291,7 +291,48 @@ class movimientosModel extends Model
         $conexion = $this->db->connect();
         $pdoSt = $conexion->prepare($sql);
         $pdoSt->execute();
+
         return $pdoSt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+
+    public function updateTotalMovimientos($id_cuenta)
+    {
+        try {
+            // Consulta para contar el número total de movimientos de la cuenta
+            $sql = "SELECT COUNT(*) 
+                    AS
+                        total_movimientos
+                    FROM
+                        movimientos
+                    WHERE
+                        id_cuenta = :id_cuenta";
+
+            $conexion = $this->db->connect();
+            $pdoSt = $conexion->prepare($sql);
+            $pdoSt->bindParam(':id_cuenta', $id_cuenta, PDO::PARAM_INT);
+            $pdoSt->execute();
+
+            $total_movimientos = $pdoSt->fetch(PDO::FETCH_ASSOC)['total_movimientos'];
+
+            // Consulta para actualizar el campo de num_movtos en la tabla de cuentas
+            $sql_update = "UPDATE
+                                cuentas
+                            SET
+                                num_movtos = :total_movimientos
+                            WHERE
+                                id = :id_cuenta";
+
+            $pdoSt_update = $conexion->prepare($sql_update);
+            $pdoSt_update->bindParam(':total_movimientos', $total_movimientos, PDO::PARAM_INT);
+            $pdoSt_update->bindParam(':id_cuenta', $id_cuenta, PDO::PARAM_INT);
+
+            $pdoSt_update->execute();
+
+        } catch (PDOException $e) {
+            include_once('template/partials/errorDB.php');
+            exit();
+        }
     }
 
 

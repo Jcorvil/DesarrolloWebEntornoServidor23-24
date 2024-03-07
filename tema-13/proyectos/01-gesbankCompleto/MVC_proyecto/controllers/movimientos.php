@@ -184,14 +184,22 @@ class Movimientos extends Controller
             // Asignar el nuevo saldo al objeto movimiento
             $movimiento->saldo = $nuevoSaldo;
 
+            // Crear el movimiento
             $this->model->create($movimiento);
+
+            // Actualizar el total de movimientos de la cuenta
+            $this->model->updateTotalMovimientos($id_cuenta);
 
             // Actualizar el saldo de la cuenta
             $this->model->updateSaldoCuenta($id_cuenta, $nuevoSaldo);
 
+            // Obtener la cuenta en cuestión
+            $id_cuenta = $movimiento->id_cuenta;
+
             $_SESSION['mensaje'] = 'Movimiento creado correctamente';
 
             header('location:' . URL . 'movimientos');
+            exit();
         }
     }
 
