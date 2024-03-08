@@ -40,7 +40,7 @@
                 <div class="col-md-6">
                     <input id="name" type="text"
                         class="form-control <?= (isset($this->errores['name'])) ? 'is-invalid' : null ?>" name="name"
-                        value="<?= isset($this->user->name) ? $this->user->name : '' ?>" required autocomplete="name"
+                        value="<?= isset($this->user->name) ? $this->user->name : '' ?>" autocomplete="name"
                         autofocus>
                     <?php if (isset($this->errores['name'])): ?>
                         <span class="form-text text-danger" role="alert">
@@ -57,7 +57,7 @@
                 <div class="col-md-6">
                     <input id="email" type="email"
                         class="form-control <?= (isset($this->errores['email'])) ? 'is-invalid' : null ?>" name="email"
-                        value="<?= isset($this->user->email) ? $this->user->email : '' ?>" required autocomplete="email"
+                        value="<?= isset($this->user->email) ? $this->user->email : '' ?>" autocomplete="email"
                         autofocus>
                     <?php if (isset($this->errores['email'])): ?>
                         <span class="form-text text-danger" role="alert">
@@ -75,7 +75,7 @@
                     <input id="password" type="password"
                         class="form-control <?= (isset($this->errores['password'])) ? 'is-invalid' : null ?>"
                         name="password" value="<?= isset($this->user->password) ? $this->user->password : '' ?>"
-                        required autocomplete="new-password">
+                        autocomplete="new-password">
                     <?php if (isset($this->errores['password'])): ?>
                         <span class="form-text text-danger" role="alert">
                             <?= $this->errores['password'] ?>
@@ -88,7 +88,7 @@
             <div class="mb-3 row">
                 <label for="num_cuenta" class="form-label">Confirmación Contraseña</label>
                 <div class="col-md-6">
-                    <input id="password" type="password" class="form-control" name="password-confirm" required
+                    <input id="password" type="password" class="form-control" name="password-confirm"
                         autocomplete="new-password">
                 </div>
             </div>
@@ -97,7 +97,7 @@
             <div class="mb-3 row">
                 <label for="rol" class="form-label">Rol</label>
                 <div class="col-md-6">
-                    <select id="rol" class="form-select" name="rol" required>
+                    <select id="rol" class="form-select" name="rol">
                         <option value="" selected disabled>Seleccione un rol</option>
                         <?php foreach ($this->roles as $rol): ?>
                             <option value="<?= $rol->id ?>">

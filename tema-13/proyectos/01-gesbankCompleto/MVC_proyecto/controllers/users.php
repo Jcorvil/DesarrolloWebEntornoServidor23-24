@@ -34,7 +34,7 @@ class Users extends Controller
                 $this->view->mensaje = $_SESSION['mensaje'];
                 unset($_SESSION['mensaje']);
             }
-
+            $this->view->model = $this->model;
             # Creo la propiedad title de la vista
             $this->view->title = "Tabla Usuarios";
 

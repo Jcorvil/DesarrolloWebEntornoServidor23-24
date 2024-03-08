@@ -26,31 +26,36 @@
         <legend>Formulario Editar Usuario</legend>
 
         <!-- Formulario Editar user -->
-        <form action="<?= URL ?>users/update/<?= $this->id ?>" method="POST">
+        <form action="<?= URL ?>users/update/<?= isset($this->id) ? $this->id : '' ?>" method="POST">
 
             <!-- id oculto -->
-            <input type="number" class="form-control" name="id" value="<?= $this->user->id ?>" hidden>
+            <input type="number" class="form-control" name="id"
+                value="<?= isset($this->user) && isset($this->user->id) ? $this->user->id : '' ?>" hidden>
 
             <!-- Nombre -->
             <div class="mb-3">
                 <label for="name" class="form-label">Nombre</label>
-                <input type="text" class="form-control" name="name" value="<?= $this->user->name ?>">
+                <input type="text" class="form-control" name="name"
+                    value="<?= isset($this->user) && isset($this->user->name) ? $this->user->name : '' ?>">
                 <?php if (isset($this->errores['name'])): ?>
                     <span class="form-text text-danger" role="alert">
                         <?= $this->errores['name'] ?>
                     </span>
                 <?php endif; ?>
             </div>
+
             <!-- Email -->
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="text" class="form-control" name="email" value="<?= $this->user->email ?>">
+                <input type="text" class="form-control" name="email"
+                    value="<?= isset($this->user) && isset($this->user->email) ? $this->user->email : '' ?>">
                 <?php if (isset($this->errores['email'])): ?>
                     <span class="form-text text-danger" role="alert">
                         <?= $this->errores['email'] ?>
                     </span>
                 <?php endif; ?>
             </div>
+
             <!-- Contraseña -->
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
@@ -62,8 +67,8 @@
                 <?php endif; ?>
             </div>
             <div class="mb-3">
-                <label for="password-confirm" class="form-label">Confirmar Contraseña</label>
-                <input type="password" class="form-control" name="password-confirm">
+                <label for="password_confirm" class="form-label">Confirmar Contraseña</label>
+                <input type="password" class="form-control" name="password_confirm" placeholder="Confirme la Contraseña">
             </div>
 
             <!-- campo rol -->
@@ -72,15 +77,16 @@
                 <div class="col-md-6">
                     <select id="rol" class="form-select" name="rol" required>
                         <option value="" selected disabled>Seleccione un rol</option>
-                        <?php foreach ($this->roles as $rol): ?>
-                            <option value="<?= $rol->id ?>">
-                                <?= $rol->name ?>
-                            </option>
-                        <?php endforeach; ?>
+                        <?php if (isset($this->roles)): ?>
+                            <?php foreach ($this->roles as $rol): ?>
+                                <option value="<?= $rol->id ?>">
+                                    <?= $rol->name ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </select>
                 </div>
             </div>
-
 
             <!-- botones de acción -->
             <a class="btn btn-secondary" href="<?= URL ?>users" role="button">Cancelar</a>
@@ -88,6 +94,7 @@
             <button type="submit" class="btn btn-primary">Actualizar</button>
 
         </form>
+
 
         <br>
         <br>

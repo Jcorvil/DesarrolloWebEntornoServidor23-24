@@ -47,6 +47,7 @@
 							<th>Nombre</th>
 							<th>Email</th>
 							<th>Password</th>
+							<th>Rol</th>
 						</tr>
 					</thead>
 					<!-- Mostramos cuerpo de la tabla -->
@@ -70,6 +71,9 @@
 								</td>
 								<td>
 									<?= $user->password ?>
+								</td>
+								<td>
+									<?= $this->model->userRol($user->id)->name ?>
 								</td>
 
 								<!-- botones de acción -->
