@@ -278,20 +278,25 @@ class Users extends Controller
         $this->view->rolActual = $userRol->id;
 
         //Comprobar si el formulario viene de una validación
+        //Comprobar si el formulario viene de una validación
         if (isset($_SESSION['error'])) {
             # Mensaje de error
             $this->view->error = $_SESSION['error'];
 
-            # Autorrellenar el formulario con los detalles del user
-            $this->view->user = unserialize($_SESSION['user']);
-
             # Recupero array de errores específicos
             $this->view->errores = $_SESSION['errores'];
+
+            // Deserializar el objeto classUser solo si no hay errores
+            if (!isset($this->view->errores)) {
+                # Autorrellenar el formulario con los detalles del user
+                $this->view->user = unserialize($_SESSION['user']);
+            }
 
             unset($_SESSION['error']);
             unset($_SESSION['errores']);
             unset($_SESSION['user']);
         }
+
 
         # cargo la vista
         $this->view->render('users/edit/index');
@@ -316,20 +321,14 @@ class Users extends Controller
         # Cargo id del user
         $id = $param[0];
 
+        $userOG = $this->model->getUser($id);
+
         // 1. Seguridad. Saneamos los datos del formulario
         $nombre = filter_var($_POST['name'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
-        $password = $_POST['password'] ?? '';
+        $password = filter_Var($_POST['password'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $password_confirm = filter_Var($_POST['password_confirm'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $rol = filter_var($_POST['rol'] ?? '', FILTER_SANITIZE_NUMBER_INT);
-
-        # Cargamos los datos del formulario
-        $user = new classUser(
-            null,
-            $nombre,
-            $email,
-            $password,
-            $rol
-        );
 
         // Validación
         $errores = [];
@@ -351,18 +350,12 @@ class Users extends Controller
         }
 
         // Password
-        if (!empty($password) && !$this->model->validatePass($password)) {
-            $errores['password'] = 'Contraseña no válida';
-        } else {
-            // Aplicar hash a la contraseña
-            $password_hash = password_hash($password, PASSWORD_DEFAULT);
-            $user->password = $password_hash;
-        }
-
-        // Confirmar password
-        $password_confirm = filter_var($_POST['password_confirm'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!empty($password) && $password !== $password_confirm) {
-            $errores['password_confirm'] = 'Las contraseñas no coinciden';
+        if (!empty($password) || !empty($password_confirm)) {
+            if (empty($password)) {
+                $errores['password'] = 'Contraseña obligatoria';
+            } elseif ($password !== $password_confirm) {
+                $errores['password_confirm'] = 'Las contraseñas no coinciden';
+            }
         }
 
         // Rol
@@ -373,7 +366,6 @@ class Users extends Controller
         # comprobamos la validación
         if (!empty($errores)) {
             // Errores de validación
-            $_SESSION['user'] = serialize($user);
             $_SESSION['error'] = 'Formulario no validado';
             $_SESSION['errores'] = $errores;
 
@@ -381,6 +373,21 @@ class Users extends Controller
             header('location:' . URL . 'users/edit/' . $id);
             exit();
         }
+
+        // hashear la contraseña
+        if (!empty($password)) {
+            $passHash = password_hash($password, PASSWORD_BCRYPT);
+        } else {
+            $passHash = $userOG->password;
+        }
+
+        $user = new classUser(
+            null,
+            $nombre,
+            $email,
+            $passHash,
+            $rol
+        );
 
         $this->model->update($id, $user, $rol);
 
