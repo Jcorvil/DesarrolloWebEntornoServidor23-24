@@ -36,7 +36,7 @@
             <div class="mb-3">
                 <label for="name" class="form-label">Nombre</label>
                 <input type="text" class="form-control" name="name"
-                    value="<?= isset($this->user) && isset($this->user->name) ? $this->user->name : '' ?>">
+                    value="<?= isset($this->user->name) ? $this->user->name : '' ?>">
                 <?php if (isset($this->errores['name'])): ?>
                     <span class="form-text text-danger" role="alert">
                         <?= $this->errores['name'] ?>
@@ -68,7 +68,13 @@
             </div>
             <div class="mb-3">
                 <label for="password_confirm" class="form-label">Confirmar Contraseña</label>
-                <input type="password" class="form-control" name="password_confirm" placeholder="Confirme la Contraseña">
+                <input type="password" class="form-control" name="password_confirm"
+                    placeholder="Confirme la Contraseña">
+                <?php if (isset($this->errores['password_confirm'])): ?>
+                    <span class="form-text text-danger" role="alert">
+                        <?= $this->errores['password_confirm'] ?>
+                    </span>
+                <?php endif; ?>
             </div>
 
             <!-- campo rol -->
@@ -76,10 +82,10 @@
                 <label for="rol" class="form-label">Rol</label>
                 <div class="col-md-6">
                     <select id="rol" class="form-select" name="rol" required>
-                        <option value="" selected disabled>Seleccione un rol</option>
+                        <option value="" disabled>Seleccione un rol</option>
                         <?php if (isset($this->roles)): ?>
                             <?php foreach ($this->roles as $rol): ?>
-                                <option value="<?= $rol->id ?>">
+                                <option value="<?= $rol->id ?>" <?= isset($this->rolActual) && $this->rolActual == $rol->id ? 'selected' : '' ?>>
                                     <?= $rol->name ?>
                                 </option>
                             <?php endforeach; ?>

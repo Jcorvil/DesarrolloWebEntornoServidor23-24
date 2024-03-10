@@ -88,7 +88,7 @@
             <div class="mb-3 row">
                 <label for="num_cuenta" class="form-label">Confirmación Contraseña</label>
                 <div class="col-md-6">
-                    <input id="password" type="password" class="form-control" name="password-confirm"
+                    <input id="password" type="password" class="form-control" name="password_confirm"
                         autocomplete="new-password">
                 </div>
             </div>

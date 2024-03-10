@@ -277,7 +277,6 @@ class usersModel extends Model
 
         }
 
-
     }
 
     # Creo nuevo usuario a partir de los datos de formulario de registro

@@ -100,7 +100,7 @@ class Users extends Controller
         $name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $password = filter_var($_POST['password'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $password_confirm = filter_var($_POST['password-confirm'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $password_confirm = filter_var($_POST['password_confirm'], FILTER_SANITIZE_SPECIAL_CHARS);
         $rol = filter_var($_POST['rol'], FILTER_SANITIZE_SPECIAL_CHARS);
 
         # Validaciones
@@ -273,6 +273,10 @@ class Users extends Controller
         // Obtener los roles
         $this->view->roles = $this->model->getRoles();
 
+        // Obtener el rol actual del usuario
+        $userRol = $this->model->userRol($id);
+        $this->view->rolActual = $userRol->id;
+
         //Comprobar si el formulario viene de una validación
         if (isset($_SESSION['error'])) {
             # Mensaje de error
@@ -313,10 +317,10 @@ class Users extends Controller
         $id = $param[0];
 
         // 1. Seguridad. Saneamos los datos del formulario
-        $nombre = filter_var($_POST['nombre'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = filter_var($_POST['email'] ??= '', FILTER_SANITIZE_EMAIL);
+        $nombre = filter_var($_POST['name'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'] ?? '';
-        $rol = filter_var($_POST['rol'] ??= '', FILTER_SANITIZE_NUMBER_INT);
+        $rol = filter_var($_POST['rol'] ?? '', FILTER_SANITIZE_NUMBER_INT);
 
         # Cargamos los datos del formulario
         $user = new classUser(
@@ -342,19 +346,23 @@ class Users extends Controller
             $errores['email'] = 'Email obligatorio';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errores['email'] = 'Email inválido';
-        } elseif ($this->model->validateEmailUnique($email, $user->id)) {
+        } elseif ($this->model->validateEmailUnique($email, $id)) {
             $errores['email'] = 'Este email ya está registrado';
         }
 
         // Password
         if (!empty($password) && !$this->model->validatePass($password)) {
             $errores['password'] = 'Contraseña no válida';
+        } else {
+            // Aplicar hash a la contraseña
+            $password_hash = password_hash($password, PASSWORD_DEFAULT);
+            $user->password = $password_hash;
         }
 
         // Confirmar password
-        $password_confirm = filter_var($_POST['password-confirm'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $password_confirm = filter_var($_POST['password_confirm'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!empty($password) && $password !== $password_confirm) {
-            $errores['password-confirm'] = 'Las contraseñas no coinciden';
+            $errores['password_confirm'] = 'Las contraseñas no coinciden';
         }
 
         // Rol
@@ -374,7 +382,7 @@ class Users extends Controller
             exit();
         }
 
-        $this->model->update($id, $user);
+        $this->model->update($id, $user, $rol);
 
         $_SESSION['mensaje'] = 'Usuario actualizado correctamente';
 
