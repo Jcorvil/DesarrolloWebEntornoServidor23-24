@@ -19,7 +19,7 @@
                         <li><a class="dropdown-item" href="<?= URL ?>users/order/1">Id</a></li>
                         <li><a class="dropdown-item" href="<?= URL ?>users/order/2">Nombre</a></li>
                         <li><a class="dropdown-item" href="<?= URL ?>users/order/3">Email</a></li>
-                        <li><a class="dropdown-item" href="<?= URL ?>users/order/4">Password</a></li>
+                        <li><a class="dropdown-item" href="<?= URL ?>users/order/4">Rol</a></li>
 
                     </ul>
                 </li>

@@ -46,8 +46,8 @@
 							<th>Id</th>
 							<th>Nombre</th>
 							<th>Email</th>
-							<th>Password</th>
 							<th>Rol</th>
+							<th>Acciones</th>
 						</tr>
 					</thead>
 					<!-- Mostramos cuerpo de la tabla -->
@@ -68,9 +68,6 @@
 								</td>
 								<td>
 									<?= $user->email ?>
-								</td>
-								<td>
-									<?= $user->password ?>
 								</td>
 								<td>
 									<?= $this->model->userRol($user->id)->name ?>
