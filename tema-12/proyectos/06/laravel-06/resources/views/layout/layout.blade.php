@@ -15,7 +15,7 @@
 
 
     {{-- Sección título --}}
-    <title>@yield('titulo') - Laravel Gesbank</title>
+    <title>@yield('titulo') - Laravel Alumnos</title>
 </head>
 
 <body>
