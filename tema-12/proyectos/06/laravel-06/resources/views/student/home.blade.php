@@ -10,6 +10,7 @@
 @section('subtitulo', 'Panel de Control de Alumnos')
 
 @section('contenido')
+    @include('partials.alerts')
     {{-- Menú alumnos --}}
     @include('student.partials.menu')
 
@@ -39,10 +40,12 @@
                     <td>{{ $alumno->course->course }}</td>
                     {{-- Botones de acción --}}
                     <td>
-                        <a href="#" title="Editar" class="btn btn-primary"><i class="bi bi-pencil-fill"></i></a>
-                        <a href="#" title="Mostrar" class="btn btn-warning"><i class="bi bi-eye-fill"></i></a>
-                        <a href="#" title="Eliminar" class="btn btn-danger"><i class="bi bi-trash-fill"
-                                onclick="return confirm('Confirmar eliminación del cuenta')"></i></a>
+                        <div class="d-grip gap-2 d-md-block">
+                            <a href="#" title="Editar" class="btn btn-primary"><i class="bi bi-pencil-fill"></i></a>
+                            <a href="#" title="Mostrar" class="btn btn-warning"><i class="bi bi-eye-fill"></i></a>
+                            <a href="#" title="Eliminar" class="btn btn-danger"><i class="bi bi-trash-fill"
+                                    onclick="return confirm('Confirmar eliminación del cuenta')"></i></a>
+                        </div>
                     </td>
                 </tr>
             @empty
@@ -50,4 +53,10 @@
             @endforelse
         </tbody>
     </table>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
 @endsection

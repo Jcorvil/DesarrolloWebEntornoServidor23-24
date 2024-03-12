@@ -1,9 +1,11 @@
-@extends('layouts.layout')
+@extends('layout\layout')
 
 @section('titulo', 'Alumnos')
 @section('subtitulo', 'Añadir Nuevo Alumno')
 @section('contenido')
     @include('partials.alerts')
+    <br>
+    <br>
     <div class="card">
         <div class="card-header">
             Formulario Nuevo Artículo
@@ -27,10 +29,10 @@
 
                 <!-- Apellidos  -->
                 <div class="mb-3">
-                    <label for="lastname" class="form-label">Apellidos</label>
-                    <input type="text" class="form-control @error('lastname') is-invalid @enderror" name="lastname"
-                        value="{{ old('lastname') }}" required autocomplete="lastname" autofocus>
-                    @error('lastname')
+                    <label for="last_name" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name"
+                        value="{{ old('last_name') }}" required autocomplete="last_name" autofocus>
+                    @error('last_name')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -42,17 +44,6 @@
                     <input type="date" class="form-control @error('birth_date') is-invalid @enderror" name="birth_date"
                         value="{{ old('birth_date') }}" required autocomplete="birth_date" autofocus>
                     @error('birth_date')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <!-- Email  -->
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
-                        value="{{ old('email') }}" required autocomplete="email" autofocus>
-                    @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -91,24 +82,52 @@
                         </span>
                     @enderror
                 </div>
+                <!-- Email  -->
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
+                        value="{{ old('email') }}" required autocomplete="email" autofocus>
+                    @error('email')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <!-- Curso -->
+                <div class="mb-3">
+                    <label for="course" class="form-label">Curso</label>
+                    <select class="form-select @error('course_id') is-invalid @enderror" name="course_id"
+                        value="{{ old('course_id') }}" required autocomplete="course_id" autofocus
+                        aria-label="Default select example" name="course_id">
+                        <option selected disabled>Seleccione un curso</option>
+                        @foreach ($cursos as $curso)
+                            <option value="{{ $curso->id }}" @if ($curso->id == old('course_id')) selected @endif>
+                                {{ $curso->course }}</option>
+                        @endforeach
+                    </select>
+                    @error('course_id')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
 
         </div>
         {{-- Fin Formulario --}}
 
-
-
         <div class="card-footer text-muted">
-            <!-- Botones de acción --------------------------------------------------->
-            <a class="btn btn-secondary"
-                href="https://educacionadistancia.juntadeandalucia.es/centros/cadiz/pluginfile.php/409401/mod_assign/introattachment/0/{{ route('clientes.index') }}"
-                role="button">Cancelar</a>
+            <!-- Botones de acción -->
+            <a class="btn btn-secondary" href="{{ route('alumnos.index') }}" role="button">Cancelar</a>
             <button type="reset" class="btn btn-danger">Borrar</button>
             <button type="submit" class="btn btn-primary">Añadir</button>
         </div>
 
         </form>
     </div>
-
+    <br>
+    <br>
+    <br>
+    <br>
 
 
 @endsection
