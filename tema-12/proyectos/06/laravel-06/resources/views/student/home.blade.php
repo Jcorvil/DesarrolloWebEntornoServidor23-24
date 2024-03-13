@@ -41,10 +41,19 @@
                     {{-- Botones de acción --}}
                     <td>
                         <div class="d-grip gap-2 d-md-block">
-                            <a href="#" title="Editar" class="btn btn-primary"><i class="bi bi-pencil-fill"></i></a>
-                            <a href="#" title="Mostrar" class="btn btn-warning"><i class="bi bi-eye-fill"></i></a>
-                            <a href="#" title="Eliminar" class="btn btn-danger"><i class="bi bi-trash-fill"
-                                    onclick="return confirm('Confirmar eliminación del cuenta')"></i></a>
+                            <a href="{{ route('alumnos.edit', $alumno->id) }}" title="Editar" class="btn btn-primary"><i
+                                    class="bi bi-pencil-fill"></i></a>
+                            <a href="{{ route('alumnos.show', $alumno->id) }}" title="Mostrar" class="btn btn-warning"><i
+                                    class="bi bi-eye-fill"></i></a>
+                            <form action="{{ route('alumnos.destroy', $alumno->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" title="Eliminar" class="btn btn-danger"
+                                    onclick="return confirm('Confirmar eliminación del Alumno')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>
